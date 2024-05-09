@@ -22,7 +22,11 @@ async function openChrome() {
 
   chromeOptions.addArguments("--incognito"); // Starts the browser in incognito mode, which doesn't save browsing history or cookies
 
-  // chromeOptions.addArguments("--disable-infobars"); // Disables infobars, such as the "Chrome is being controlled by automated test software" infobar
+  chromeOptions.addArguments("--disable-infobars"); // Disables infobars, such as the "Chrome is being controlled by automated test software" infobar
+
+  chromeOptions.addArguments("--auto-open-devtools-for-tabs"); // Opens the dev tools when windows spaws
+
+  chromeOptions.setLoggingPrefs({ performance: "ALL" });
 
   console.log(chromeOptions);
 
@@ -48,12 +52,20 @@ async function openChrome() {
     const loginButton = await driver.findElement(By.id("kc-login"));
     await loginButton.click();
 
-    // Find and click the cookies button
-    // const cookieButton = await driver.wait(
-    //   until.elementToBeClickable(By.className("accept-button")),
-    //   5000
-    // );
-    // await cookieButton.click();
+    // Wait until the cookie button is visible before clicking it
+    const cookieButton = await driver.wait(
+      until.elementLocated(
+        By.xpath("/html/body/app-root/oaibox-cookies-consent/div/button")
+      ),
+      10000 // Timeout in milliseconds
+    );
+    await cookieButton.click();
+
+    // Enable Chrome DevTools Protocol
+    await driver.sendDevToolsCommand("Page.enable");
+
+    // Open DevTools using CDP
+    await driver.sendDevToolsCommand("Inspector.enable");
 
     // TODO: Access DevTools ...
     // Access DevTools
