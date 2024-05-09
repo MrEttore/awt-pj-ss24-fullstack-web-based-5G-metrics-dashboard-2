@@ -61,12 +61,6 @@ async function openChrome() {
     );
     await cookieButton.click();
 
-    // Enable Chrome DevTools Protocol
-    await driver.sendDevToolsCommand("Page.enable");
-
-    // Open DevTools using CDP
-    await driver.sendDevToolsCommand("Inspector.enable");
-
     // TODO: Access DevTools ...
     // Access DevTools
     // await driver.sleep(10000);
