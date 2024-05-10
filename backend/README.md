@@ -10,10 +10,10 @@
 
 ### With Docker
 1. Make sure Docker is installed on your system.
-2. Navigate to the root directory of your project.
+2. Navigate to the backend directory.
 3. Build the Docker image using the Dockerfile located in the backend directory:
    ```
-   docker build -t backend ./backend
+   docker build -t backend .
    ```
 4. Run the Docker container:
    ```
