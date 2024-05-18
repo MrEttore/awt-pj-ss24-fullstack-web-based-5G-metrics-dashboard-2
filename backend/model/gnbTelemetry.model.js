@@ -1,8 +1,8 @@
 
-module.exports = class GnbTelemetryModel {
+class GnbTelemetryModel {
 
-    constructor(db) {
-        this.db = db
+    constructor() {
+        this.db = require('../database/sqlite3');
         this.init();
     }
 
@@ -157,3 +157,7 @@ module.exports = class GnbTelemetryModel {
     // }
 
 }
+
+const INSTANCE = new GnbTelemetryModel();
+
+module.exports = INSTANCE
