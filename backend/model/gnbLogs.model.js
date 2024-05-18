@@ -5,6 +5,17 @@ class GnbLogsModel {
         this.db = db
     }
 
+    init() {
+        this.db.run(`
+            CREATE TABLE IF NOT EXISTS 
+                GnbLogs (
+                    rowId INTEGER PRIMARY KEY,
+                    timestamp BIGINT,
+                    payload TEXT
+                );
+        `)
+    }
+
     getGnbLogs(params, callback) {
         const QUERY = 'SELECT * FROM GnbLogs'
         this.db.all(QUERY, callback);
