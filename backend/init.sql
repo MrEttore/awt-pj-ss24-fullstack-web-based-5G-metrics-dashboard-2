@@ -1,40 +1,6 @@
 
-DROP TABLE GnbTelemetry;
-
-
-CREATE TABLE IF NOT EXISTS GnbTelemetry_ (
-    rowId INTEGER PRIMARY KEY,
-    id INTEGER,
-    frame INTEGER,
-    slot INTEGER,
-    pci INTEGER,
-    dlCarrierFreq INTEGER,
-    ulCarrierFreq INTEGER,
-    avgLdpcIterations INTEGER,
-    ueId TEXT,
-    rnti TEXT,
-    inSync INTEGER,
-    dlBytes INTEGER,
-    dlMcs INTEGER,
-    dlBler REAL,
-    ulBytes INTEGER,
-    ulMcs INTEGER,
-    ulBler REAL,
-    ri INTEGER,
-    pmi TEXT,
-    phr INTEGER,
-    pcmax INTEGER,
-    rsrq REAL,
-    sinr REAL,
-    rsrp REAL,
-    rssi REAL,
-    cqi INTEGER,
-    pucchSnr REAL,
-    puschSnr REAL,
-    timestamp BIGINT
-);
-
 DROP TABLE GnbTelemetry
+
 CREATE TABLE IF NOT EXISTS GnbTelemetry (
     rowId INTEGER PRIMARY KEY,
     id INTEGER,
@@ -48,6 +14,7 @@ CREATE TABLE IF NOT EXISTS GnbTelemetry (
 );
 
 DROP TABLE GnbTelemetryUe;
+
 CREATE TABLE IF NOT EXISTS GnbTelemetryUe (
     rowId INTEGER PRIMARY KEY,
     gnbTelemetryRowId INT,
@@ -231,41 +198,3 @@ INSERT INTO GnbTelemetryUe(ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, 
 ('1', 'a393', 1, 913237099, 9, 0, 282774878, 9, 0, 2, '(0,0)', 58, 23, -10.5, 23.5, -96, 86, 9, 20, 30.5, 24),
 ('1', 'a393', 1, 913241634, 9, 0, 282776980, 9, 0, 2, '(0,0)', 58, 23, -10.5, 23.5, -95, 86, 9, 20, 30.5, 25),
 ('1', 'a393', 1, 913246169, 9, 0, 282779082, 9, 0, 2, '(0,0)', 58, 23, -10.5, 23.5, -95, 86, 9, 20, 31.5, 26);
-
-CREATE VIEW IF NOT EXISTS BaseStation AS
-SELECT rowId, id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-FROM Metrics
-WHERE id IS NOT NULL 
-  AND frame IS NOT NULL 
-  AND slot IS NOT NULL 
-  AND pci IS NOT NULL 
-  AND dlCarrierFreq IS NOT NULL 
-  AND ulCarrierFreq IS NOT NULL 
-  AND avgLdpcIterations IS NOT NULL 
-  AND timestamp IS NOT NULL;
-
-
-CREATE VIEW IF NOT EXISTS UE AS
-SELECT rowId, ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler, ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, timestamp
-FROM Metrics
-WHERE ueId IS NOT NULL 
-  AND rnti IS NOT NULL 
-  AND inSync IS NOT NULL 
-  AND dlBytes IS NOT NULL 
-  AND dlMcs IS NOT NULL 
-  AND dlBler IS NOT NULL 
-  AND ulBytes IS NOT NULL 
-  AND ulMcs IS NOT NULL 
-  AND ulBler IS NOT NULL 
-  AND ri IS NOT NULL 
-  AND pmi IS NOT NULL 
-  AND phr IS NOT NULL 
-  AND pcmax IS NOT NULL 
-  AND rsrq IS NOT NULL 
-  AND sinr IS NOT NULL 
-  AND rsrp IS NOT NULL 
-  AND rssi IS NOT NULL 
-  AND cqi IS NOT NULL 
-  AND pucchSnr IS NOT NULL 
-  AND puschSnr IS NOT NULL 
-  AND timestamp IS NOT NULL;
