@@ -1,0 +1,31 @@
+
+// Abfragen aller Telemetrie Datensätze
+curl "http://localhost:3000/api/gnb/telemetry"
+
+// Abfragen aller Telemetrie Datensätze mit Angabe eines Zeitintervalls
+curl -X GET "http://localhost:3000/api/gnb/telemetry?timeStart=1&timeEnd=1715085256102"
+
+// Abfragen aller UE Datensätze
+curl "http://localhost:3000/api/gnb/telemetry/ue"
+
+// Abragen aller UE Datensätze mit Angabe von ueId
+curl -X GET "http://localhost:3000/api/gnb/telemetry/ue?ueId=1"
+
+// Abfragen aller UE Datensätze mit Angabe von ueId und Zeitintervalls
+curl -X GET "http://localhost:3000/api/gnb/telemetry/ue?ueId=1&timeStart=1&timeEnd=1715085256102"
+
+
+// Hinzufügen eines Telemetrie Datensatzes
+curl -X POST http://localhost:3000/api/gnb/telemetry \
+     -H "Content-Type: application/json" \
+     -d '{
+         "id": 12345678,
+         "frame": 976,
+         "slot": 4,
+         "pci": 0,
+         "dlCarrierFreq": 3349380000,
+         "ulCarrierFreq": 3349380000,
+         "ues": [],
+         "avgLdpcIterations": 3,
+         "timestamp": 1715085525102
+     }'
