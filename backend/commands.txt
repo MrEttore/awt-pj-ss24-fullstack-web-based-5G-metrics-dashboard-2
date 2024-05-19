@@ -8,12 +8,17 @@ curl -X GET "http://localhost:3000/api/gnb/telemetry?timeStart=1&timeEnd=1715085
 // Abfragen aller UE Datensätze
 curl "http://localhost:3000/api/gnb/telemetry/ue"
 
+// Abfrage Telemetrie Datensatz
+curl -X GET "http://localhost:3000/api/gnb/telemetry/1"
+
 // Abragen aller UE Datensätze mit Angabe von ueId
 curl -X GET "http://localhost:3000/api/gnb/telemetry/ue?ueId=1"
 
 // Abfragen aller UE Datensätze mit Angabe von ueId und Zeitintervalls
 curl -X GET "http://localhost:3000/api/gnb/telemetry/ue?ueId=1&timeStart=1&timeEnd=1715085256102"
 
+// Abfrage UE Datensatz
+curl -X GET "http://localhost:3000/api/gnb/telemetry/ue/1"
 
 // Hinzufügen eines Telemetrie Datensatzes
 curl -X POST http://localhost:3000/api/gnb/telemetry \
@@ -29,3 +34,12 @@ curl -X POST http://localhost:3000/api/gnb/telemetry \
          "avgLdpcIterations": 3,
          "timestamp": 1715085525102
      }'
+
+
+// logs service
+
+curl -X GET "http://localhost:3000/api/gnb/logs"
+
+curl -X GET "http://localhost:3000/api/gnb/logs/1"
+
+curl -X GET "http://localhost:3000/api/gnb/logs?timeStart=1&timeEnd=1715076990535"

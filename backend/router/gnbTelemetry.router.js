@@ -51,4 +51,27 @@ router.get('/api/gnb/telemetry/ue', async (req, res) => {
     }
 })
 
+router.get('/api/gnb/telemetry/:id', async (req, res) => {
+    console.log(req.method, req.path);
+    const { id } = req.params
+    const row = await gnbTelemetryModel.get(id)
+    if (row) {
+        row.href = `/api/gnb/telemetry/${id}`
+        res.status(200).json(row)
+    } else {
+        res.status(404).send()
+    }
+})
+
+router.get('/api/gnb/telemetry/ue/:id', async (req, res) => {
+    const { id } = req.params
+    const row = await gnbTelemetryUeModel.get(id)
+    if (row) {
+        row.href = `/api/gnb/telemetry/ue${id}`
+        res.status(200).json(row)
+    } else {
+        res.status(404).send()
+    }
+})
+
 module.exports = router

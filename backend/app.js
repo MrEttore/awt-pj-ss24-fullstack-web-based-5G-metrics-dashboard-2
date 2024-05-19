@@ -9,6 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const gnbTelemetryRouter = require('./router/gnbTelemetry.router');
+const gnbLogsRouter = require('./router/gnbLogs.router');
 
 // const dbFilePath = 'database.db';
 // const db = new sqlite3.Database(dbFilePath)
@@ -25,6 +26,8 @@ app.post('/api/gnb/configuration', (_, res) => {
 })
 
 app.use('/', gnbTelemetryRouter);
+
+app.use('/', gnbLogsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
