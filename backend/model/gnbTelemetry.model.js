@@ -45,18 +45,27 @@ class GnbTelemetryModel {
     }
 
     async get(id) {
-        const QUERY = ""
+        const QUERY = `
+            SELECT * FROM GnbTelemetry
+            WHERE rowId = ?`
 
         return new Promise((resolve, reject) => {
-            resolve()
-        })
+            this.db.get(QUERY, [id], (err, row) => {
+                if (err) reject(err)
+                else resolve(row)
+            });
+        });
     }
 
     async delete(id) {
         const QUERY = `
-            `
+            DELETE FROM GnbTelemetry
+            WHERE rowId = ?`
         return new Promise((resolve, reject) => {
-            resolve()
+            this.db.run(QUERY, [id], (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
         })
     }
 

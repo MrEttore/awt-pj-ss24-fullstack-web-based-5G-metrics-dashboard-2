@@ -59,8 +59,8 @@ class GnbTelemetryUeModel {
         }
         if (timeStart && timeEnd) {
             query += `
-             AND ? <= GnbTelemetry.timestamp 
-            AND GnbTelemetry.timestamp <= ?`
+             AND ? <= timestamp 
+            AND timestamp <= ?`
         }
 
         return new Promise((resolve, reject) => {
@@ -107,6 +107,12 @@ class GnbTelemetryUeModel {
                 resolve(this.lastID)
             })
         });
+    }
+
+    async delete(id) {
+        return new Promise((resolve, reject) => {
+            resolve()
+        })
     }
 }
 
