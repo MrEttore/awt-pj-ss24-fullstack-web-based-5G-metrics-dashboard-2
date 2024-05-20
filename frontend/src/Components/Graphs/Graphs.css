@@ -1,0 +1,13 @@
+.graphsContainer {
+  display: grid;
+  /* defines the colums */
+  grid-template-columns: 1fr 1fr;
+
+  /* defines the rows */
+  grid-template-rows: 1fr 1fr;
+
+  border: 2px solid;
+  border-radius: 5px;
+
+  margin-top: 0.5rem;
+}
