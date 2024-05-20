@@ -1,5 +1,5 @@
 .header {
-  padding: 1rem;
+  padding: 0.2rem;
   border-bottom: 2px solid;
   display: flex;
 
@@ -9,7 +9,7 @@
 }
 
 .imageContainer img {
-  height: 3.2rem;
+  height: 2.5rem;
 }
 
 .imageContainer {
@@ -17,14 +17,15 @@
   align-items: center;
   justify-content: center;
 
-  height: 4.2rem;
-  width: 5rem;
+  height: 3rem;
+  width: 4rem;
   margin: 0.3rem;
   border-radius: 5px;
   background-color: white;
 }
 
 .header h1 {
+  font-size: 1.5rem;
   margin-left: 1rem;
   color: white;
 }
