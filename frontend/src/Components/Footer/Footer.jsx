@@ -5,7 +5,10 @@ function Footer() {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    setInterval(() => setTime(new Date()), 1000);
+    const interval = setInterval(() => setTime(new Date()), 1000);
+
+    // Clear the interval when component unmounts
+    return () => clearInterval(interval);
   }, []);
 
   return (
