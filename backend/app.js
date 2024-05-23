@@ -25,9 +25,21 @@ app.post('/api/gnb/configuration', (_, res) => {
   return;
 })
 
+/*
+* gnb.telemetry
+*/
 app.use('/', gnbTelemetryRouter);
 
+/*
+/ gnb.logs
+*/
 app.use('/', gnbLogsRouter);
+
+/*
+* gnb.configuration
+*/
+const gnbConfigurationRouter = require('./router/gnbConfiguration.router');
+app.use('/', gnbConfigurationRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
