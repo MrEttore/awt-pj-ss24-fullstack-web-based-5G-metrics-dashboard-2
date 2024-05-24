@@ -13,7 +13,7 @@ password = os.getenv('PW')
 
 async def intercept_websockets():
     # Launch the browser
-    browser = await launch(headless=True, args=['--start-maximized', '--incognito'])
+    browser = await launch(headless=True, args=['--start-maximized', '--incognito', '--no-sandbox'], executablePath='/usr/bin/chromium')
     page = await browser.newPage()
 
     # Intercept WebSocket messages
