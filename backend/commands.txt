@@ -24,16 +24,39 @@ curl -X GET "http://localhost:3000/api/gnb/telemetry/ue/1"
 curl -X POST http://localhost:3000/api/gnb/telemetry \
      -H "Content-Type: application/json" \
      -d '{
-         "id": 12345678,
-         "frame": 976,
-         "slot": 4,
-         "pci": 0,
-         "dlCarrierFreq": 3349380000,
-         "ulCarrierFreq": 3349380000,
-         "ues": [],
-         "avgLdpcIterations": 3,
-         "timestamp": 1715085525102
-     }'
+        "id": 12345678,
+        "frame": 800,
+        "slot": 4,
+        "pci": 0,
+        "dlCarrierFreq": 3349380000,
+        "ulCarrierFreq": 3349380000,
+        "ues": [
+            {
+                "ueId": "1",
+                "rnti": "a393",
+                "inSync": 1,
+                "dlBytes": 913141864,
+                "dlMcs": 9,
+                "dlBler": 0,
+                "ulBytes": 282731733,
+                "ulMcs": 9,
+                "ulBler": 0,
+                "ri": 2,
+                "pmi": "(0,0)",
+                "phr": 58,
+                "pcmax": 23,
+                "rsrq": -10.5,
+                "sinr": 23.5,
+                "rsrp": -96,
+                "rssi": 85.5,
+                "cqi": 9,
+                "pucchSnr": 20,
+                "puschSnr": 28.5
+            }
+        ],
+        "avgLdpcIterations": 3,
+        "timestamp": 1715085257102
+    }'
 
 
 // logs service

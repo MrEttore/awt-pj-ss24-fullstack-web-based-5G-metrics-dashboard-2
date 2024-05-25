@@ -14,8 +14,13 @@ const router = express.Router()
 // TODO: Add UE data using gnbTelemetryModel.addUE()
 router.post('/api/gnb/telemetry', async (req, res) => {
     console.log(req.method, req.path)
-    const id = await gnbTelemetryModel.add({ ...req.body })
-    const row = await gnbTelemetryModel.get(id)
+    const lastID = await gnbTelemetryModel.add({ ...req.body })
+
+    for (let ueData of req.body.ues) {
+        console.log("ueData", ueData)
+        await gnbTelemetryUeModel.add({ ...ueData, 'gnbTelemetryRowId': lastID })
+    }
+    const row = await gnbTelemetryModel.get(lastID)
     if (row) {
         row.href = `${req.path}/row.rowID`
         res.status(200).json(row)
@@ -27,15 +32,39 @@ router.post('/api/gnb/telemetry', async (req, res) => {
 router.get('/api/gnb/telemetry', async (req, res) => {
     console.log(req.method, req.path)
     const rows = await gnbTelemetryModel.getAll({ ...req.query })
-    if (rows) {
-        rows.forEach((row) => {
-            row.href = `/api/gnb/telemetry/${row.rowId}`
-        })
-        res.status(200).json(rows)
-    }
-    else {
+
+    if (!rows) {
         res.status(404).send()
+        return
     }
+
+    for (let row of rows) {
+        const telemetryID = row.rowId
+        row.ues = await gnbTelemetryUeModel.getAll(
+            {
+                ...req.query,
+                'telemetryId': telemetryID
+            }
+        )
+        row.href = `/api/gnb/telemetry/${telemetryID}`
+    }
+    res.status(200).json(rows)
+})
+
+router.get('/api/gnb/telemetry/:id', async (req, res) => {
+    const { id } = req.params
+    let row = await gnbTelemetryModel.get(id)
+    if (!row) {
+        res.status(404).send()
+        return
+    }
+
+    const telemetryID = row.rowId
+    row.ues = await gnbTelemetryUeModel.getAll({
+        'telemetryId': telemetryID
+    })
+    row.href = '/api/gnb/telemetry/' + telemetryID
+    res.status(200).json(row)
 })
 
 router.get('/api/gnb/telemetry/ue', async (req, res) => {
@@ -46,29 +75,6 @@ router.get('/api/gnb/telemetry/ue', async (req, res) => {
             row.href = `/api/gnb/telemetry/ue/${row.rowId}`
         })
         res.status(200).json(rows)
-    } else {
-        res.status(404).send()
-    }
-})
-
-router.get('/api/gnb/telemetry/:id', async (req, res) => {
-    console.log(req.method, req.path);
-    const { id } = req.params
-    const row = await gnbTelemetryModel.get(id)
-    if (row) {
-        row.href = `/api/gnb/telemetry/${id}`
-        res.status(200).json(row)
-    } else {
-        res.status(404).send()
-    }
-})
-
-router.get('/api/gnb/telemetry/ue/:id', async (req, res) => {
-    const { id } = req.params
-    const row = await gnbTelemetryUeModel.get(id)
-    if (row) {
-        row.href = `/api/gnb/telemetry/ue${id}`
-        res.status(200).json(row)
     } else {
         res.status(404).send()
     }
