@@ -60,8 +60,9 @@ class Cn5gTelemetryModel {
         } = params
 
         let paramList = []
-        if (timeStart && timeEnd && parseInt(timeStart) !== NaN && parseInt(timeEnd) !== NaN) {
-            query += ' WHERE timeStart <= ? AND ? <= timeEnd'
+        if (timeStart && timeEnd && !isNaN(parseInt(timeStart)) && !isNaN(parseInt(timeEnd))) {
+            console.log("Params provided.")
+            query += ' WHERE ? <= timestamp AND timestamp <= ?'
             paramList.push(timeStart, timeEnd)
         }
 

@@ -6,7 +6,7 @@ const router = express.Router()
 const model = require('../model/cn5g.telemetry.model')
 
 router.get('/', async (req, res) => {
-    const rows = await model.getAll({...req.params})
+    const rows = await model.getAll({...req.query})
     for (let row of rows) {
         row.href = req.originalUrl+ '/' + row.rowId
     }
