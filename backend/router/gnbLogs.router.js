@@ -30,6 +30,14 @@ router.get('/api/gnb/logs/:id', async (req, res) => {
     }
 })
 
-router.post('/api/gnb/logs', async () => {})
+router.post('/api/gnb/logs', async (req, res) => {
+    const id = await model.add(req.body)
+    if (!id) {
+        return res.status(404).send()
+    }
+    const row = await model.get(id)
+    row.href = '/api/gnb/logs/' + id
+    res.status(200).json(row)
+})
 
 module.exports = router;
