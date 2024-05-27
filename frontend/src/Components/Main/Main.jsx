@@ -6,7 +6,7 @@ function Main() {
   return (
     <main className="main">
       <ControlBar />
-      <Graphs />
+      {/* <Graphs /> */}
     </main>
   );
 }
