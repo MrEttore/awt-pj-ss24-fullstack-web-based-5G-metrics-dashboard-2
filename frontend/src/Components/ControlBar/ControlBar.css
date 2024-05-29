@@ -1,32 +1,79 @@
 @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
 
 .controlBarContainer {
-  padding: 0.3rem;
-
+  padding: 0.5rem;
   border-radius: 5px;
 }
 
 .selectTab {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  width: 30%;
+  height: 4.5rem;
+  border-radius: 10px;
+  padding: 0.4rem;
+  background-color: rgba(250, 249, 246, 0.4);
 }
 
 .healthStatusForm,
 .telemetryForm,
 .logsForm {
-  display: flex;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  /* justify-content: space-between; */
+
   gap: 1.5rem;
   margin-top: 1rem;
 
-  height: 5rem;
+  height: 6rem;
   width: auto;
 
-  border: solid 1.5px;
-  border-radius: 0.8rem;
+  border-radius: 0.5rem;
 
-  padding: 0.3rem;
+  padding: 0.4rem;
+
+  background-color: rgba(250, 249, 246, 0.4);
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+  gap: 0.5rem;
+}
+
+.btnSubmit {
+  background-color: #15b244;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.btnSubmit:hover {
+  background-color: #229b3e;
+}
+
+.btnReset {
+  background-color: #f1bf29;
+
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.btnReset:hover {
+  background-color: #ffb347;
 }
 
 label {
@@ -38,51 +85,17 @@ input[type="text"] {
   width: 12rem;
   padding: 8px;
 
-  border: 1px solid black;
+  border: 1.5px solid #4e4376;
   border-radius: 5px;
-}
-.btnHealthForm {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.btnHealthForm:hover {
-  background-color: #218838;
-}
-
-/* Deprecated */
-
-.control {
-  display: flex;
-  align-items: center;
-  /* justify-content: space-between; */
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.control label {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.device,
-.time,
-.metrics {
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  font-family: "Comfortaa", sans-serif;
 }
 
 /** custom CSS for the <Select/> component **/
 .selectDevice,
 .selectMetrics {
-  width: 16rem;
-  border: 2px solid;
-  border-radius: 24px;
+  width: 14rem;
+  border: 1px solid;
+  border-radius: 5px;
   padding: 0.3rem;
   font-family: "Comfortaa", sans-serif;
 }
@@ -96,8 +109,8 @@ input[type="text"] {
 .selectDevice .react-select__menu,
 .selectMetrics .react-select__menu {
   /* Styles for the menu */
-  border: 2px solid;
-  border-radius: 1rem;
+  border: 1px solid;
+  border-radius: 0.2rem;
   margin-top: 0.5rem;
   background-color: white;
 }
@@ -109,6 +122,7 @@ input[type="text"] {
   cursor: pointer;
   height: 2rem;
   margin: 0.05rem;
+  border-radius: 0.12rem;
 }
 
 .selectDevice .react-select__option:hover,
@@ -131,7 +145,7 @@ input[type="text"] {
   /* Styles for the single value */
   background-color: #f0f0f0;
   border-radius: 2px;
-  padding: 2px 4px;
+  padding: 2px;
 }
 
 .selectDevice .react-select__multi-value,
@@ -139,7 +153,7 @@ input[type="text"] {
   /* Styles for the multi value */
   background-color: #f0f0f0;
   border-radius: 2px;
-  padding: 2px 4px;
+  padding: 2px;
 }
 
 .selectDevice .react-select__multi-value__label,
@@ -159,24 +173,4 @@ input[type="text"] {
 .selectMetrics .react-select__multi-value__remove:hover {
   /* Hover styles for the remove button of multi value */
   color: #666;
-}
-
-/** CSS for the button */
-.btnForm {
-  margin-left: auto;
-  font-weight: bold;
-  height: 3rem;
-  width: 8rem;
-  border: 2px solid;
-  border-radius: 24px;
-  font-family: "Comfortaa";
-  background-color: white;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.btnForm:hover {
-  background-color: #b31b1b;
-  color: white;
-  border-color: white;
 }
