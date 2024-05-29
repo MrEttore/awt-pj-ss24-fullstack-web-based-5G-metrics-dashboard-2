@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./ControlBar.css";
 import Select from "react-select";
+import Tab from "../Tab/Tab";
 
 const optionsMetrics = [
   { value: "dlBytes", label: "DL Bytes" },
@@ -29,33 +30,29 @@ function ControlBar() {
   }
 
   return (
-    <div className="formContainer">
+    <div className="controlBarContainer">
       <div className="selectTab">
-        <button
-          className={`healthStatusTab ${
-            selectedTab === "healthStatus" ? "selected" : ""
-          }`}
+        <Tab
           value="healthStatus"
-          onClick={handleSelectedTab}
+          onSelect={handleSelectedTab}
+          selectedTab={selectedTab}
         >
           Health Status
-        </button>
-        <button
-          className={`telemetryTab ${
-            selectedTab === "telemetry" ? "selected" : ""
-          }`}
+        </Tab>
+        <Tab
           value="telemetry"
-          onClick={handleSelectedTab}
+          onSelect={handleSelectedTab}
+          selectedTab={selectedTab}
         >
           Telemetry
-        </button>
-        <button
-          className={`logsTab ${selectedTab === "logs" ? "selected" : ""}`}
+        </Tab>
+        <Tab
           value="logs"
-          onClick={handleSelectedTab}
+          onSelect={handleSelectedTab}
+          selectedTab={selectedTab}
         >
           Logs
-        </button>
+        </Tab>
       </div>
 
       {selectedTab === "healthStatus" && (
