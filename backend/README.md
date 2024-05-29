@@ -1,4 +1,4 @@
-# Project Name - Backend
+# 5G Metrics Dashboard - Backend
 
 ## Installation
 
