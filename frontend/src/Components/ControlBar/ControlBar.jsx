@@ -56,19 +56,32 @@ function ControlBar() {
       </div>
 
       {selectedTab === "healthStatus" && (
-        <form className="healthStatusForm">
-          <label>healthStatusForm</label>
+        <form
+          className="healthStatusForm" /*  onSubmit={handleSubmit(event)} ... */
+        >
+          <label htmlFor="time">Select time</label>
+          <input
+            type="text"
+            id="time"
+            placeholder="Add an unix timestamp"
+            required
+          ></input>
+          <button className="btnHealthForm" type="submit">
+            Submit
+          </button>
         </form>
       )}
 
       {selectedTab === "telemetry" && (
-        <form className="telemetryForm">
+        <form
+          className="telemetryForm" /*  onSubmit={handleSubmit(event)} ... */
+        >
           <label>telemetryForm</label>
         </form>
       )}
 
       {selectedTab === "logs" && (
-        <form className="logsForm">
+        <form className="logsForm" /*  onSubmit={handleSubmit(event)} ... */>
           <label>logsForm</label>
         </form>
       )}
