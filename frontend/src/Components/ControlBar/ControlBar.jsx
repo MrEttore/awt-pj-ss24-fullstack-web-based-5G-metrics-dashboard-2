@@ -8,7 +8,7 @@ const optionsMetrics = [
   { value: "ulBytes", label: "UL Bytes" },
 ];
 
-const optionsdevice = [
+const optionsDevices = [
   {
     value: "iPhone15",
     label: "iPhone15",
@@ -23,7 +23,11 @@ const optionsdevice = [
 // TODO: build form elements in separate React components
 
 function ControlBar() {
+  // piece of state to control the tab selection
   const [selectedTab, setSelectedTab] = useState("healthStatus");
+
+  // piece of state to control the device selection
+  const [selectedDevice, setSelectedDevice] = useState("iPhone15");
 
   function handleSelectedTab(e) {
     setSelectedTab(e.target.value);
@@ -66,9 +70,12 @@ function ControlBar() {
             placeholder="Add an unix timestamp"
             required
           ></input>
-          <button className="btnHealthForm" type="submit">
-            Submit
-          </button>
+          <div className="btnContainer">
+            <button className="btnSubmit" type="submit">
+              Submit
+            </button>
+            <button className="btnReset">Reset</button>
+          </div>
         </form>
       )}
 
@@ -76,13 +83,68 @@ function ControlBar() {
         <form
           className="telemetryForm" /*  onSubmit={handleSubmit(event)} ... */
         >
-          <label>telemetryForm</label>
+          {/* DEVICE */}
+          <label htmlFor="selectDevice">Select device</label>
+          <Select
+            className="selectDevice"
+            classNamePrefix="react-select"
+            id="selectDevice"
+            unstyled
+            isMulti
+            isSearchable
+            defaultValue={selectedDevice}
+            onChange={setSelectedDevice}
+            options={optionsDevices}
+            required
+          />
+
+          {/* METRICS */}
+          <label htmlFor="selectMetrics">Select device</label>
+          <Select
+            className="selectMetrics"
+            classNamePrefix="react-select"
+            id="selectMetrics"
+            unstyled
+            isMulti
+            isSearchable
+            defaultValue={selectedDevice}
+            onChange={setSelectedDevice}
+            options={optionsMetrics}
+            required
+          />
+
+          {/* TIME */}
+          <label htmlFor="time">Select time</label>
+          <input
+            type="text"
+            id="time"
+            placeholder="Add an unix timestamp"
+            required
+          ></input>
+          <div className="btnContainer">
+            <button className="btnSubmit" type="submit">
+              Submit
+            </button>
+            <button className="btnReset">Reset</button>
+          </div>
         </form>
       )}
 
       {selectedTab === "logs" && (
         <form className="logsForm" /*  onSubmit={handleSubmit(event)} ... */>
-          <label>logsForm</label>
+          <label htmlFor="time">Select time</label>
+          <input
+            type="text"
+            id="time"
+            placeholder="Add an unix timestamp"
+            required
+          ></input>
+          <div className="btnContainer">
+            <button className="btnSubmit" type="submit">
+              Submit
+            </button>
+            <button className="btnReset">Reset</button>
+          </div>
         </form>
       )}
     </div>
@@ -90,51 +152,3 @@ function ControlBar() {
 }
 
 export default ControlBar;
-
-//  const [selectedDevice, setSelectedDevice] = useState(null);
-//  const [selectedMetric, setSelectedMetric] = useState(null);
-
-// {/* <form className="control" /*  onSubmit={handleSubmit(event)} ... */>
-//   {/* Select device */}
-//   <div className="device">
-//     <label htmlFor="selectDevice">Device:</label>
-//     <Select
-//       className="selectDevice"
-//       classNamePrefix="react-select"
-//       id="selectDevice"
-//       unstyled
-//       isMulti
-//       isSearchable
-//       defaultValue={selectedDevice}
-//       onChange={setSelectedDevice}
-//       options={optionsdevice}
-//     />
-//   </div>
-
-//   {/* Select time span */}
-//   <div className="time">
-//     <label htmlFor="selectTime">Time Span:</label>
-//     <p id="selectTime">[Here comes the time filter]</p>
-//   </div>
-
-//   {/* Select metrics */}
-//   <div className="metrics">
-//     <label htmlFor="selectMetrics">Metrics:</label>
-//     <Select
-//       className="selectMetrics"
-//       classNamePrefix="react-select"
-//       id="selectMetrics"
-//       unstyled
-//       isMulti
-//       isSearchable
-//       defaultValue={selectedMetric}
-//       onChange={setSelectedMetric}
-//       options={optionsMetrics}
-//     />
-//   </div>
-
-//   {/* Submit button */}
-//   <button className="btnForm" type="submit">
-//     Show Data
-//   </button>
-// </form>; */}

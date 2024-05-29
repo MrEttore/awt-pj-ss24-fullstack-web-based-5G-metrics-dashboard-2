@@ -1,11 +1,11 @@
 .header {
-  padding: 0.2rem;
+  padding: 0.5rem;
   border-bottom: 2px solid;
   display: flex;
 
   /* to align items vertically */
   align-items: center;
-  background-color: #b31b1b;
+  background-color: #2b5876;
 }
 
 .imageContainer img {
