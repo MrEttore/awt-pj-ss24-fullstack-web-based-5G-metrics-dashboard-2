@@ -1,7 +1,7 @@
 import asyncio
 from pyppeteer import launch
 from dotenv import load_dotenv
-import os, re, json
+import os, re, json, requests
 
 # Load environment variables from .env.local
 load_dotenv(dotenv_path=".env.local")
@@ -31,11 +31,15 @@ async def intercept_websockets():
             # send_data(event['response']['payloadData'])
             filter_data(event['response']['payloadData'])
     
-    def send_data(data):
+    def send_data(data, url_ending):
         # Send json data to the backend server
         json_data = extract_json_from_string(data)
         if json_data:
+            url = 'http://localhost:5000/api/' + url_ending
             print(json_data)
+            requests.post(url, json=json_data)
+            # send json_data to the backend server
+
 
     def filter_data(text):
         # send json objects to endpoints
@@ -59,18 +63,18 @@ async def intercept_websockets():
                 destination = line.split(':', 1)[1].strip()
                 break
         print(text)
-        if destination and False:
+        if destination:
             json = extract_json_from_string(text)
             if 'gnb.telemetry' in destination:
-                send_data(json, 'gnb.telemetry')
-            elif 'gnb.logs' in destination:
-                send_data(json, 'gnb.logs')
-            elif 'gnb.configuration' in destination:
-                send_data(json, 'gnb.configuration')
-            elif 'gnb.details' in destination:
-                send_data(json, 'gnb.details')
-            elif 'cn5g.telemetry' in destination:
-                send_data(json, 'cn5g.telemtry')
+                send_data(json, 'gnb/telemetry')
+            #elif 'gnb.logs' in destination:
+                #send_data(json, 'gnb/logs')
+            #elif 'gnb.configuration' in destination:
+                # send_data(json, 'gnb/configuration')
+            #elif 'gnb.details' in destination:
+                # send_data(json, 'gnb/details')
+            #elif 'cn5g.telemetry' in destination:
+                # send_data(json, 'cn5g/telemtry')
 
     def extract_json_from_string(text):
         # Regular expression to find JSON objects within a string
