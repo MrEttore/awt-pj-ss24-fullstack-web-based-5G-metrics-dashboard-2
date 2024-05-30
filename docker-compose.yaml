@@ -8,6 +8,8 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+    networks:
+      - awt
   backend:
     build: 
       context: ./backend
@@ -17,5 +19,10 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    networks:
+      - awt
+networks:
+  awt:
+    driver: bridge
 
 
