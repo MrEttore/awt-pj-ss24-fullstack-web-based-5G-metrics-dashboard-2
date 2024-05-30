@@ -18,6 +18,13 @@ const gnbLogsRouter = require('./router/gnbLogs.router');
 
 app.use(bodyParser.json());
 
+/*
+* Logger middleware
+*/
+app.use((req, _, next) => {
+  console.log(req.method, req.originalUrl)
+  next()
+})
 
 app.post('/api/gnb/configuration', (_, res) => {
   console.log("/gnb/configuration endpoint called.");
@@ -25,9 +32,25 @@ app.post('/api/gnb/configuration', (_, res) => {
   return;
 })
 
+/*
+* gnb.telemetry
+*/
 app.use('/', gnbTelemetryRouter);
 
+/*
+/ gnb.logs
+*/
 app.use('/', gnbLogsRouter);
+
+/*
+* gnb.configuration
+*/
+const gnbConfigurationRouter = require('./router/gnbConfiguration.router');
+app.use('/', gnbConfigurationRouter)
+
+/*  cn5g.telemetry */
+app.use('/api/cn5g/telemetry', require('./router/cn5g.telemetry.router'));
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

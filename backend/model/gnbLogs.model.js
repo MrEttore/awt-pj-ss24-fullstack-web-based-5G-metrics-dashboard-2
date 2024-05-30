@@ -1,13 +1,15 @@
 
 class GnbLogsModel {
 
+    #db;
+
     constructor() {
-        this.db = require('../database/sqlite3');
-        this.init();
+        this.#db = require('../database/sqlite3');
+        this.#init();
     }
 
-    init() {
-        this.db.run(`
+    #init() {
+        this.#db.run(`
             CREATE TABLE IF NOT EXISTS 
                 GnbLogs (
                     rowId INTEGER PRIMARY KEY,
@@ -17,7 +19,7 @@ class GnbLogsModel {
         `)
     }
 
-    getAll(params) {
+    async getAll(params) {
         const { timeStart, timeEnd } = params
         let query = `
             SELECT * FROM GnbLogs
@@ -27,32 +29,32 @@ class GnbLogsModel {
                  AND timestamp <= ?`
         }
         return new Promise((resolve, reject) => {
-            this.db.all(query, [timeStart, timeEnd], (err, rows) => {
+            this.#db.all(query, [timeStart, timeEnd], (err, rows) => {
                 if (err) reject(err)
                 else resolve(rows)
             });
         });
     }
 
-    get(id) {
+    async get(id) {
         const QUERY = `
             SELECT *
             FROM GnbLogs
             WHERE rowId = ?`
         
         return new Promise((resolve, reject) => {
-            this.db.get(QUERY, [id], (err, row) => {
+            this.#db.get(QUERY, [id], (err, row) => {
                 if (err) reject(err)
                 else resolve(row)
             })
         })
     }
 
-    add(data) {
+    async add(data) {
         const QUERY = 'INSERT INTO GnbLogs (payload, timestamp) VALUES (?, ?)'
         let { payload, timestamp } = data
         return new Promise((resolve, reject) => {
-            this.db.run(QUERY, [payload, timestamp], function(err) {
+            this.#db.run(QUERY, [payload, timestamp], function(err) {
                 if (err) reject(err)
                 else resolve(this.lastID)
             });
