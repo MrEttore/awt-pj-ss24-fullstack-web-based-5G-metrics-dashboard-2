@@ -19,7 +19,7 @@ class GnbLogsModel {
         `)
     }
 
-    getAll(params) {
+    async getAll(params) {
         const { timeStart, timeEnd } = params
         let query = `
             SELECT * FROM GnbLogs
@@ -36,7 +36,7 @@ class GnbLogsModel {
         });
     }
 
-    get(id) {
+    async get(id) {
         const QUERY = `
             SELECT *
             FROM GnbLogs
@@ -50,7 +50,7 @@ class GnbLogsModel {
         })
     }
 
-    add(data) {
+    async add(data) {
         const QUERY = 'INSERT INTO GnbLogs (payload, timestamp) VALUES (?, ?)'
         let { payload, timestamp } = data
         return new Promise((resolve, reject) => {
