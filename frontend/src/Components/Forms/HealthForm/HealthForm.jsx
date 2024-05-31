@@ -26,28 +26,30 @@ export default function HealthForm({ selectedTab }) {
 
   return (
     <form className={`${selectedTab}Form`} onSubmit={handleSubmit}>
-      <label htmlFor="time">Select time</label>
-      <div className="inputContainer">
-        <input
-          type="text"
-          id="time"
-          placeholder="From ..."
-          value={startTime}
-          onChange={(e) => {
-            setStartTime(Number(e.target.value));
-          }}
-          required
-        />
-        <input
-          type="text"
-          id="time"
-          placeholder="To ..."
-          value={endTime}
-          onChange={(e) => {
-            setEndTime(Number(e.target.value));
-          }}
-          required
-        />
+      <div className="timeSpanContainer">
+        <label htmlFor="time">Select time</label>
+        <div className="inputContainer">
+          <input
+            type="text"
+            id="time"
+            placeholder="From ..."
+            value={startTime}
+            onChange={(e) => {
+              setStartTime(Number(e.target.value));
+            }}
+            required
+          />
+          <input
+            type="text"
+            id="time"
+            placeholder="To ..."
+            value={endTime}
+            onChange={(e) => {
+              setEndTime(Number(e.target.value));
+            }}
+            required
+          />
+        </div>
       </div>
 
       <div className="btnContainer">
