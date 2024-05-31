@@ -1,12 +1,11 @@
 .footer {
   padding: 1rem;
-  border-top: 2px solid;
   position: fixed;
   bottom: 0;
   width: 100%;
   clear: both;
   text-align: center;
-  background-color: #2b5876;
+  background-color: #080f25;
 }
 
 .date {
