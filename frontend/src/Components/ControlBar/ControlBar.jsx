@@ -1,5 +1,4 @@
-import Form from "../Form/Form";
-
+import Forms from "../Forms/Forms";
 import "./ControlBar.css";
 import Tabs from "../Tabs/Tabs";
 
@@ -12,7 +11,7 @@ function ControlBar({ selectedTab, onSelect }) {
       <Tabs selectedTab={selectedTab} onSelect={onSelect} />
 
       {/* Forms */}
-      <Form selectedTab={selectedTab} />
+      <Forms selectedTab={selectedTab} />
     </div>
   );
 }
