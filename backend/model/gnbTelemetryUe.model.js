@@ -1,5 +1,10 @@
 // gnbTelemetryUe.model.js
 
+const QUERY = `
+SELECT rowId, ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler, ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr
+FROM GnbTelemetryUe
+`
+
 class GnbTelemetryUeModel {
 
     constructor() {
@@ -48,23 +53,32 @@ class GnbTelemetryUeModel {
     */
     async getAll(params) {
         let query = `
-            SELECT * FROM GnbTelemetryUe 
+            SELECT GnbTelemetryUe.rowId, ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler, ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr
+            FROM GnbTelemetryUe 
             JOIN GnbTelemetry
             ON GnbTelemetryUe.gnbTelemetryRowId = GnbTelemetry.rowId
             WHERE 1=1`
-        const { ueId, timeStart, timeEnd } = params
+        const { ueId, timeStart, timeEnd, telemetryId } = params
+
+        let paramList = []
 
         if (ueId) {
             query += " AND ueId = ?"
+            paramList.push(ueId)
         }
         if (timeStart && timeEnd) {
             query += `
              AND ? <= timestamp 
             AND timestamp <= ?`
+            paramList.push(timeStart, timeEnd)
+        }
+        if (telemetryId) {
+            query += " AND gnbTelemetryRowId = ?"
+            paramList.push(telemetryId)
         }
 
         return new Promise((resolve, reject) => {
-            this.db.all(query, [ueId, timeStart, timeEnd], (err, rows) => {
+            this.db.all(query, paramList, (err, rows) => {
                 if (err) {
                     reject(err)
                 } else {
@@ -75,11 +89,11 @@ class GnbTelemetryUeModel {
     }
 
     async get(id) {
-        const QUERY = `
+        let query = `
             SELECT * FROM GnbTelemetryUe WHERE rowId = ?`
 
         return new Promise((resolve, reject) => {
-            this.db.get(QUERY, [id], (err, row) => {
+            this.db.get(query, [id], (err, row) => {
                 if (err) reject(err)
                 else resolve(row)
             })
@@ -87,24 +101,28 @@ class GnbTelemetryUeModel {
     }
 
     async add(data) {
+        console.log(data)
         const QUERY = `INSERT 
             INTO GnbTelemetryUe (
                 ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler, 
-                ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, timestamp
+                ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, gnbTelemetryRowId
             ) VALUES ( 
                 ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? 
             );`
         const {
             ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler,
-            ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, timestamp
+            ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, gnbTelemetryRowId
         } = data
 
-        return new Promise((resolve, _) => {
+        return new Promise((resolve, reject) => {
             this.db.run(QUERY, [
                 ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler,
-                ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, timestamp
-            ], function () {
-                resolve(this.lastID)
+                ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, gnbTelemetryRowId
+            ], function (err) {
+                if (err)
+                    reject(err)
+                else
+                    resolve(this.lastID)
             })
         });
     }

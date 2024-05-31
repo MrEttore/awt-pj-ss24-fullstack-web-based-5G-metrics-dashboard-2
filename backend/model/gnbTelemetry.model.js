@@ -1,4 +1,19 @@
 
+const ueModel = require("./gnbTelemetryUe.model")
+
+const SELECT = `
+    SELECT *
+    FROM GnbTelemetry`
+
+const INSERT = `INSERT
+INTO GnbTelemetry (
+    id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
+) VALUES (
+    ?, ?, ?, ?, ?, ?, ?, ?
+);`
+
+const GNB_TELEMETRY_ROW_ID = 'gnbTelemetryRowId'
+
 class GnbTelemetryModel {
 
     constructor() {
@@ -28,31 +43,47 @@ class GnbTelemetryModel {
     /   es werden alle datensätze zurückgegeben
     */
     async getAll(params) {
-        const { timeStart, timeEnd } = params
+        const { ueId, timeStart, timeEnd } = params
         let query = `
-            SELECT * FROM GnbTelemetry WHERE 1=1`
+            ${SELECT}
+            WHERE 1=1
+        `
+
+        let paramList = []
+
+        if (ueId) {
+            query += "\nAND ueId = ?"
+            paramList.push(ueId)
+        }
 
         if (timeStart && timeEnd) {
-            query += " AND ? <= timestamp AND timestamp <= ?"
+            query += "\nAND ? <= timestamp AND timestamp <= ?"
+            paramList.push(timeStart, timeEnd)
         }
         return new Promise((resolve, reject) => {
-            this.db.all(query, [timeStart, timeEnd], (err, rows) => {
-                if (err) reject(err)
-                else resolve(rows)
+            this.db.all(query, paramList, (err, rows) => {
+                if (err) 
+                    reject(err)
+                else 
+                    resolve(rows)
             })
         })
 
     }
 
     async get(id) {
-        const QUERY = `
-            SELECT * FROM GnbTelemetry
-            WHERE rowId = ?`
+        let query = `
+            ${SELECT}
+            WHERE GnbTelemetry.rowId = ?
+        `
 
         return new Promise((resolve, reject) => {
-            this.db.get(QUERY, [id], (err, row) => {
+            this.db.get(query, [id], (err, row) => {
                 if (err) reject(err)
-                else resolve(row)
+                else {
+                    console.log(row)
+                    resolve(row)
+                }
             });
         });
     }
@@ -121,24 +152,38 @@ class GnbTelemetryModel {
     //     }
     // }
 
+    /*
+    *   Adds telemetry data to table
+    *   Returns 
+    */
+    async addAll(data) {
+        console.log(data)
+
+        const lastID = await this.add(data);
+
+        for (let ueData in data.ues) {
+            await ueModel.add({...ueData, 
+                                [GNB_TELEMETRY_ROW_ID]: lastID
+                            })
+        }
+        return lastID;
+    }
+
     async add(data) {
-        const QUERY = `INSERT
-            INTO GnbTelemetry (
-                id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-            ) VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?
-            );`
         const {
             id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-         } = data
-        return new Promise((resolve, _) => {
-            this.db.run(QUERY, [
+        } = data
+
+        return new Promise((resolve, reject) => {
+            this.db.run(INSERT, [
                 id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-            ], function (err) {
-                if (err) reject(err)
-                else resolve(this.lastID)
+            ], function(err) {
+                if (err)
+                    reject(err)
+                else
+                    resolve(this.lastID)
             })
-        });
+        })
     }
 
 
