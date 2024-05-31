@@ -1,0 +1,163 @@
+.formContainer {
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0.5rem;
+  background-color: #37446b;
+}
+
+.healthStatusForm,
+.logsForm,
+.telemetryForm {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+
+  border-radius: 0.5rem;
+
+  color: white;
+  text-transform: uppercase;
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btnSubmit {
+  background-color: #15b244;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: white;
+
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.btnSubmit:hover {
+  background-color: #229b3e;
+}
+
+.btnReset {
+  background-color: #f1bf29;
+
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.btnReset:hover {
+  background-color: #ffb347;
+}
+
+label {
+  display: block;
+  margin-left: 1rem;
+  ont-weight: 100;
+}
+input[type="text"] {
+  width: 12rem;
+  padding: 8px;
+
+  border: 1.5px solid #4e4376;
+  border-radius: 5px;
+  font-family: "Comfortaa", sans-serif;
+}
+
+/** custom CSS for the <Select/> component **/
+.selectDevice,
+.selectMetrics {
+  width: 14rem;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 0.3rem;
+  font-family: "Comfortaa", sans-serif;
+}
+
+.selectDevice .react-select__control,
+.selectMetrics .react-select__control {
+  /* Styles for the control */
+  padding: 8px;
+}
+
+.selectDevice .react-select__menu,
+.selectMetrics .react-select__menu {
+  /* Styles for the menu */
+  border: 1px solid;
+  border-radius: 0.2rem;
+  margin-top: 0.5rem;
+  background-color: white;
+}
+
+.selectDevice .react-select__option,
+.selectMetrics .react-select__option {
+  /* Styles for the options */
+  padding: 8px;
+  cursor: pointer;
+  height: 2rem;
+  margin: 0.05rem;
+  border-radius: 0.12rem;
+}
+
+.selectDevice .react-select__option:hover,
+.selectMetrics .react-select__option:hover {
+  /* Hover styles for the options */
+  background-color: #b31b1b;
+  color: white;
+  border-color: white;
+  margin: 0;
+}
+
+.selectDevice .react-select__placeholder,
+.selectMetrics .react-select__placeholder {
+  /* Styles for the placeholder */
+  color: #999;
+}
+
+.selectDevice .react-select__single-value,
+.selectMetrics .react-select__single-value {
+  /* Styles for the single value */
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.selectDevice .react-select__multi-value,
+.selectMetrics .react-select__multi-value {
+  /* Styles for the multi value */
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  padding: 2px;
+}
+
+.selectDevice .react-select__multi-value__label,
+.selectMetrics .react-select__multi-value__label {
+  /* Styles for the label of multi value */
+  color: #333;
+}
+
+.selectDevice .react-select__multi-value__remove,
+.selectMetrics .react-select__multi-value__remove {
+  /* Styles for the remove button of multi value */
+  color: #999;
+  cursor: pointer;
+}
+
+.selectDevice .react-select__multi-value__remove:hover,
+.selectMetrics .react-select__multi-value__remove:hover {
+  /* Hover styles for the remove button of multi value */
+  color: #666;
+}
