@@ -1,22 +1,75 @@
+import { useState } from "react";
 import "../Forms.css";
 
 export default function LogsForm({ selectedTab }) {
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+
+  function handleReset() {
+    setStartTime("");
+    setEndTime("");
+  }
+
+  function handleSubmit(e) {
+    // prevent the page to reload
+    e.preventDefault();
+
+    const timestamp = {
+      startTime: startTime,
+      endTime: endTime,
+    };
+
+    console.log(timestamp);
+
+    // TODO: API call
+  }
+
   return (
-    <form
-      className={`${selectedTab}Form`} /*  onSubmit={handleSubmit(event)} ... */
-    >
-      <label htmlFor="time">Select time</label>
-      <input
-        type="text"
-        id="time"
-        placeholder="Add an unix timestamp"
-        required
-      ></input>
+    <form className={`${selectedTab}Form`} onSubmit={handleSubmit}>
+      <div className="timeSpanContainer">
+        <label htmlFor="time">Select time</label>
+        <div className="inputContainer">
+          <input
+            type="text"
+            id="time"
+            placeholder="From ..."
+            value={startTime}
+            onChange={(e) => {
+              setStartTime(Number(e.target.value));
+            }}
+            required
+          />
+          <input
+            type="text"
+            id="time"
+            placeholder="To ..."
+            value={endTime}
+            onChange={(e) => {
+              setEndTime(Number(e.target.value));
+            }}
+            required
+          />
+        </div>
+      </div>
+
+      {/* Toggle for live data */}
+      {/* // TODO: add gray-put logic for btns when toggle is selected */}
+      <div className="toggleSwitchContainer">
+        <label htmlFor="toggleSwitch">Live logs</label>
+
+        <div class="toggleBtn" id="toggleSwitch">
+          <input type="checkbox" id="toggle" class="toggleInput" />
+          <label for="toggle" class="toggleLabel"></label>
+        </div>
+      </div>
+
       <div className="btnContainer">
         <button className="btnSubmit" type="submit">
           Submit
         </button>
-        <button className="btnReset">Reset</button>
+        <button className="btnReset" onClick={handleReset}>
+          Reset
+        </button>
       </div>
     </form>
   );
