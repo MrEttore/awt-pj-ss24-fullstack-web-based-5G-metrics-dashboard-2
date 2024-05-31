@@ -1,31 +1,16 @@
 .header {
-  padding: 0.5rem;
-  border-bottom: 2px solid;
   display: flex;
+  padding: 1rem;
+  margin-top: 0.75rem;
 
   /* to align items vertically */
   align-items: center;
-  background-color: #2b5876;
-}
-
-.imageContainer img {
-  height: 2.5rem;
-}
-
-.imageContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 3rem;
-  width: 4rem;
-  margin: 0.3rem;
-  border-radius: 5px;
-  background-color: white;
+  background-color: #080f25;
 }
 
 .header h1 {
   font-size: 1.5rem;
   margin-left: 1rem;
   color: white;
+  text-transform: uppercase;
 }
