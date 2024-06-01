@@ -1,0 +1,17 @@
+.contentLogs {
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0.5rem;
+  background-color: #37446b;
+}
+
+/* .graphsContainer {
+  display: grid;
+  defines the colums
+  grid-template-columns: 1fr 1fr;
+
+  defines the rows
+  grid-template-rows: 1fr 1fr;
+
+  margin-top: 0.5rem;
+} */
