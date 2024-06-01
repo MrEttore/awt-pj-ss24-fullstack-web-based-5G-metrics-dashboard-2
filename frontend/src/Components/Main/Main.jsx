@@ -17,7 +17,7 @@ function Main() {
       <ControlBar selectedTab={selectedTab} onSelect={handleSelectedTab} />
 
       {/* Content */}
-      {/* <Content /> */}
+      <Content selectedTab={selectedTab} />
     </main>
   );
 }
