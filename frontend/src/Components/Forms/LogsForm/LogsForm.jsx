@@ -2,12 +2,21 @@ import { useState } from "react";
 import "../Forms.css";
 
 export default function LogsForm({ selectedTab }) {
+  // pieces of state for the timespan inputs
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+
+  // piece of state for the toggle button
+  const [isToggled, setIsToggled] = useState(false);
 
   function handleReset() {
     setStartTime("");
     setEndTime("");
+  }
+
+  function handleToggle() {
+    setIsToggled(!isToggled);
+    handleReset();
   }
 
   function handleSubmit(e) {
@@ -30,24 +39,28 @@ export default function LogsForm({ selectedTab }) {
         <label htmlFor="time">Select time</label>
         <div className="inputContainer">
           <input
+            className="time"
             type="text"
             id="time"
-            placeholder="From ..."
+            placeholder={!isToggled ? "From ..." : ""}
             value={startTime}
             onChange={(e) => {
               setStartTime(Number(e.target.value));
             }}
             required
+            disabled={isToggled}
           />
           <input
+            className="time"
             type="text"
             id="time"
-            placeholder="To ..."
+            placeholder={!isToggled ? "To ..." : ""}
             value={endTime}
             onChange={(e) => {
               setEndTime(Number(e.target.value));
             }}
             required
+            disabled={isToggled}
           />
         </div>
       </div>
@@ -57,17 +70,23 @@ export default function LogsForm({ selectedTab }) {
       <div className="toggleSwitchContainer">
         <label htmlFor="toggleSwitch">Live logs</label>
 
-        <div class="toggleBtn" id="toggleSwitch">
-          <input type="checkbox" id="toggle" class="toggleInput" />
-          <label for="toggle" class="toggleLabel"></label>
+        <div className="toggleBtn" id="toggleSwitch">
+          <input
+            type="checkbox"
+            id="toggle"
+            className="toggleInput"
+            checked={isToggled}
+            onChange={handleToggle}
+          />
+          <label htmlFor="toggle" className="toggleLabel"></label>
         </div>
       </div>
 
       <div className="btnContainer">
-        <button className="btnSubmit" type="submit">
+        <button className="btnSubmit" type="submit" disabled={isToggled}>
           Submit
         </button>
-        <button className="btnReset" onClick={handleReset}>
+        <button className="btnReset" onClick={handleReset} disabled={isToggled}>
           Reset
         </button>
       </div>
