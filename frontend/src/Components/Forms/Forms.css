@@ -43,35 +43,53 @@
   gap: 0.5rem;
 }
 
+/** Btn SUBMIT */
+
 .btnSubmit {
   background-color: #15b244;
   padding: 10px 20px;
   text-transform: uppercase;
   color: white;
-
+  border: 2px solid #080f25;
   border-radius: 5px;
   cursor: pointer;
-  border: none;
   transition: background-color 0.3s;
 }
 
-.btnSubmit:hover {
+.btnSubmit:disabled {
+  color: #080f25;
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+  border: 2px solid #080f25;
+  border-radius: 5px;
+}
+
+.btnSubmit:not(:disabled):hover {
   background-color: #229b3e;
 }
 
+/** Btn RESET */
+
 .btnReset {
   background-color: #f1bf29;
-
   padding: 10px 20px;
   text-transform: uppercase;
   color: white;
+  border: 2px solid #080f25;
   border-radius: 5px;
   cursor: pointer;
-  border: none;
   transition: background-color 0.3s;
 }
 
-.btnReset:hover {
+.btnReset:disabled {
+  color: #080f25;
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+  border: 2px solid #080f25;
+  border-radius: 5px;
+}
+
+.btnReset:not(:disabled):hover {
   background-color: #ffb347;
 }
 
@@ -80,16 +98,23 @@ label {
   margin-left: 1rem;
   ont-weight: 100;
 }
-input[type="text"] {
+
+/** Input timestamp */
+
+.time {
   width: 12rem;
   padding: 8px;
-
-  border: 1.5px solid #4e4376;
+  border: 2px solid #080f25;
   border-radius: 5px;
   font-family: "Comfortaa", sans-serif;
 }
 
-/** CSS for toggle switch **/
+.time:disabled {
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+}
+
+/** Toggle switch **/
 .toggleInput {
   display: none;
 }
