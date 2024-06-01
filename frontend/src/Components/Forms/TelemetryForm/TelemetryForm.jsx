@@ -60,6 +60,7 @@ export default function TelemetryForm({ selectedTab }) {
       {/* TIME */}
       <label htmlFor="time">Select time</label>
       <input
+        className="time"
         type="text"
         id="time"
         placeholder="Add an unix timestamp"

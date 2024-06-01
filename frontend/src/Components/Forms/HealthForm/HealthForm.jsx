@@ -30,6 +30,7 @@ export default function HealthForm({ selectedTab }) {
         <label htmlFor="time">Select time</label>
         <div className="inputContainer">
           <input
+            className="time"
             type="text"
             id="time"
             placeholder="From ..."
@@ -40,6 +41,7 @@ export default function HealthForm({ selectedTab }) {
             required
           />
           <input
+            className="time"
             type="text"
             id="time"
             placeholder="To ..."
