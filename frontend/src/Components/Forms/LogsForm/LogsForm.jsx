@@ -66,7 +66,6 @@ export default function LogsForm({ selectedTab }) {
       </div>
 
       {/* Toggle for live data */}
-      {/* // TODO: add gray-put logic for btns when toggle is selected */}
       <div className="toggleSwitchContainer">
         <label htmlFor="toggleSwitch">Live logs</label>
 
