@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const gnbTelemetryRouter = require('./router/gnbTelemetry.router');
-
 app.use(bodyParser.json());
 
 /*
@@ -22,24 +20,27 @@ app.post('/api/gnb/configuration', (_, res) => {
   return;
 })
 
-/*
-* gnb.telemetry
-*/
-app.use('/', gnbTelemetryRouter);
+/* gnb.telemetryUE */
+app.use('/api/gnb/telemetry/ue',
+  require('./router/gnb.telemetryUE.router')
+);
+
+/* gnb.telemetry */
+app.use('/api/gnb/telemetry', 
+  require('./router/gnb.telemetry.router')
+);
 
 /** gnb.logs */
 app.use('/api/gnb/logs', 
   require('./router/gnb.logs.router')
 );
 
-/** gnb.configuration */
+/* gnb.configuration */
 app.use('/api/gnb/configuration',
   require('./router/gnb.configuration.router')
 );
 
-/*
- * cn5g.telemetry 
-*/
+/* cn5g.telemetry */
 app.use('/api/cn5g/telemetry', 
   require('./router/cn5g.telemetry.router')
 );

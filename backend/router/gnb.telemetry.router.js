@@ -1,7 +1,7 @@
 const express = require('express')
 
-/* Import controller object */
-const controller = require('../controller/gnb.logs.controller')
+/* Import gnb.telemetry.controller object */
+const controller = require('../controller/gnb.telemetry.controller')
 
 /* Initialize router */
 const router = express.Router()

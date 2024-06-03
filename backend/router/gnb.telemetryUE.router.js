@@ -1,7 +1,7 @@
 const express = require('express')
 
-/* Import controller object */
-const controller = require('../controller/gnb.logs.controller')
+/* Import gnb.telemetryUE.controller object */
+const controller = require('../controller/gnb.telemetryUE.controller')
 
 /* Initialize router */
 const router = express.Router()
@@ -16,10 +16,11 @@ router.get('/:id', async (req, res) => {
     await controller.get(req, res)
 });
 
-/* Mount add */
-router.post('/', async (req, res) => {
-    await controller.add(req, res)
-});
+
+// /* Mount add */
+// router.post('/', async (req, res) => {
+//     await controller.add(req, res)
+// });
 
 /* Mount remove */
 router.delete('/', async (req, res) => {

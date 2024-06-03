@@ -1,12 +1,12 @@
 const express = require('express')
-const GenericController = require('../controller/generic.controller')
+const AbstractController = require('../controller/abstract.controller')
 
 const model = require('../model/gnb.configuration.model')
 
 const router = express.Router()
 
 /* Initialize controller */
-const controller = new GenericController(model)
+const controller = new AbstractController(model)
 
 /* Mount getAll */
 router.get('/', async (req, res) => {

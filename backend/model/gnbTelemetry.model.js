@@ -1,48 +1,46 @@
 
-const ueModel = require("./gnbTelemetryUe.model")
-
-const SELECT = `
-    SELECT *
-    FROM GnbTelemetry`
-
-const INSERT = `INSERT
-INTO GnbTelemetry (
-    id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-) VALUES (
-    ?, ?, ?, ?, ?, ?, ?, ?
-);`
+const {
+    INIT,
+    INSERT,
+    SELECT
+} = require('../sql/gnb.telemetry.sql');
 
 const GNB_TELEMETRY_ROW_ID = 'gnbTelemetryRowId'
 
+/** Persistence API for gnb.telemetry data */
 class GnbTelemetryModel {
 
+    #db;
+    #ueModel;
+
     constructor() {
-        this.db = require('../database/sqlite3');
-        this.init();
+        this.#db = require('../database/sqlite3');
+        this.#ueModel = require('./gnb.telemetryUE.model');
+        this.#init();
     }
 
-    init() {
-        this.db.run(`
-            CREATE TABLE IF NOT EXISTS
-                GnbTelemetry (
-                    rowId INTEGER PRIMARY KEY,
-                    id INTEGER,
-                    frame INTEGER,
-                    slot INTEGER,
-                    pci INTEGER,
-                    dlCarrierFreq INTEGER,
-                    ulCarrierFreq INTEGER,
-                    avgLdpcIterations INTEGER,
-                    timestamp BIGINT
-                )`
-        );
+    #init() {
+        this.#db.run(INIT);
+    }
+
+    async getAll(params) {
+        const rows = await this.#getAll(params);
+
+        for (let row of rows) {
+            row.ues = await this.#ueModel.getAll(params)
+        }
+        // for (let id of ids) {
+        //     const row = await this.#get(id)
+        //     rows.push(row)
+        // }
+        return rows
     }
 
     /*
     /   Wenn uid nicht angegeben ist, wird uid auf 1 gesetzt
     /   es werden alle datensätze zurückgegeben
     */
-    async getAll(params) {
+    async #getAll(params) {
         const { ueId, timeStart, timeEnd } = params
         let query = `
             ${SELECT}
@@ -51,20 +49,15 @@ class GnbTelemetryModel {
 
         let paramList = []
 
-        if (ueId) {
-            query += "\nAND ueId = ?"
-            paramList.push(ueId)
-        }
-
         if (timeStart && timeEnd) {
             query += "\nAND ? <= timestamp AND timestamp <= ?"
             paramList.push(timeStart, timeEnd)
         }
         return new Promise((resolve, reject) => {
-            this.db.all(query, paramList, (err, rows) => {
-                if (err) 
+            this.#db.all(query, paramList, (err, rows) => {
+                if (err)
                     reject(err)
-                else 
+                else
                     resolve(rows)
             })
         })
@@ -72,13 +65,23 @@ class GnbTelemetryModel {
     }
 
     async get(id) {
+        const row = await this.#get(id)
+
+        row.ues = await this.#ueModel.getAll({
+            telemetryId: id
+        })
+
+        return row;
+    }
+
+    async #get(id) {
         let query = `
             ${SELECT}
-            WHERE GnbTelemetry.rowId = ?
+            WHERE rowId = ?
         `
 
         return new Promise((resolve, reject) => {
-            this.db.get(query, [id], (err, row) => {
+            this.#db.get(query, [id], (err, row) => {
                 if (err) reject(err)
                 else {
                     console.log(row)
@@ -93,7 +96,7 @@ class GnbTelemetryModel {
             DELETE FROM GnbTelemetry
             WHERE rowId = ?`
         return new Promise((resolve, reject) => {
-            this.db.run(QUERY, [id], (err) => {
+            this.#db.run(QUERY, [id], (err) => {
                 if (err) reject(err)
                 else resolve()
             })
@@ -118,7 +121,7 @@ class GnbTelemetryModel {
     //     }
 
     //     return new Promise((resolve, reject) => {
-    //         this.db.all(query, [ueId, timeStart, timeEnd], (err, rows) => {
+    //         this.#db.all(query, [ueId, timeStart, timeEnd], (err, rows) => {
     //             if (err) {
     //                 reject(err)
     //             } else {
@@ -133,7 +136,7 @@ class GnbTelemetryModel {
     //         SELECT * FROM GnbTelemetryUe WHERE rowId = ?`
 
     //     return new Promise((resolve, reject) => {
-    //         this.db.get(QUERY, [id], (err, row) => {
+    //         this.#db.get(QUERY, [id], (err, row) => {
     //             if (err) reject(err)
     //             else resolve(row)
     //         })
@@ -162,22 +165,41 @@ class GnbTelemetryModel {
         const lastID = await this.add(data);
 
         for (let ueData in data.ues) {
-            await ueModel.add({...ueData, 
-                                [GNB_TELEMETRY_ROW_ID]: lastID
-                            })
+            await this.#ueModel.add({
+                ...ueData,
+                [GNB_TELEMETRY_ROW_ID]: lastID
+            })
         }
         return lastID;
     }
 
     async add(data) {
         const {
+            id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp, ues
+        } = data
+
+        const ID = await this.#add({
+            id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
+        })
+
+        for (let ue of ues) {
+            await this.#ueModel.add({
+                ...ue,
+                [GNB_TELEMETRY_ROW_ID]: ID
+            })
+        }
+        return ID;
+    }
+
+    async #add(data) {
+        const {
             id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
         } = data
 
         return new Promise((resolve, reject) => {
-            this.db.run(INSERT, [
+            this.#db.run(INSERT, [
                 id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
-            ], function(err) {
+            ], function (err) {
                 if (err)
                     reject(err)
                 else
@@ -185,6 +207,7 @@ class GnbTelemetryModel {
             })
         })
     }
+
 
 
     // async addUE(data) {
@@ -201,7 +224,7 @@ class GnbTelemetryModel {
     //     } = data
 
     //     return new Promise((resolve, _) => {
-    //         this.db.run(QUERY, [
+    //         this.#db.run(QUERY, [
     //             ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler,
     //             ri, pmi, phr, pcmax, rsrq, sinr, rsrp, rssi, cqi, pucchSnr, puschSnr, timestamp
     //         ], function () {
