@@ -8,10 +8,6 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-    depends_on:
-      - mongo
-    ports:
-     - "48081:8080"
   backend:
     build: 
       context: ./backend
