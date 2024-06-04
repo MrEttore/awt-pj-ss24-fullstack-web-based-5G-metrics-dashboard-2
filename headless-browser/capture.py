@@ -31,14 +31,12 @@ async def intercept_websockets():
             # send_data(event['response']['payloadData'])
             filter_data(event['response']['payloadData'])
     
-    def send_data(data, url_ending):
+    def send_data(json_data, url_ending):
         # Send json data to the backend server
-        json_data = extract_json_from_string(data)
-        if json_data:
-            url = 'http://localhost:5000/api/' + url_ending
-            print(json_data)
-            requests.post(url, json=json_data)
-            # send json_data to the backend server
+        url = 'http://backend:3000/api/' + url_ending
+        response = requests.post(url, json=json_data, headers={'Content-Type': 'application/json'})
+        print(json_data)
+        # send json_data to the backend server
 
 
     def filter_data(text):
@@ -62,19 +60,21 @@ async def intercept_websockets():
             if line.startswith('destination:'):
                 destination = line.split(':', 1)[1].strip()
                 break
-        print(text)
         if destination:
             json = extract_json_from_string(text)
-            if 'gnb.telemetry' in destination:
-                send_data(json, 'gnb/telemetry')
-            #elif 'gnb.logs' in destination:
-                #send_data(json, 'gnb/logs')
-            #elif 'gnb.configuration' in destination:
-                # send_data(json, 'gnb/configuration')
-            #elif 'gnb.details' in destination:
-                # send_data(json, 'gnb/details')
-            #elif 'cn5g.telemetry' in destination:
-                # send_data(json, 'cn5g/telemtry')
+            #print('should send something')
+            if json:
+                if 'gnb.telemetry' in destination:
+                    print('')
+                    #send_data(json, 'gnb/telemetry')
+                elif 'gnb.logs' in destination:
+                    send_data(json, 'gnb/logs')
+                elif 'gnb.configuration' in destination:
+                    send_data(json, 'gnb/configuration')
+                #elif 'gnb.details' in destination:
+                    # send_data(json, 'gnb/details')
+                #elif 'cn5g.telemetry' in destination:
+                    #send_data(json, 'cn5g/telemetry')
 
     def extract_json_from_string(text):
         # Regular expression to find JSON objects within a string
@@ -84,7 +84,6 @@ async def intercept_websockets():
         json_matches = json_pattern.findall(text)
         
         extracted_data = []
-        
         for match in json_matches:
             try:
                 # Parse JSON
@@ -94,8 +93,9 @@ async def intercept_websockets():
                 # Handle invalid JSON if necessary
                 pass
         if len(extracted_data) > 0:
-            print(extracted_data)
             return extracted_data
+        else:
+            return None
 
 
     client = page._client

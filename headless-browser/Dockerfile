@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Chromium
-RUN apt-get update && apt-get install -y chromium && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y chromium curl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set environment variable to use Chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
@@ -41,4 +41,4 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the script when the container launches
-CMD ["python", "capture.py"]
+CMD ["python","-u", "capture.py"]
