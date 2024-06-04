@@ -58,7 +58,8 @@ async def intercept_websockets():
             if line.startswith('destination:'):
                 destination = line.split(':', 1)[1].strip()
                 break
-        if destination:
+        print(text)
+        if destination and False:
             json = extract_json_from_string(text)
             if 'gnb.telemetry' in destination:
                 send_data(json, 'gnb.telemetry')
@@ -108,7 +109,8 @@ async def intercept_websockets():
     await page.click('#kc-login')
 
     # Wait for a while to capture WebSocket messages
-    await asyncio.sleep(60)  # Wait for 60 seconds
+    while True:
+        await asyncio.sleep(3600)  # Wait for 1 hour
 
     # Close the browser
     await browser.close()
