@@ -1,0 +1,25 @@
+services:
+  scraper:
+    build: 
+      context: ./headless-browser
+      dockerfile: Dockerfile
+    image: scraper:latest
+    container_name: scraper
+    restart: always
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+    ports:
+     - "48081:8080"
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend:latest
+    container_name: backend
+    restart: always
+    ports:
+      - "3000:3000"
+
+
