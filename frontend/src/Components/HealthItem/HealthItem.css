@@ -1,0 +1,30 @@
+.itemHealth {
+  display: flex;
+  gap: 1.5rem;
+
+  /* update later */
+  height: 5rem;
+  border-radius: 10px;
+
+  padding: 0.2rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* starts offline */
+  background-color: rgba(168, 64, 41, 0.45);
+  color: #080f25;
+  border: 2px solid #080f25;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.online {
+  background-color: rgb(64, 168, 41, 45%);
+}
