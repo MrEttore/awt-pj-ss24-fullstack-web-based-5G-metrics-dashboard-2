@@ -1,10 +1,23 @@
-import "./HealthItem.css";
+import './HealthItem.css';
+import { HiOutlineStatusOnline } from 'react-icons/hi';
+import { HiOutlineStatusOffline } from 'react-icons/hi';
 
-export default function HealthItem({ icon, status, moduleName }) {
+// TODO: display the messsage
+
+export default function HealthItem({ moduleName, status, message }) {
   return (
-    <div className={`itemHealth ${status ? "online" : ""}`}>
-      <p>{moduleName}</p>
-      <span className="icon">{icon}</span>
+    <div className={`itemHealth ${status === 'Healthy' ? 'online' : ''}`}>
+      <p className="nameString">{moduleName}</p>
+      <div className="status">
+        <p className="statusString">{status}</p>
+        <span>
+          {status === 'Healthy' ? (
+            <HiOutlineStatusOnline />
+          ) : (
+            <HiOutlineStatusOffline />
+          )}
+        </span>
+      </div>
     </div>
   );
 }
