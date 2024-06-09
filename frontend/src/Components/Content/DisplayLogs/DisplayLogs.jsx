@@ -1,4 +1,4 @@
-import "./DisplayLogs.css";
+import './DisplayLogs.css';
 
 export default function DisplayLogs() {
   return (
