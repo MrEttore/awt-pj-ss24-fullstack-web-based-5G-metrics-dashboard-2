@@ -1,7 +1,7 @@
 .header {
   display: flex;
-  padding: 0.5rem;
-  margin-top: 1rem;
+  padding: 0.2rem;
+  margin: 1rem;
 
   /* to align items vertically */
   align-items: center;
@@ -12,4 +12,9 @@
   font-size: 1.5rem;
   color: white;
   text-transform: uppercase;
+}
+
+.date {
+  margin-left: auto;
+  color: white;
 }
