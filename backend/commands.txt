@@ -1,3 +1,5 @@
+// TOPIC #1
+// gnb.telemetry API
 
 // Abfragen aller Telemetrie Datensätze
 curl "http://localhost:3000/api/gnb/telemetry"
@@ -59,6 +61,7 @@ curl -X POST http://localhost:3000/api/gnb/telemetry \
     }'
 
 
+// TOPIC #2
 // gnb.logs API
 
 curl -X GET "http://localhost:3000/api/gnb/logs"
@@ -75,6 +78,7 @@ curl -X POST "http://localhost:3000/api/gnb/logs" \
      }'
 
 
+// TOPIC #3
 // cn5g.telemetry API
 
 curl -X GET "http://localhost:3000/api/cn5g/telemetry"
