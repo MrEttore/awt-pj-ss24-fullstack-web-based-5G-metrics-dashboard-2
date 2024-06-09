@@ -27,7 +27,10 @@ class GnbTelemetryModel {
         const rows = await this.#getAll(params);
 
         for (let row of rows) {
-            row.ues = await this.#ueModel.getAll(params)
+            row.ues = await this.#ueModel.getAll({
+                ...params,
+                'telemetryId': row.rowId
+            })
         }
         // for (let id of ids) {
         //     const row = await this.#get(id)
