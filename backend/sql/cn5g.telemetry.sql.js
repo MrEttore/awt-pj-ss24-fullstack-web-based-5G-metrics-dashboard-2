@@ -2,34 +2,34 @@ const INIT = `
     CREATE TABLE IF NOT EXISTS 
         Cn5gTelemetry (
             rowId INTEGER PRIMARY KEY,
-            timestamp BIGINT NOT NULL,
-            amfStatus TEXT NOT NULL,
-            amfMessage TEXT NOT NULL,
-            ausfStatus TEXT NOT NULL,
-            ausfMessage TEXT NOT NULL,
-            nrfStatus TEXT NOT NULL,
-            nrfMessage TEXT NOT NULL,
-            smfStatus TEXT NOT NULL,
-            smfMessage TEXT NOT NULL,
-            upfStatus TEXT NOT NULL,
-            upfMessage TEXT NOT NULL,
-            udmStatus TEXT NOT NULL,
-            udmMessage TEXT NOT NULL,
-            udrStatus TEXT NOT NULL,
-            udrMessage TEXT NOT NULL,
-            nssfStatus TEXT NOT NULL,
-            nssfMessage TEXT NOT NULL,
-            nefStatus TEXT NOT NULL,
+            timestamp BIGINT,
+            amfStatus TEXT,
+            amfMessage TEXT,
+            ausfStatus TEXT,
+            ausfMessage TEXT,
+            nrfStatus TEXT,
+            nrfMessage TEXT,
+            smfStatus TEXT,
+            smfMessage TEXT,
+            upfStatus TEXT,
+            upfMessage TEXT,
+            udmStatus TEXT,
+            udmMessage TEXT,
+            udrStatus TEXT,
+            udrMessage TEXT,
+            nssfStatus TEXT,
+            nssfMessage TEXT,
+            nefStatus TEXT,
             nefMessage TEXT,
-            mysqlStatus TEXT NOT NULL,
-            mysqlMessage TEXT NOT NULL,
-            extdnStatus TEXT NOT NULL,
-            extdnMessage TEXT NOT NULL,
-            asteriskStatus TEXT NOT NULL,
-            asteriskMessage TEXT NOT NULL,
-            openspeedtestStatus TEXT NOT NULL,
-            openspeedtestMessage TEXT NOT NULL,
-            oaiExtDnUplinkState TEXT NOT NULL,
+            mysqlStatus TEXT,
+            mysqlMessage TEXT,
+            extdnStatus TEXT,
+            extdnMessage TEXT,
+            asteriskStatus TEXT,
+            asteriskMessage TEXT,
+            openspeedtestStatus TEXT,
+            openspeedtestMessage TEXT,
+            oaiExtDnUplinkState TEXT,
             oaiExtDnDownlinkInstances TEXT
         );`
 
@@ -112,7 +112,7 @@ const INSERT = `
         oaiExtDnUplinkState, oaiExtDnDownlinkInstances
     ) 
     VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     );`
 
 module.exports = {
