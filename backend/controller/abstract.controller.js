@@ -28,7 +28,7 @@ class AbstractController {
             const rows = await this.#model.getAll({ ...req.query });
 
             for (let row of rows) {
-                row.href = req.originalUrl + '/' + row.rowId;
+                // row.href = req.originalUrl + '/' + row.rowId;
             }
 
             res.json(rows);
@@ -60,7 +60,7 @@ class AbstractController {
         try {
             const ID = await this.#model.add(req.body);
             const row = await this.#model.get(ID);
-            row.href = req.originalUrl + '/' + ID;
+            // row.href = req.originalUrl + '/' + ID;
             res.status(201).json(row);
         } catch (error) {
             console.error('Error adding data:', error);
