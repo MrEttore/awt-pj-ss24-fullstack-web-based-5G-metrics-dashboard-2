@@ -97,7 +97,6 @@ async def intercept_websockets():
         else:
             return None
 
-
     client = page._client
     await client.send('Network.enable')
 

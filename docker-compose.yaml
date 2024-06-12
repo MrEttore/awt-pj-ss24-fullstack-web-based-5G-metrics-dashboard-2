@@ -24,5 +24,3 @@ services:
 networks:
   awt:
     driver: bridge
-
-
