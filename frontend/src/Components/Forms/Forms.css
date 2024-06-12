@@ -110,13 +110,13 @@ label {
   padding: 8px;
   border: 2px solid #080f25;
   border-radius: 5px;
-  font-family: "Comfortaa", sans-serif;
-  background-color: #4e5f94;
+  font-family: 'Comfortaa', sans-serif;
+  background-color: #dee2e6;
   color: #080f25;
 }
 
 .time::placeholder {
-  color: #080f25;
+  color: grey;
 }
 
 .time:disabled {
@@ -147,7 +147,7 @@ label {
 
 .toggleLabel::before {
   position: absolute;
-  content: "";
+  content: '';
   background-color: white;
   height: 0.8rem;
   width: 0.8rem;
