@@ -1,60 +1,99 @@
+/** FORMS CONTAINER */
+
 .formContainer {
   border-radius: 10px;
-  min-width: 40%;
-  margin-top: 1rem;
+  width: fit-content;
+  padding: 0.5rem;
+  background-color: #37446b;
 }
 
+/** FORM CONTAINER */
+
 .healthStatusForm,
-.telemetryForm,
-.logsForm {
+.logsForm,
+.telemetryForm {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
   gap: 1.5rem;
-
   border-radius: 0.5rem;
-  padding: 0.4rem;
-  background-color: #37446b;
   color: white;
   text-transform: uppercase;
+}
+
+.selectDeviceContainer,
+.selectMetricsContainer,
+.timeSpanContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.toggleSwitchContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btnContainer {
   display: flex;
   flex-direction: column;
-  margin-right: 1rem;
   gap: 0.5rem;
 }
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/** Btn SUBMIT */
 
 .btnSubmit {
   background-color: #15b244;
   padding: 10px 20px;
   text-transform: uppercase;
   color: white;
-
+  border: 2px solid #080f25;
   border-radius: 5px;
   cursor: pointer;
-  border: none;
   transition: background-color 0.3s;
 }
 
-.btnSubmit:hover {
+.btnSubmit:disabled {
+  color: #080f25;
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+  border: 2px solid #080f25;
+  border-radius: 5px;
+}
+
+.btnSubmit:not(:disabled):hover {
   background-color: #229b3e;
 }
 
+/** Btn RESET */
+
 .btnReset {
   background-color: #f1bf29;
-
   padding: 10px 20px;
   text-transform: uppercase;
   color: white;
+  border: 2px solid #080f25;
   border-radius: 5px;
   cursor: pointer;
-  border: none;
   transition: background-color 0.3s;
 }
 
-.btnReset:hover {
+.btnReset:disabled {
+  color: #080f25;
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+  border: 2px solid #080f25;
+  border-radius: 5px;
+}
+
+.btnReset:not(:disabled):hover {
   background-color: #ffb347;
 }
 
@@ -63,38 +102,94 @@ label {
   margin-left: 1rem;
   ont-weight: 100;
 }
-input[type="text"] {
+
+/** INPUT TIMESTAMP */
+
+.time {
   width: 12rem;
   padding: 8px;
-
-  border: 1.5px solid #4e4376;
+  border: 2px solid #080f25;
   border-radius: 5px;
-  font-family: "Comfortaa", sans-serif;
+  font-family: 'Comfortaa', sans-serif;
+  background-color: #dee2e6;
+  color: #080f25;
+}
+
+.time::placeholder {
+  color: grey;
+}
+
+.time:disabled {
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+}
+
+/** TOGGLE SWITCH */
+
+.toggleInput {
+  display: none;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+}
+
+.toggleLabel {
+  background-color: gray;
+  height: 1.2rem;
+  width: 2.4rem;
+  border-radius: 11.5px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s;
+}
+
+.toggleLabel::before {
+  position: absolute;
+  content: '';
+  background-color: white;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 6.4px;
+  margin: 3.3px;
+  transition: 0.3s;
+}
+
+.toggleInput:checked + .toggleLabel {
+  background-color: #228b22;
+}
+
+.toggleInput:checked + .toggleLabel::before {
+  transform: translateX(1rem);
 }
 
 /** custom CSS for the <Select/> component **/
+
 .selectDevice,
 .selectMetrics {
-  width: 14rem;
-  border: 1px solid;
+  width: 15rem;
+  border: 2px solid #080f25;
+  background-color: #4e5f94;
   border-radius: 5px;
   padding: 0.3rem;
-  font-family: "Comfortaa", sans-serif;
+  /* font-family: inherit; */
 }
 
 .selectDevice .react-select__control,
 .selectMetrics .react-select__control {
   /* Styles for the control */
   padding: 8px;
+  align-items: center;
 }
 
 .selectDevice .react-select__menu,
 .selectMetrics .react-select__menu {
   /* Styles for the menu */
-  border: 1px solid;
-  border-radius: 0.2rem;
+  border: 2px solid #080f25;
+  border-radius: 5px;
   margin-top: 0.5rem;
-  background-color: white;
+  background-color: #4e5f94;
 }
 
 .selectDevice .react-select__option,
@@ -102,57 +197,68 @@ input[type="text"] {
   /* Styles for the options */
   padding: 8px;
   cursor: pointer;
-  height: 2rem;
-  margin: 0.05rem;
+  /* height: 2rem; */
+  /* margin: 0.05rem; */
   border-radius: 0.12rem;
+  color: #080f25;
 }
 
 .selectDevice .react-select__option:hover,
 .selectMetrics .react-select__option:hover {
   /* Hover styles for the options */
-  background-color: #b31b1b;
+  background-color: #080f25;
   color: white;
   border-color: white;
-  margin: 0;
 }
 
 .selectDevice .react-select__placeholder,
 .selectMetrics .react-select__placeholder {
   /* Styles for the placeholder */
-  color: #999;
+  font-size: 0.8rem;
+  text-transform: initial;
+  color: #080f25;
+}
+
+.selectDevice .react-select__indicators,
+.selectMetrics .react-select__indicators {
+  /* Styles for the arrow */
+  color: #080f25;
 }
 
 .selectDevice .react-select__single-value,
 .selectMetrics .react-select__single-value {
   /* Styles for the single value */
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   border-radius: 2px;
+  color: #080f25;
   padding: 2px;
 }
 
 .selectDevice .react-select__multi-value,
 .selectMetrics .react-select__multi-value {
   /* Styles for the multi value */
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   border-radius: 2px;
+  color: #080f25;
   padding: 2px;
 }
 
 .selectDevice .react-select__multi-value__label,
 .selectMetrics .react-select__multi-value__label {
   /* Styles for the label of multi value */
-  color: #333;
+  color: #080f25;
+  font-size: 0.85rem;
 }
 
 .selectDevice .react-select__multi-value__remove,
 .selectMetrics .react-select__multi-value__remove {
   /* Styles for the remove button of multi value */
-  color: #999;
+  color: red;
   cursor: pointer;
 }
 
 .selectDevice .react-select__multi-value__remove:hover,
 .selectMetrics .react-select__multi-value__remove:hover {
   /* Hover styles for the remove button of multi value */
-  color: #666;
+  color: #800020;
 }

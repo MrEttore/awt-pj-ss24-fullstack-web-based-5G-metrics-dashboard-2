@@ -1,25 +1,13 @@
-// app.js
 const express = require('express');
-const sqlite3 = require('sqlite3')
 const bodyParser = require('body-parser');
-// const MetricsModel = require('./metricsModel');
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const gnbTelemetryRouter = require('./router/gnbTelemetry.router');
-const gnbLogsRouter = require('./router/gnbLogs.router');
-
-// const dbFilePath = 'database.db';
-// const db = new sqlite3.Database(dbFilePath)
-// const gnbTelemetryModel = new GnbTelemetryModel(db)
-// const gnbTelemetryUeModel = new GnbTelemetryUeModel(db)
-
 app.use(bodyParser.json());
 
 /*
-* Logger middleware
+* Logging middleware
 */
 app.use((req, _, next) => {
   console.log(req.method, req.originalUrl)
@@ -32,26 +20,32 @@ app.post('/api/gnb/configuration', (_, res) => {
   return;
 })
 
-/*
-* gnb.telemetry
-*/
-app.use('/', gnbTelemetryRouter);
+/* gnb.telemetryUE */
+app.use('/api/gnb/telemetry/ue',
+  require('./router/gnb.telemetryUE.router')
+);
 
-/*
-/ gnb.logs
-*/
-app.use('/', gnbLogsRouter);
+/* gnb.telemetry */
+app.use('/api/gnb/telemetry', 
+  require('./router/gnb.telemetry.router')
+);
 
-/*
-* gnb.configuration
-*/
-const gnbConfigurationRouter = require('./router/gnbConfiguration.router');
-app.use('/', gnbConfigurationRouter)
+/** gnb.logs */
+app.use('/api/gnb/logs', 
+  require('./router/gnb.logs.router')
+);
 
-/*  cn5g.telemetry */
-app.use('/api/cn5g/telemetry', require('./router/cn5g.telemetry.router'));
+/* gnb.configuration */
+app.use('/api/gnb/configuration',
+  require('./router/gnb.configuration.router')
+);
 
+/* cn5g.telemetry */
+app.use('/api/cn5g/telemetry', 
+  require('./router/cn5g.telemetry.router')
+);
 
+/* entry point */
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,7 +1,7 @@
 const express = require('express')
 const AbstractController = require('../controller/abstract.controller')
 
-const model = require('../model/cn5g.telemetry.model')
+const model = require('../model/gnb.configuration.model')
 
 const router = express.Router()
 

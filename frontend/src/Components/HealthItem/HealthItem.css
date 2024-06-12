@@ -1,0 +1,45 @@
+.itemHealth {
+  display: flex;
+  gap: 1.5rem;
+
+  /* update later */
+  height: 5rem;
+  border-radius: 10px;
+
+  padding: 0.2rem;
+  align-items: center;
+  position: relative;
+
+  /* starts offline */
+  background-color: rgba(168, 64, 41, 0.45);
+  color: #080f25;
+  border: 2px solid #080f25;
+
+  cursor: pointer;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.statusString {
+  font-size: 0.7rem;
+  margin-top: -5px;
+}
+
+.nameString {
+  margin-left: 1rem;
+  text-transform: uppercase;
+}
+
+.online {
+  background-color: rgb(64, 168, 41, 45%);
+}

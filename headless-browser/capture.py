@@ -76,7 +76,6 @@ async def intercept_websockets():
                 #elif 'cn5g.telemetry' in destination:
                     #send_data(json, 'cn5g/telemetry')
 
-
     def extract_json_from_string(text):
         # Regular expression to find JSON objects within a string
         json_pattern = re.compile(r'\{.*?\}')

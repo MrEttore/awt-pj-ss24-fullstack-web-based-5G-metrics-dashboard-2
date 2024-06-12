@@ -34,3 +34,8 @@
 
 .tab:hover {
 }
+
+.tab:focus {
+  transform: translateY(-2px);
+  transition: 0.15s;
+}

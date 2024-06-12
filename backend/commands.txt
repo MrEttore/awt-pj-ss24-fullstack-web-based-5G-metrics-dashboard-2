@@ -1,3 +1,5 @@
+// TOPIC #1
+// gnb.telemetry API
 
 // Abfragen aller Telemetrie Datensätze
 curl "http://localhost:3000/api/gnb/telemetry"
@@ -59,6 +61,7 @@ curl -X POST http://localhost:3000/api/gnb/telemetry \
     }'
 
 
+// TOPIC #2
 // gnb.logs API
 
 curl -X GET "http://localhost:3000/api/gnb/logs"
@@ -75,6 +78,7 @@ curl -X POST "http://localhost:3000/api/gnb/logs" \
      }'
 
 
+// TOPIC #3
 // cn5g.telemetry API
 
 curl -X GET "http://localhost:3000/api/cn5g/telemetry"
@@ -82,3 +86,24 @@ curl -X GET "http://localhost:3000/api/cn5g/telemetry"
 curl -X GET "http://localhost:3000/api/cn5g/telemetry?timeStart=1&timeEnd=1715076990853"
 
 curl -X GET "http://localhost:3000/api/cn5g/telemetry/1"
+
+curl -X POST "http://localhost:3000/api/cn5g/telemetry" \
+     -H "Content-Type: application/json" \
+     -d '{
+        "timestamp": 1715077194854,
+        "amf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "ausf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "nrf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "smf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "upf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "udm": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "udr": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "nssf": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "nef": { "status": "NotImplemented", "message": "" },
+        "mysql": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "extdn": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "asterisk": { "status": "Healthy", "message": " Up 52 minutes (healthy)" },
+        "openspeedtest": { "status": "Healthy", "message": " Up 52 minutes" },
+        "oaiExtDnUplinkState": "Stopped",
+        "oaiExtDnDownlinkInstances": null
+    }'

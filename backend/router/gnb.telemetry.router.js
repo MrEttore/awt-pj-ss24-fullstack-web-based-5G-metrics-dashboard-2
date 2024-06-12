@@ -1,12 +1,10 @@
 const express = require('express')
-const AbstractController = require('../controller/abstract.controller')
 
-const model = require('../model/cn5g.telemetry.model')
+/* Import gnb.telemetry.controller object */
+const controller = require('../controller/gnb.telemetry.controller')
 
+/* Initialize router */
 const router = express.Router()
-
-/* Initialize controller */
-const controller = new AbstractController(model)
 
 /* Mount getAll */
 router.get('/', async (req, res) => {
