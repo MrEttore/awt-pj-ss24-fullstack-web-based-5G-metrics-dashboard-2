@@ -65,16 +65,16 @@ async def intercept_websockets():
             #print('should send something')
             if json:
                 if 'gnb.telemetry' in destination:
-                    print('')
-                    #send_data(json, 'gnb/telemetry')
+                    #print('')
+                    send_data(json, 'gnb/telemetry')
                 elif 'gnb.logs' in destination:
                     send_data(json, 'gnb/logs')
                 elif 'gnb.configuration' in destination:
                     send_data(json, 'gnb/configuration')
                 #elif 'gnb.details' in destination:
                     # send_data(json, 'gnb/details')
-                #elif 'cn5g.telemetry' in destination:
-                    #send_data(json, 'cn5g/telemetry')
+                elif 'cn5g.telemetry' in destination:
+                    send_data(json, 'cn5g/telemetry')
 
     def extract_json_from_string(text):
         # Regular expression to find JSON objects within a string
