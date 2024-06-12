@@ -21,6 +21,17 @@ services:
       - "3000:3000"
     networks:
       - awt
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend:latest
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    networks:
+      - awt
 networks:
   awt:
     driver: bridge
