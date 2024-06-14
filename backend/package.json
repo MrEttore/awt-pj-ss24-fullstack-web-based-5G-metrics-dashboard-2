@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "start": "node server.js",
-    "dev": "node --watch server"
+    "start": "DB_PATH=test.db node server.js",
+    "dev": "DB_PATH=test.db node --watch server"
   },
   "author": "",
   "license": "ISC",
