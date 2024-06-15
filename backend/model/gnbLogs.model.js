@@ -6,7 +6,8 @@ class GnbLogsModel {
 
     constructor(db) {
         this.#db = db;
-        // this.#init();
+        if (process.env.NODE_ENV != 'test')
+            this.init();
     }
 
     setDb(db) {
