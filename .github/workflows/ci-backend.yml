@@ -31,6 +31,4 @@ jobs:
 
     - name: Run backend tests
       working-directory: backend
-      env:
-        DB_PATH: test.db
       run: npm test
