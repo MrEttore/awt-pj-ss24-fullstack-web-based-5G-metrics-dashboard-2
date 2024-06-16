@@ -9,10 +9,21 @@ const {
     INSERT
 } = require('../sql/gnb.telemetryUE.sql')
 
-const db = require('../database/sqlite3');
+let db = require('../database/sqlite3');
+
+module.exports.setDb = function(newDb) {
+    db = newDb
+}
 
 /* Initialize database */
-db.run(INIT);
+module.exports.init = async function() {
+    return new Promise((resolve, reject) => {
+        db.run(INIT, (err) => {
+            if (err) reject(err)
+            else resolve()
+        })
+    })
+}
 
 /* Add new entry */
 module.exports.add = async function (data) {

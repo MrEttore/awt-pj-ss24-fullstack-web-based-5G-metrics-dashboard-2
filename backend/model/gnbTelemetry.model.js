@@ -16,11 +16,22 @@ class GnbTelemetryModel {
     constructor() {
         this.#db = require('../database/sqlite3');
         this.#ueModel = require('./gnb.telemetryUE.model');
-        this.#init();
     }
 
-    #init() {
-        this.#db.run(INIT);
+    setDb(db) {
+        this.#ueModel.setDb(db)
+        this.#db = db;
+    }
+
+    async init() {
+        await this.#ueModel.init();
+
+        return new Promise((resolve, reject) => {
+            this.#db.run(INIT, (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
+        })
     }
 
     async getAll(params) {

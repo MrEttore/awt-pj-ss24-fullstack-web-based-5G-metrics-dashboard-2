@@ -13,16 +13,27 @@ class Cn5gTelemetryModel {
 
     #db;
 
-    constructor() {
-        this.#db = require('../database/sqlite3');
-        this.#init()
+    constructor(db = require('../database/sqlite3')) {
+        this.#db = db;
+        if (process.env.NODE_ENV != 'test')
+            this.init()
+    }
+
+    setDb(db) {
+        this.#db = db;
+        return this;
     }
 
     /*
     *   Initialize database
     */
-    #init() {
-        this.#db.run(INIT)
+    async init() {
+        return new Promise((resolve, reject) => {
+            this.#db.run(INIT, (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
+        })
     }
 
     /*
