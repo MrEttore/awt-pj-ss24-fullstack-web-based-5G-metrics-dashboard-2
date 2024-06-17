@@ -3,6 +3,7 @@ import './DisplayHealth.css';
 import { useEffect, useState } from 'react';
 
 const url = '/api/cn5g/telemetry';
+
 const moduleStrings = [
   'amf',
   'ausf',
@@ -25,6 +26,8 @@ export default function DisplayHealth() {
   const [healthStatus, setHealthStatus] = useState([]);
 
   // TODO: API call with timestamp
+
+  // TODO: Move API call to other component
 
   useEffect(() => {
     const fetchData = async (url) => {
@@ -57,7 +60,7 @@ export default function DisplayHealth() {
   }, []);
 
   return (
-    <div className="gridHealth">
+    <div className="contentHealth">
       {healthStatus.map((module, i) => {
         return (
           <HealthItem

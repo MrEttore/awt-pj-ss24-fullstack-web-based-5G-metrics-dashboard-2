@@ -1,13 +1,15 @@
-import { useState } from "react";
-import "../Forms.css";
+import { useState } from 'react';
+import '../Forms.css';
+
+const apiUrl = '/api/cn5g/telemetry';
 
 export default function HealthForm({ selectedTab }) {
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   function handleReset() {
-    setStartTime("");
-    setEndTime("");
+    setStartTime('');
+    setEndTime('');
   }
 
   function handleSubmit(e) {
