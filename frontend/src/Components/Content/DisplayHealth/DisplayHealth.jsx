@@ -1,73 +1,48 @@
-import HealthItem from '../../HealthItem/HealthItem';
-import './DisplayHealth.css';
 import { useEffect, useState } from 'react';
 
-const url = '/api/cn5g/telemetry';
-const moduleStrings = [
-  'amf',
-  'ausf',
-  'nrf',
-  'smf',
-  'upf',
-  'udm',
-  'udr',
-  'nssf',
-  'nef',
-  'mysql',
-  'extdn',
-  'asterisk',
-  'openspeedtest',
-];
+import HealthItem from '../../HealthItem/HealthItem';
+import { transformHealthData } from '../../../Utils/transformData';
+import { CN5G_MODULES } from '../../../Utils/constants';
+import { getCn5gData } from '../../../Utils/fetching';
+
+import './DisplayHealth.css';
 
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
-export default function DisplayHealth() {
+export default function DisplayHealth({ requestedData }) {
+  // Set state to define helth status of modules
   const [healthStatus, setHealthStatus] = useState([]);
 
-  // TODO: API call with timestamp
-
   useEffect(() => {
-    const fetchData = async (url) => {
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
+    const fetchData = async () => {
+      if (requestedData) {
+        const data = await getCn5gData(
+          requestedData.startTime,
+          requestedData.endTime
+        );
 
-        let content = data[0];
-
-        const modules = Object.keys(content).reduce((acc, module) => {
-          const value = content[module];
-
-          if (moduleStrings.includes(module))
-            acc.push({
-              name: module,
-              status: value.status,
-              message: value.message,
-            });
-
-          return acc;
-        }, []);
-
-        return setHealthStatus(modules);
-      } catch (err) {
-        console.error(`Failed to fetch the data ${err}`);
-      }
+        const processedData = transformHealthData(data);
+        setHealthStatus(processedData);
+      } else
+        console.warn(
+          `No timespan specified! Specify a valid timespan to dislay the data!`
+        );
     };
 
-    fetchData(url);
-  }, []);
+    // TODO: Add loading component
+
+    fetchData();
+  }, [requestedData]);
 
   return (
-    <div className="gridHealth">
-      {healthStatus.map((module, i) => {
-        return (
-          <HealthItem
-            key={i}
-            status={module.status}
-            moduleName={module.name}
-            message={module.message}
-          />
-        );
-      })}
+    <div className="contentHealth">
+      {requestedData
+        ? healthStatus.map((m, i) => {
+            return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
+          })
+        : CN5G_MODULES.map((m, i) => {
+            return <HealthItem name={m} key={i} />;
+          })}
     </div>
   );
 }

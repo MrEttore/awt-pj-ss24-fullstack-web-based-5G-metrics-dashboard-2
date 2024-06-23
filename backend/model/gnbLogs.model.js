@@ -1,22 +1,26 @@
+const { INIT } = require('../sql/gnbLogs.sql')
 
 class GnbLogsModel {
 
     #db;
 
-    constructor() {
-        this.#db = require('../database/sqlite3');
-        this.#init();
+    constructor(db) {
+        this.#db = db;
+        if (process.env.NODE_ENV != 'test')
+            this.init();
     }
 
-    #init() {
-        this.#db.run(`
-            CREATE TABLE IF NOT EXISTS 
-                GnbLogs (
-                    rowId INTEGER PRIMARY KEY,
-                    timestamp BIGINT,
-                    payload TEXT
-                );
-        `)
+    setDb(db) {
+        this.#db = db;
+    }
+
+    async init() {
+        return new Promise((resolve, reject) => {
+            this.#db.run(INIT, (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
+        })
     }
 
     async getAll(params) {
@@ -65,12 +69,13 @@ class GnbLogsModel {
 /*
 * Implement singleton pattern.
 */
-const INSTANCE = new GnbLogsModel()
+let INSTANCE; 
 
-function getInstance() {
+function getInstance(db = require('../database/sqlite3')) {
     if (!INSTANCE) {
-        INSTANCE = new GnbLogsModel()
+        INSTANCE = new GnbLogsModel(db)
     }
+    console.log(INSTANCE)
     return INSTANCE
 }
 

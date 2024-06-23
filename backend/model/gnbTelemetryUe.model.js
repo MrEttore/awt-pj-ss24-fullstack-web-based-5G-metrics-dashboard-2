@@ -5,6 +5,12 @@ SELECT rowId, ueId, rnti, inSync, dlBytes, dlMcs, dlBler, ulBytes, ulMcs, ulBler
 FROM GnbTelemetryUe
 `
 
+const {
+    INIT, 
+    SELECT, 
+    INSERT
+} = require('../sql/gnb.telemetryUE.sql')
+
 class GnbTelemetryUeModel {
 
     constructor() {
@@ -12,38 +18,20 @@ class GnbTelemetryUeModel {
         this.init()
     }
 
+    setDb(db) {
+        this.#db = db
+    }
+
     /*
     / Initialize data model
     */
-    init() {
-        this.db.run(`
-            CREATE TABLE IF NOT EXISTS 
-                GnbTelemetryUe (
-                    rowId INTEGER PRIMARY KEY,
-                    gnbTelemetryRowId INT,
-                    ueId INTEGER,
-                    rnti TEXT,
-                    inSync INTEGER,
-                    dlBytes INTEGER,
-                    dlMcs INTEGER,
-                    dlBler REAL,
-                    ulBytes INTEGER,
-                    ulMcs INTEGER,
-                    ulBler REAL,
-                    ri INTEGER,
-                    pmi TEXT,
-                    phr INTEGER,
-                    pcmax INTEGER,
-                    rsrq REAL,
-                    sinr REAL,
-                    rsrp REAL,
-                    rssi REAL,
-                    cqi INTEGER,
-                    pucchSnr REAL,
-                    puschSnr REAL,
-                    FOREIGN KEY (gnbTelemetryRowId) REFERENCES GnbTelementry(rowId)
-                );`
-        )
+    async init() {
+        return new Promise((resolve, reject) => {
+            this.#db.run(INIT, (err) => {
+                if (err) reject(err)
+                else resolve()
+            })
+        })
     }
 
     /*
