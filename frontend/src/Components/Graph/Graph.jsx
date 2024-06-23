@@ -23,6 +23,7 @@ ChartJS.register(
   Legend
 );
 
+// X axis
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
 const data = {
@@ -58,18 +59,18 @@ const options = {
     title: {
       display: true,
       // text: '',
-      color: '37446b', // Corrected hex color value
+      color: '37446b',
     },
   },
   scales: {
     x: {
       ticks: {
-        color: '37446b', // Color of x-axis labels
+        color: '37446b',
       },
     },
     y: {
       ticks: {
-        color: '37446b', // Color of y-axis labels
+        color: '37446b',
       },
     },
   },

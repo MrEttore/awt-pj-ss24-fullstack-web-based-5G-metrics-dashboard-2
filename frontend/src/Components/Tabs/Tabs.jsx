@@ -1,16 +1,19 @@
-import Tab from "../Tab/Tab";
-import { TbActivityHeartbeat } from "react-icons/tb";
-import { TbMobiledata } from "react-icons/tb";
-import { FaCode } from "react-icons/fa6";
-import "./Tabs.css";
+import Tab from '../Tab/Tab';
 
-export default function Tabs({ selectedTab, onSelect }) {
+import { TbActivityHeartbeat } from 'react-icons/tb';
+import { TbMobiledata } from 'react-icons/tb';
+import { FaCode } from 'react-icons/fa6';
+
+import './Tabs.css';
+
+export default function Tabs({ selectedTab, onSelectTab }) {
   return (
     <div className="tabContainer">
+      {/* TAB */}
       <Tab
         value="healthStatus"
         icon={<TbActivityHeartbeat />}
-        onSelect={onSelect}
+        onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
         Health Status
@@ -18,7 +21,7 @@ export default function Tabs({ selectedTab, onSelect }) {
       <Tab
         value="telemetry"
         icon={<TbMobiledata />}
-        onSelect={onSelect}
+        onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
         Telemetry
@@ -26,7 +29,7 @@ export default function Tabs({ selectedTab, onSelect }) {
       <Tab
         value="logs"
         icon={<FaCode />}
-        onSelect={onSelect}
+        onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
         Logs

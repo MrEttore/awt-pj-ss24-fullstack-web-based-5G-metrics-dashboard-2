@@ -1,0 +1,45 @@
+/** TOGGLE SWITCH */
+
+.toggleSwitchContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toggleInput {
+  display: none;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+}
+
+.toggleLabel {
+  background-color: gray;
+  height: 1.2rem;
+  width: 2.4rem;
+  border-radius: 11.5px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s;
+}
+
+.toggleLabel::before {
+  position: absolute;
+  content: '';
+  background-color: white;
+  height: 0.8rem;
+  width: 0.8rem;
+  border-radius: 6.4px;
+  margin: 3.3px;
+  transition: 0.3s;
+}
+
+.toggleInput:checked + .toggleLabel {
+  background-color: #228b22;
+}
+
+.toggleInput:checked + .toggleLabel::before {
+  transform: translateX(1rem);
+}
