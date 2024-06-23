@@ -1,0 +1,32 @@
+/** INPUT TIMESTAMP */
+
+.timeSpanContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.time {
+  width: 12rem;
+  padding: 8px;
+  border: 2px solid #080f25;
+  border-radius: 5px;
+  font-family: 'Comfortaa', sans-serif;
+  background-color: #dee2e6;
+  color: #080f25;
+}
+
+.time::placeholder {
+  color: grey;
+}
+
+.time:disabled {
+  background-color: rgb(204, 198, 198);
+  cursor: not-allowed;
+}

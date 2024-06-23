@@ -1,87 +1,38 @@
-import { useState } from "react";
-import Select from "react-select";
-import "../Forms.css";
+import { useState } from 'react';
+import Select from 'react-select';
+import '../Forms.css';
 
 const optionsMetrics = [
-  { value: "dlBytes", label: "DL Bytes" },
-  { value: "ulBytes", label: "UL Bytes" },
+  { value: 'dlBytes', label: 'DL Bytes' },
+  { value: 'ulBytes', label: 'UL Bytes' },
 ];
 
 const optionsDevices = [
   {
-    value: "iPhone15",
-    label: "iPhone15",
+    value: 'iPhone15',
+    label: 'iPhone15',
   },
 
   {
-    value: "Samsung S24",
-    label: "Samsung S24",
+    value: 'Samsung S24',
+    label: 'Samsung S24',
   },
 ];
 
-export default function TelemetryForm({ selectedTab }) {
+export default function TelemetryForm({
+  selectedTab,
+  isLiveDataOn,
+  onSubmit,
+  children,
+}) {
   // piece of state to control the device selection
-  const [selectedDevice, setSelectedDevice] = useState("");
+  const [selectedDevice, setSelectedDevice] = useState('');
 
-  // pieces of state for the timespan inputs
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-
-  // piece of state for the toggle button
-
+  // TODO: lift state
   function handleSelect(e) {}
 
-  function handleReset() {
-    setStartTime("");
-    setEndTime("");
-  }
-
-  function handleSubmit(e) {
-    // prevent the page to reload
-    e.preventDefault();
-
-    const timestamp = {
-      startTime: startTime,
-      endTime: endTime,
-      device: selectedDevice,
-    };
-
-    console.log(timestamp);
-
-    // TODO: API call
-  }
-
   return (
-    <form className={`${selectedTab}Form`} onSubmit={handleSubmit}>
-      {/* TIME */}
-      <div className="timeSpanContainer">
-        <label htmlFor="time">Select time</label>
-        <div className="inputContainer">
-          <input
-            className="time"
-            type="text"
-            id="time"
-            placeholder="From ..."
-            value={startTime}
-            onChange={(e) => {
-              setStartTime(Number(e.target.value));
-            }}
-            required
-          />
-          <input
-            className="time"
-            type="text"
-            id="time"
-            placeholder="To ..."
-            value={endTime}
-            onChange={(e) => {
-              setEndTime(Number(e.target.value));
-            }}
-            required
-          />
-        </div>
-      </div>
-
+    <form className={`${selectedTab}Form`} onSubmit={onSubmit}>
       {/* DEVICE */}
       <div className="selectDeviceContainer">
         <label htmlFor="selectDevice">Select device</label>
@@ -99,9 +50,9 @@ export default function TelemetryForm({ selectedTab }) {
           }}
           options={optionsDevices}
           required
+          isDisabled={isLiveDataOn}
         />
       </div>
-
       {/* METRICS */}
       <div className="selectMetricsContainer">
         <label htmlFor="selectMetrics">Select Metric</label>
@@ -116,17 +67,12 @@ export default function TelemetryForm({ selectedTab }) {
           onChange={setSelectedDevice}
           options={optionsMetrics}
           required
+          isDisabled={isLiveDataOn}
         />
       </div>
 
-      <div className="btnContainer">
-        <button className="btnSubmit" type="submit">
-          Submit
-        </button>
-        <button className="btnReset" onClick={handleReset}>
-          Reset
-        </button>
-      </div>
+      {/* TIME + LIVE DATA + METRICS + BTNS */}
+      {children}
     </form>
   );
 }
