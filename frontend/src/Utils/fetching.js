@@ -14,7 +14,7 @@ export async function getCn5gData(timeStart, timeEnd) {
 
       return data;
     } catch (err) {
-      console.error(`Failed to fetch the data: ${err}`);
+      console.error(`Failed to fetch the data inside getCn5gData: ${err}`);
     }
   } else throw new Error('Select a valid start and endtime for the request!');
 }
