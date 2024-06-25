@@ -22,6 +22,10 @@ function Main() {
     setRequestedData(data);
   }
 
+  function handleDataReset() {
+    setRequestedData(null);
+  }
+
   return (
     <main className="main">
       <ControlBar>
@@ -29,7 +33,11 @@ function Main() {
         <Tabs selectedTab={selectedTab} onSelectTab={handleSelectedTab} />
 
         {/* FORMS */}
-        <Forms selectedTab={selectedTab} onDataRequest={handleDataRequest} />
+        <Forms
+          selectedTab={selectedTab}
+          onDataRequest={handleDataRequest}
+          onDataReset={handleDataReset}
+        />
       </ControlBar>
 
       {/* CONTENT */}

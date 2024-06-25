@@ -9,7 +9,7 @@ import FormControlButtons from '../FormControlButtons/FormControlButtons';
 
 import './Forms.css';
 
-export default function Forms({ selectedTab, onDataRequest }) {
+export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   // Set state for <ToggleLiveDataSwitch/> component
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
 
@@ -18,7 +18,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
   const [endTime, setEndTime] = useState('');
 
   // Reset timespan input fields
-  function handleResetTime() {
+  function handleResetTimeSpan() {
     setStartTime('');
     setEndTime('');
   }
@@ -26,7 +26,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
   // Handle the functionality of the live data toggle
   function handleToggle() {
     setIsLiveDataToggled(!isLiveDataToggled);
-    handleResetTime();
+    handleResetTimeSpan();
   }
 
   // TODO: handle live data
@@ -45,7 +45,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
 
     // console.log(timestamp);
 
-    handleResetTime();
+    handleResetTimeSpan();
   }
 
   return (
@@ -72,7 +72,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </HealthForm>
       )}
@@ -99,7 +99,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </TelemetryForm>
       )}
@@ -126,7 +126,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </LogsForm>
       )}
