@@ -106,10 +106,6 @@ export default function HealthItem({ name, rawData = [] }) {
 
   const messages = rawData.map((dp) => dp.message);
 
-  // console.log('labels: ', labels);
-  // console.log('healthData: ', healthData);
-  // console.log('messages: ', messages);
-
   const data = {
     labels: labels,
     datasets: [
