@@ -26,6 +26,8 @@ function Main() {
     setRequestedData(null);
   }
 
+  // TODO: when swithing tabs, requestedData -> null
+
   return (
     <main className="main">
       <ControlBar>
