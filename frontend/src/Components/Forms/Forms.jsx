@@ -31,8 +31,25 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
   // TODO: handle live data
 
-  // Handle submit of form
+  // Handle submit of health form
   function handleSubmitHealth(e) {
+    // prevent the page to reload
+    e.preventDefault();
+
+    const timestamp = {
+      startTime: startTime,
+      endTime: endTime,
+    };
+
+    onDataRequest(timestamp);
+
+    // console.log(timestamp);
+
+    handleResetTimeSpan();
+  }
+
+  // Handle submit of logs form
+  function handleSubmitLogs(e) {
     // prevent the page to reload
     e.preventDefault();
 
@@ -106,7 +123,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {/* TODO: build handle submit function */}
       {selectedTab === 'logs' && (
-        <LogsForm selectedTab={selectedTab} onSubmit={() => {}}>
+        <LogsForm selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
           {/* TIME */}
           <SelectTimespan
             isLiveDataOn={isLiveDataToggled}
