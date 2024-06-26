@@ -4,7 +4,9 @@ export default function LogItem({ time, payload, logNr }) {
   return (
     <li className={`log ${logNr}`}>
       <div>
-        {time} | {payload}
+        {/* TODO: Wrap better the message */}
+        <p className="logTime">{time}</p>
+        <p className="logMessage">{payload}</p>
       </div>
     </li>
   );
