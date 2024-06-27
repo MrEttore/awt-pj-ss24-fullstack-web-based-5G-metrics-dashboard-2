@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import LogItem from '../../LogItem/LogItem';
 import Loader from '../../Loader/Loader';
+import InfoMessage from '../../InfoMessage/InfoMessage';
 import { getGnbLogs } from '../../../Utils/fetching';
 
 import './DisplayLogs.css';
@@ -45,10 +46,12 @@ export default function DisplayLogs({ requestedData }) {
   return (
     <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
-      <ul className="logs">
-        {!isLoading &&
-          requestedData &&
-          logsStatus.map((log, i) => {
+      {!isLoading && !requestedData && (
+        <InfoMessage>No data to display</InfoMessage>
+      )}
+      {!isLoading && requestedData && (
+        <ul className="logs">
+          {logsStatus.map((log, i) => {
             return (
               <LogItem
                 time={log.timestamp}
@@ -58,10 +61,8 @@ export default function DisplayLogs({ requestedData }) {
               />
             );
           })}
-      </ul>
-      <div className="statistics">
-        <p>[Statistics]</p>
-      </div>
+        </ul>
+      )}
     </div>
   );
 }
