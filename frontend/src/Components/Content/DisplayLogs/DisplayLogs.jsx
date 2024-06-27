@@ -44,9 +44,10 @@ export default function DisplayLogs({ requestedData }) {
 
   return (
     <div className="contentLogs">
-      {isLoading && <Loader />}
+      {isLoading && <Loader>Loading Logs ...</Loader>}
       <ul className="logs">
-        {requestedData &&
+        {!isLoading &&
+          requestedData &&
           logsStatus.map((log, i) => {
             return (
               <LogItem
