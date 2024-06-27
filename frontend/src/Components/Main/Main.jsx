@@ -16,6 +16,7 @@ function Main() {
 
   function handleSelectedTab(e) {
     setSelectedTab(e.target.value);
+    setRequestedData(null);
   }
 
   function handleDataRequest(data) {
@@ -25,8 +26,6 @@ function Main() {
   function handleDataReset() {
     setRequestedData(null);
   }
-
-  // TODO: when swithing tabs, requestedData -> null
 
   return (
     <main className="main">
