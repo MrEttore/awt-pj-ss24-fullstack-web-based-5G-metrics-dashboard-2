@@ -1,20 +1,19 @@
 .log {
-  margin: 0rem 0rem 1rem 0rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.2rem;
+  list-style-type: none;
 }
 
-.log div {
+.logContent {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 4rem;
   align-items: center;
-
   padding: 0.5rem;
   border: solid black 2px;
   border-radius: 5px;
-
-  height: 4rem;
-
   background-color: #080f25;
+  height: 5rem;
 }
 
 .log div:hover {
@@ -22,8 +21,18 @@
   cursor: pointer;
 }
 
-.logTime,
-.logMessage {
-  color: #d3d3d3;
+.logTime {
+  width: 135px;
+  color: white;
   font-weight: bold;
+  white-space: nowrap;
+  font-family: 'Inconsolata', Courier, monospace;
+}
+
+.logMessage {
+  color: white;
+  white-space: normal;
+  flex-grow: 1;
+  word-wrap: break-word;
+  font-family: 'Inconsolata', Courier, monospace;
 }

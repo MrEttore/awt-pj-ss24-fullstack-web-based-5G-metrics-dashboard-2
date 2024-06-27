@@ -1,14 +1,20 @@
 .contentHealth {
+  border-radius: 10px;
+  padding: 0.5rem;
+  background-color: #37446b;
+}
+
+.items {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  border-radius: 10px;
 
-  padding: 0.5rem;
   background-color: #37446b;
 
-  height: 520px;
   overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 10px;
+  height: 520px;
 }
 
 .loading {
