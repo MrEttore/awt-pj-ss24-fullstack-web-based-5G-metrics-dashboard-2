@@ -17,3 +17,4 @@ export const CN5G_MODULES = [
 /// APIs ///
 
 export const CN5G_BASE_URL = 'http://localhost:5173/api/cn5g/telemetry?';
+export const GNB_LOGS_URL = 'http://localhost:5173/api/gnb/logs?';

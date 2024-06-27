@@ -1,8 +1,8 @@
-import './Content.css';
 import DisplayHealth from './DisplayHealth/DisplayHealth.jsx';
 import DisplayLogs from './DisplayLogs/DisplayLogs.jsx';
 import DisplayTelemetry from './DisplayTelemetry/DisplayTelemetry.jsx';
-import Graph from '../Graph/Graph.jsx';
+
+import './Content.css';
 
 export default function Content({ selectedTab, requestedData }) {
   return (

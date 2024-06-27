@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import HealthItem from '../../HealthItem/HealthItem';
+import Loader from '../../Loader/Loader';
 import { transformHealthData } from '../../../Utils/transformData';
 import { CN5G_MODULES } from '../../../Utils/constants';
 import { getCn5gData } from '../../../Utils/fetching';
@@ -10,39 +11,59 @@ import './DisplayHealth.css';
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
 export default function DisplayHealth({ requestedData }) {
-  // Set state to define helth status of modules
+  // Set state to define health status of modules
   const [healthStatus, setHealthStatus] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (requestedData) {
-        const data = await getCn5gData(
-          requestedData.startTime,
-          requestedData.endTime
-        );
+  // Set state to manage laoding message
+  const [isLoading, setIsLoading] = useState(false);
 
-        const processedData = transformHealthData(data);
-        setHealthStatus(processedData);
-      } else
+  // TODO: Add further useEffect() hook to display live data???
+  // ...
+
+  useEffect(() => {
+    const fetchHealthData = async () => {
+      if (requestedData) {
+        try {
+          setIsLoading(true);
+
+          const data = await getCn5gData(
+            requestedData.startTime,
+            requestedData.endTime
+          );
+
+          const processedData = transformHealthData(data);
+
+          setHealthStatus(processedData);
+        } catch (err) {
+          console.err(err.message);
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
         console.warn(
           `No timespan specified! Specify a valid timespan to dislay the data!`
         );
+      }
     };
 
-    // TODO: Add loading component
+    fetchHealthData();
 
-    fetchData();
-  }, [requestedData]);
+    // TODO: Cleanup function needed?
+  }, [requestedData]); // add healthStatus??
 
   return (
-    <div className="contentHealth">
-      {requestedData
-        ? healthStatus.map((m, i) => {
-            return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
-          })
-        : CN5G_MODULES.map((m, i) => {
-            return <HealthItem name={m} key={i} />;
-          })}
+    <div className={`contentHealth ${isLoading ? 'loading' : ''}`}>
+      {isLoading && <Loader>Loading Data ...</Loader>}
+      {!isLoading &&
+        requestedData &&
+        healthStatus.map((m, i) => {
+          return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
+        })}
+      {!isLoading &&
+        !requestedData &&
+        CN5G_MODULES.map((m, i) => {
+          return <HealthItem name={m} key={i} />;
+        })}
     </div>
   );
 }

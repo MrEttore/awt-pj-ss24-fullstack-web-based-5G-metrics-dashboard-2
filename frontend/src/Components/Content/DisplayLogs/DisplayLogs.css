@@ -1,17 +1,20 @@
 .contentLogs {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  gap: 0.5rem;
+
+  height: 520px;
+
   border-radius: 10px;
-  width: fit-content;
   padding: 0.5rem;
   background-color: #37446b;
 }
 
-/* .graphsContainer {
-  display: grid;
-  defines the colums
-  grid-template-columns: 1fr 1fr;
+.logs {
+  width: 65%;
 
-  defines the rows
-  grid-template-rows: 1fr 1fr;
+  overflow-y: auto;
 
-  margin-top: 0.5rem;
-} */
+  list-style-type: none;
+}

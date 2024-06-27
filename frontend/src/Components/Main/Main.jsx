@@ -16,10 +16,15 @@ function Main() {
 
   function handleSelectedTab(e) {
     setSelectedTab(e.target.value);
+    setRequestedData(null);
   }
 
   function handleDataRequest(data) {
     setRequestedData(data);
+  }
+
+  function handleDataReset() {
+    setRequestedData(null);
   }
 
   return (
@@ -29,7 +34,11 @@ function Main() {
         <Tabs selectedTab={selectedTab} onSelectTab={handleSelectedTab} />
 
         {/* FORMS */}
-        <Forms selectedTab={selectedTab} onDataRequest={handleDataRequest} />
+        <Forms
+          selectedTab={selectedTab}
+          onDataRequest={handleDataRequest}
+          onDataReset={handleDataReset}
+        />
       </ControlBar>
 
       {/* CONTENT */}

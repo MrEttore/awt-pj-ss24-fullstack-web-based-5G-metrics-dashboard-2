@@ -9,7 +9,7 @@ import FormControlButtons from '../FormControlButtons/FormControlButtons';
 
 import './Forms.css';
 
-export default function Forms({ selectedTab, onDataRequest }) {
+export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   // Set state for <ToggleLiveDataSwitch/> component
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
 
@@ -18,7 +18,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
   const [endTime, setEndTime] = useState('');
 
   // Reset timespan input fields
-  function handleResetTime() {
+  function handleResetTimeSpan() {
     setStartTime('');
     setEndTime('');
   }
@@ -26,12 +26,12 @@ export default function Forms({ selectedTab, onDataRequest }) {
   // Handle the functionality of the live data toggle
   function handleToggle() {
     setIsLiveDataToggled(!isLiveDataToggled);
-    handleResetTime();
+    handleResetTimeSpan();
   }
 
   // TODO: handle live data
 
-  // Handle submit of form
+  // Handle submit of health form
   function handleSubmitHealth(e) {
     // prevent the page to reload
     e.preventDefault();
@@ -45,7 +45,24 @@ export default function Forms({ selectedTab, onDataRequest }) {
 
     // console.log(timestamp);
 
-    handleResetTime();
+    handleResetTimeSpan();
+  }
+
+  // Handle submit of logs form
+  function handleSubmitLogs(e) {
+    // prevent the page to reload
+    e.preventDefault();
+
+    const timestamp = {
+      startTime: startTime,
+      endTime: endTime,
+    };
+
+    onDataRequest(timestamp);
+
+    // console.log(timestamp);
+
+    handleResetTimeSpan();
   }
 
   return (
@@ -72,7 +89,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </HealthForm>
       )}
@@ -99,14 +116,14 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </TelemetryForm>
       )}
 
       {/* TODO: build handle submit function */}
       {selectedTab === 'logs' && (
-        <LogsForm selectedTab={selectedTab} onSubmit={() => {}}>
+        <LogsForm selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
           {/* TIME */}
           <SelectTimespan
             isLiveDataOn={isLiveDataToggled}
@@ -126,7 +143,7 @@ export default function Forms({ selectedTab, onDataRequest }) {
           {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={handleResetTime}
+            onReset={onDataReset}
           />
         </LogsForm>
       )}
