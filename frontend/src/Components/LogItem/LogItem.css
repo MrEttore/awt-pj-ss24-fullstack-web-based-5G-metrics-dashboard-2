@@ -35,4 +35,5 @@
   flex-grow: 1;
   word-wrap: break-word;
   font-family: 'Inconsolata', Courier, monospace;
+  font-size: 0.9rem;
 }
