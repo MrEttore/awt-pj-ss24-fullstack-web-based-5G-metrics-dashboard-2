@@ -53,7 +53,7 @@ export default function DisplayHealth({ requestedData }) {
 
   return (
     <div className={`contentHealth ${isLoading ? 'loading' : ''}`}>
-      {isLoading && <Loader />}
+      {isLoading && <Loader>Loading Data ...</Loader>}
       {!isLoading &&
         requestedData &&
         healthStatus.map((m, i) => {
