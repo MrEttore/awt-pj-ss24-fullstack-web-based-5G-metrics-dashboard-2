@@ -54,16 +54,20 @@ export default function DisplayHealth({ requestedData }) {
   return (
     <div className={`contentHealth ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Data ...</Loader>}
-      {!isLoading &&
-        requestedData &&
-        healthStatus.map((m, i) => {
-          return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
-        })}
-      {!isLoading &&
-        !requestedData &&
-        CN5G_MODULES.map((m, i) => {
-          return <HealthItem name={m} key={i} />;
-        })}
+      {!isLoading && requestedData && (
+        <div className="items">
+          {healthStatus.map((m, i) => {
+            return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
+          })}
+        </div>
+      )}
+      {!isLoading && !requestedData && (
+        <div className="items">
+          {CN5G_MODULES.map((m, i) => {
+            return <HealthItem name={m} key={i} />;
+          })}
+        </div>
+      )}
     </div>
   );
 }
