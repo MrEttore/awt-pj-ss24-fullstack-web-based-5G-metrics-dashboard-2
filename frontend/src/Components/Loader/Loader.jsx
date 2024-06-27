@@ -1,9 +1,9 @@
 import './Loader.css';
 
-export default function Loader() {
+export default function Loader({ children }) {
   return (
     <div className="loader">
-      <p>Loading data ...</p>
+      <p>{children}</p>
     </div>
   );
 }
