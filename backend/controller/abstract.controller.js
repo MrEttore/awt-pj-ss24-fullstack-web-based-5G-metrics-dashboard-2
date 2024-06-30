@@ -27,9 +27,9 @@ class AbstractController {
         try {
             const rows = await this.#model.getAll({ ...req.query });
 
-            for (let row of rows) {
-                // row.href = req.originalUrl + '/' + row.rowId;
-            }
+            // for (let row of rows) {
+            //     row.href = req.originalUrl + '/' + row.rowId;
+            // }
 
             res.json(rows);
         } catch (error) {
