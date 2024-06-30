@@ -8,7 +8,7 @@
 
 .message {
   text-align: center;
-  font-family: 'Inconsolata', Courier, monospace;
   color: #febe10;
   font-size: 1.5rem;
+  font-weight: bold;
 }
