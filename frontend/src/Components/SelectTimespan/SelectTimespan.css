@@ -1,3 +1,5 @@
+@import url('../../Styles/variables.css');
+
 /** INPUT TIMESTAMP */
 
 .timeSpanContainer {
@@ -15,18 +17,23 @@
 .time {
   width: 12rem;
   padding: 8px;
-  border: 2px solid #080f25;
-  border-radius: 5px;
-  font-family: 'Comfortaa', sans-serif;
-  background-color: #dee2e6;
-  color: #080f25;
+  border: solid 2px var(--color-background-900);
+  outline: none;
+  border-radius: 30px;
+  background-color: var(--color-background-100);
+  color: var(--color-background-900);
+  transition: all 0.2s;
+}
+
+.time:focus {
+  border: solid 3.5px var(--color-primary-light);
 }
 
 .time::placeholder {
-  color: grey;
+  color: var(--color-background-500);
 }
 
 .time:disabled {
-  background-color: rgb(204, 198, 198);
+  background-color: var(--color-background-100);
   cursor: not-allowed;
 }

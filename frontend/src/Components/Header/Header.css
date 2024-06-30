@@ -1,20 +1,36 @@
-.header {
-  display: flex;
-  padding: 0.2rem;
-  margin: 1rem;
+@import url('../../Styles/variables.css');
 
-  /* to align items vertically */
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  background-color: #080f25;
+  height: 4rem;
+  padding: 0 2rem;
+  background-color: var(--color-primary);
+  border-radius: 0.9rem;
 }
 
-.header h1 {
+.leftColumn {
+  display: flex;
+  font-size: 3.3rem;
+}
+
+.centerColumn {
+  display: flex;
+  justify-self: center;
+}
+
+.rightColumn {
+  margin-left: auto;
+  display: flex;
+}
+
+.title {
   font-size: 1.5rem;
-  color: white;
+  margin-right: auto; /* Pushes the title to the leftmost part of the flex container */
   text-transform: uppercase;
 }
 
 .date {
-  margin-left: auto;
-  color: white;
+  margin-left: 1rem; /* Adds margin between title and date */
 }

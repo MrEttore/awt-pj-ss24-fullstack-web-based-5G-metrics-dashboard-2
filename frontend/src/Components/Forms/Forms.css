@@ -1,10 +1,15 @@
+@import url('../../Styles/variables.css');
+
 /** FORMS CONTAINER */
 
 .formContainer {
   border-radius: 10px;
   width: fit-content;
   padding: 0.5rem;
-  background-color: #37446b;
+  background-color: var(--color-background-500);
+  display: flex;
+  align-items: center;
+  transition: all 0.5s;
 }
 
 /** FORM CONTAINER */
@@ -12,13 +17,13 @@
 .healthStatusForm,
 .logsForm,
 .telemetryForm {
-  display: inline-flex;
-  flex-direction: row;
+  display: flex;
   align-items: center;
   gap: 1.5rem;
   border-radius: 0.5rem;
-  color: white;
+  color: var(--color-text);
   text-transform: uppercase;
+  width: 100%;
 }
 
 .selectDeviceContainer,
