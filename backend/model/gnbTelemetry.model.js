@@ -36,7 +36,7 @@ class GnbTelemetryModel {
 
     #extractUeIds(data) {
         const ueIds = new Set(); // Verwenden Sie ein Set, um Duplikate zu vermeiden
-
+    
         data.forEach(record => {
             if (record.ues && Array.isArray(record.ues)) {
                 record.ues.forEach(ue => {
@@ -44,51 +44,8 @@ class GnbTelemetryModel {
                 });
             }
         });
-
-        return Array.from(ueIds); // Konvertieren Sie das Set zurück in ein Array
-    }
-
-    #transposition(data, requestedColumns = []) {
-        const validColumns = new Set([
-            "rowId", "id", "frame", "slot", "pci", "dlCarrierFreq", "ulCarrierFreq", 
-            "avgLdpcIterations", "timestamp", "ueId", "rnti", "inSync", "dlBytes", 
-            "dlMcs", "dlBler", "ulBytes", "ulMcs", "ulBler", "ri", "pmi", "phr", 
-            "pcmax", "rsrq", "sinr", "rsrp", "rssi", "cqi", "pucchSnr", "puschSnr"
-        ]);
-
-        const result = {};
-
-        // Filter out invalid columns
-        const columnsToInclude = requestedColumns.filter(col => validColumns.has(col));
-        
-        data.forEach(entry => {
-            Object.keys(entry).forEach(key => {
-                if (key === 'ues') {
-                    // Handle the 'ues' array
-                    if (entry[key].length > 0) {
-                        const ue = entry[key][0];
-                        Object.keys(ue).forEach(ueKey => {
-                            if (columnsToInclude.length === 0 || columnsToInclude.includes(ueKey)) {
-                                if (!result[ueKey]) {
-                                    result[ueKey] = [];
-                                }
-                                result[ueKey].push(ue[ueKey]);
-                            }
-                        });
-                    }
-                } else {
-                    // Handle other keys
-                    if (columnsToInclude.length === 0 || columnsToInclude.includes(key)) {
-                        if (!result[key]) {
-                            result[key] = [];
-                        }
-                        result[key].push(entry[key]);
-                    }
-                }
-            });
-        });
     
-        return result;
+        return Array.from(ueIds); // Konvertieren Sie das Set zurück in ein Array
     }
 
     async getAll(params) {
@@ -108,8 +65,7 @@ class GnbTelemetryModel {
         if ('ues' in params) {
             return this.#extractUeIds(rows)
         }
-
-        return this.#transposition(rows, Object.keys(params))
+        return rows
     }
 
     /*
