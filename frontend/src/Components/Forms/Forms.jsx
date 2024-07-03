@@ -8,6 +8,7 @@ import SelectTimespan from '../SelectTimespan/SelectTimespan';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
 import { DASHBOARD_METRICS } from '../../Utils/constants';
+import { getGnbUes } from '../../Utils/fetching';
 
 import './Forms.css';
 
@@ -21,6 +22,9 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
   // Set metric state
   const [metrics, setMetrics] = useState([]);
+
+  // Set devices state
+  const [devices, setDevices] = useState([]);
 
   // Reset timespan input fields
   function handleResetTimeSpan() {
@@ -73,27 +77,31 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     handleResetTimeSpan();
   }
 
-  // Load the devices
-  // TODO: get devices with API
-  const optionsDevices = [
-    {
-      value: 'iPhone15',
-      label: 'iPhone15',
-    },
+  // Load the devices for the dropdown
+  useEffect(() => {
+    const getDevices = async () => {
+      try {
+        const data = await getGnbUes();
 
-    {
-      value: 'Samsung S24',
-      label: 'Samsung S24',
-    },
-  ];
+        const daviceData = data.map((dev) => {
+          return { value: dev, label: `UE${dev}` };
+        });
 
-  // Load the metrics
+        setDevices(daviceData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    getDevices();
+  }, []);
+
+  // Load the metrics for the dropdown
   useEffect(() => {
     function getMetrics(metricsArray) {
-      const metrics = metricsArray.map((m) => ({
-        value: m,
-        label: m,
-      }));
+      const metrics = metricsArray.map((m) => {
+        return { value: m, label: m };
+      });
 
       setMetrics(metrics);
     }
@@ -133,7 +141,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       {selectedTab === 'telemetry' && (
         <TelemetryForm selectedTab={selectedTab} onSubmit={() => {}}>
           {/* DEVICES */}
-          <DropDown name="device" label="device" content={optionsDevices} />
+          <DropDown name="device" label="device" content={devices} />
 
           {/* METRICS */}
           <DropDown name="metrics" label="metrics" content={metrics} />
