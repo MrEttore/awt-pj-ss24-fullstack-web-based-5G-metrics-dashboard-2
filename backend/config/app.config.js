@@ -3,8 +3,24 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(bodyParser.json());
-
+app.use((req, res, next) => {
+  if (req.headers['content-type'] === 'application/json') {
+    let data = '';
+    req.on('data', chunk => {
+      data += chunk;
+    });
+    req.on('end', () => {
+      try {
+        req.body = JSON.parse(data);
+        next();
+      } catch (error) {
+        res.status(400).send('Invalid JSON');
+      }
+    });
+  } else {
+    next();
+  }
+});
 /*
 * Logging middleware
 */

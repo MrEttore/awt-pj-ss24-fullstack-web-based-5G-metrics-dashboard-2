@@ -1,3 +1,4 @@
 python-dotenv
 pyppeteer
-requests
+requests == 2.25.1
+aiohttp
