@@ -38,6 +38,7 @@
   border-radius: 30px;
   margin-top: 0.5rem;
   margin-left: -6px;
+  overflow: hidden;
 }
 
 .select .react-select__option {
