@@ -1,11 +1,11 @@
-import { CN5G_BASE_URL, GNB_LOGS_URL } from './constants.js';
+import { CN5G_BASE_URL, GNB_LOGS_URL, GNB_TELEMETRY_URL } from './constants.js';
 
 // Fetch cn5g telemetry
 export async function getCn5gData(timeStart, timeEnd) {
   if (timeStart && timeEnd) {
     try {
       const response = await fetch(
-        `${CN5G_BASE_URL}timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+        `${CN5G_BASE_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
       );
 
       if (!response.ok) throw new Error('API response not ok!');
@@ -26,7 +26,7 @@ export async function getGnbLogs(timeStart, timeEnd) {
   if (timeStart && timeEnd) {
     try {
       const response = await fetch(
-        `${GNB_LOGS_URL}timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+        `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
       );
 
       if (!response.ok) throw new Error('API response not ok!');
