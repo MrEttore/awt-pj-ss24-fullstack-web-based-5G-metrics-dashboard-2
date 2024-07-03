@@ -32,6 +32,15 @@ services:
       - "5173:5173"
     networks:
       - awt
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: nginx:awt
+    ports:
+      - "80:80"
+    networks:
+      - awt
 networks:
   awt:
     driver: bridge
