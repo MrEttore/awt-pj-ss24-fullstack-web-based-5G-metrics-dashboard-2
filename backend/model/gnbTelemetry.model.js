@@ -188,10 +188,9 @@ class GnbTelemetryModel {
     }
 
     async add(data) {
-        const dataParsed = JSON.parse(data)
         const {
             id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp, ues
-        } = dataParsed
+        } = data
 
         const ID = await this.#add({
             id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp

@@ -96,7 +96,6 @@ class Cn5gTelemetryModel {
     *   Returns ID of new entry
     */
     async add(data) {
-        const dataParsed = JSON.parse(data)
         const {
             timestamp,
             amf: { status: amfStatus, message: amfMessage },
@@ -114,7 +113,7 @@ class Cn5gTelemetryModel {
             openspeedtest: { status: openspeedtestStatus, message: openspeedtestMessage },
             oaiExtDnUplinkState,
             oaiExtDnDownlinkInstances
-        } = dataParsed;
+        } = data;
 
         return new Promise((resolve, reject) => {
             this.#db.run(INSERT, [

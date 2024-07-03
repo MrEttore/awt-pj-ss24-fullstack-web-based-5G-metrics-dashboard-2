@@ -71,13 +71,15 @@ async def filter_data(text):
             json_obj = extract_json_from_string(text)
             if json_obj:
                 if 'gnb.telemetry' in destination:
-                    await send_data(json_obj, 'gnb/telemetry')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'gnb/telemetry')
                 elif 'gnb.logs' in destination:
                     await send_data(json_obj, 'gnb/logs')
                 elif 'gnb.configuration' in destination:
                     await send_data(json_obj, 'gnb/configuration')
                 elif 'cn5g.telemetry' in destination:
-                    await send_data(json_obj, 'cn5g/telemetry')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'cn5g/telemetry')
                 else:
                     print('Unknown destination')
     except Exception as e:
