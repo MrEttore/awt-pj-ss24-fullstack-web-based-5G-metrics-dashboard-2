@@ -42,6 +42,29 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
+// Fetch gnb telemetry using timespans
+export default async function getGnBTelemetry(timeStart, timeEnd) {
+  if (timeStart && timeEnd) {
+    try {
+      const response = await fetch(
+        `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      );
+
+      if (!response.ok) throw new Error('API response not ok!');
+
+      const data = await response.json();
+
+      console.log('telemetry data: ', data);
+
+      return data;
+    } catch (err) {
+      console.error(
+        `Failed to fetch the data inside getGnbLogs: ${err.message}`
+      );
+    }
+  }
+}
+
 // Fetch available ues (devices)
 export async function getGnbUes() {
   try {
