@@ -1,7 +1,5 @@
 import { CN5G_MODULES } from './constants';
 
-/// Transforms the data from the cn5g-telemetry API ///
-
 export function transformHealthData(data) {
   // Initialize the structure to store each module's data
   const moduleData = {};
@@ -28,6 +26,3 @@ export function transformHealthData(data) {
 
   return result;
 }
-
-// const transformedHealthData = transformHealthData(data);
-// console.log(JSON.stringify(transformedHealthData, null, 2));
