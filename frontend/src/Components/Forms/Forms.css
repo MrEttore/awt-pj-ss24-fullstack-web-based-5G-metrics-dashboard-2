@@ -1,7 +1,5 @@
 @import url('../../Styles/variables.css');
 
-/** FORMS CONTAINER */
-
 .formContainer {
   border-radius: 10px;
   width: fit-content;
@@ -10,25 +8,4 @@
   display: flex;
   align-items: center;
   transition: all 0.5s;
-}
-
-/** FORM CONTAINER */
-
-.healthStatusForm,
-.logsForm,
-.telemetryForm {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  border-radius: 0.5rem;
-  color: var(--color-text);
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.selectDeviceContainer,
-.selectMetricsContainer {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
 }

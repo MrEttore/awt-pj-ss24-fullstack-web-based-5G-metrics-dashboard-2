@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import HealthForm from './HealthForm/HealthForm';
-import TelemetryForm from './TelemetryForm/TelemetryForm';
-import LogsForm from './LogsForm/LogsForm';
+import Form from '../Form/Form';
 import ToggleLiveDataSwitch from '../ToggleLiveDataSwitch/ToggleLiveDataSwitch';
 import SelectTimespan from '../SelectTimespan/SelectTimespan';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
+
 import { DASHBOARD_METRICS } from '../../Utils/constants';
 import { getGnbUes } from '../../Utils/fetching';
 
@@ -112,7 +111,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   return (
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
-        <HealthForm selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
+        <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
           {/* TIME */}
           <SelectTimespan
             isLiveDataOn={isLiveDataToggled}
@@ -134,12 +133,12 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
           />
-        </HealthForm>
+        </Form>
       )}
 
       {/* TODO: build handle submit function */}
       {selectedTab === 'telemetry' && (
-        <TelemetryForm selectedTab={selectedTab} onSubmit={() => {}}>
+        <Form selectedTab={selectedTab} onSubmit={() => {}}>
           {/* DEVICES */}
           <DropDown name="device" label="device" content={devices} />
 
@@ -167,11 +166,11 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
           />
-        </TelemetryForm>
+        </Form>
       )}
 
       {selectedTab === 'logs' && (
-        <LogsForm selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
+        <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
           {/* TIME */}
           <SelectTimespan
             isLiveDataOn={isLiveDataToggled}
@@ -193,7 +192,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
           />
-        </LogsForm>
+        </Form>
       )}
     </div>
   );
