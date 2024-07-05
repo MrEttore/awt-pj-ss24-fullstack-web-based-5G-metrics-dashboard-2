@@ -2,7 +2,13 @@ import Select from 'react-select';
 
 import './DropDown.css';
 
-export default function DropDown({ name, label, content = [] }) {
+export default function DropDown({
+  name,
+  label,
+  options = [],
+  selectedOptions,
+  onSelectOption,
+}) {
   return (
     <div className={`dropdown ${name}`}>
       <label htmlFor="select">{label}</label>
@@ -13,12 +19,11 @@ export default function DropDown({ name, label, content = [] }) {
         unstyled
         isMulti
         isSearchable
-        // defaultValue={selectedDevice}
-        // value={selectedDevice}
+        value={selectedOptions}
         onChange={(e) => {
-          console.log(e);
+          onSelectOption(e);
         }}
-        options={content}
+        options={options}
         required
         isDisabled={false}
       />
