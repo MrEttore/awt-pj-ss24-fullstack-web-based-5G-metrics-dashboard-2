@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
 import { transformHealthData } from '../../../Utils/transformData';
-import { CN5G_MODULES } from '../../../Utils/constants';
 import { getCn5gData } from '../../../Utils/fetching';
+import { CN5G_MODULES } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
@@ -40,6 +40,7 @@ export default function DisplayHealth({ requestedData }) {
           setIsLoading(false);
         }
       } else {
+        // TODO: take out and build a warning message instead
         console.warn(
           `No timespan specified! Specify a valid timespan to dislay the data!`
         );
