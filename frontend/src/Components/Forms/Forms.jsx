@@ -19,44 +19,52 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
-  // Set metric state
+  // Set state to manage the currently selected metric
+  const [selectedMetrics, setSelectedMetrics] = useState([]);
+
+  // Set state to manage the currently selected device
+  const [selectedDevices, setSelectedDevices] = useState([]);
+
+  // Set state to manage available metrics
   const [metrics, setMetrics] = useState([]);
 
-  // Set devices state
+  // Set state to manage available devices
   const [devices, setDevices] = useState([]);
 
   // Reset timespan input fields
-  function handleResetTimeSpan() {
+  function handleResetForm() {
     setStartTime('');
     setEndTime('');
+    setSelectedMetrics([]);
+    setSelectedDevices([]);
   }
 
+  // TODO: also update the dropdowns ...
   // Handle the functionality of the live data toggle
   function handleToggle() {
     setIsLiveDataToggled(!isLiveDataToggled);
-    handleResetTimeSpan();
+    handleResetForm();
   }
 
-  // Handle the selection of devices
-  function handleSelect(e) {}
-
   // TODO: handle live data
+  // ...
 
   // Handle submit of health form
   function handleSubmitHealth(e) {
     // prevent the page to reload
     e.preventDefault();
 
-    const timestamp = {
+    const requestedData = {
       startTime: startTime,
       endTime: endTime,
+      isLiveDataOn: isLiveDataToggled,
     };
 
-    onDataRequest(timestamp);
+    onDataRequest(requestedData);
 
-    // console.log(timestamp);
+    // console.log(requestedData);
 
-    handleResetTimeSpan();
+    handleResetForm();
   }
 
   // Handle submit of logs form
@@ -64,16 +72,37 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     // prevent the page to reload
     e.preventDefault();
 
-    const timestamp = {
+    const requestedData = {
       startTime: startTime,
       endTime: endTime,
+      isLiveDataOn: isLiveDataToggled,
     };
 
-    onDataRequest(timestamp);
+    onDataRequest(requestedData);
 
-    // console.log(timestamp);
+    // console.log(requestedData);
 
-    handleResetTimeSpan();
+    handleResetForm();
+  }
+
+  // Handle submit of telemtry form
+  function handleSubmitTelemetry(e) {
+    // prevent the page to reload
+    e.preventDefault();
+
+    const requestedData = {
+      startTime: startTime,
+      endTime: endTime,
+      devices: selectedDevices,
+      metrics: selectedMetrics,
+      isLiveDataOn: isLiveDataToggled,
+    };
+
+    onDataRequest(requestedData);
+
+    console.log('requestedData from form: ', requestedData);
+
+    handleResetForm();
   }
 
   // Load the devices for the dropdown
@@ -138,12 +167,24 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {/* TODO: build handle submit function */}
       {selectedTab === 'telemetry' && (
-        <Form selectedTab={selectedTab} onSubmit={() => {}}>
+        <Form selectedTab={selectedTab} onSubmit={handleSubmitTelemetry}>
           {/* DEVICES */}
-          <DropDown name="device" label="device" content={devices} />
+          <DropDown
+            name="device"
+            label="device"
+            options={devices}
+            selectedOptions={selectedDevices}
+            onSelectOption={setSelectedDevices}
+          />
 
           {/* METRICS */}
-          <DropDown name="metrics" label="metrics" content={metrics} />
+          <DropDown
+            name="metrics"
+            label="metrics"
+            options={metrics}
+            selectedOptions={selectedMetrics}
+            onSelectOption={setSelectedMetrics}
+          />
 
           {/* TIME */}
           <SelectTimespan
