@@ -6,6 +6,8 @@
   --color-background-100: #d8dde5;
   --color-background-500: #485375;
   --color-background-900: #080f25;
-  --color-red: #fa5252;
-  --color-red-dark: #e03131;
+  --color-error: #fa5252;
+  --color-error-dark: #e03131;
+  --color-warning: #ffa94d;
+  --color-warning-dark: #ff922b;
 }
