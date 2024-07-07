@@ -18,6 +18,7 @@ function Main() {
   // Set state to control the data requests
   const [requestedData, setRequestedData] = useState(null);
 
+  // TODO: update to messages arr
   // Set state to control info/error messages
   const [message, setMessage] = useState(EMPTY_MESSAGE);
 
