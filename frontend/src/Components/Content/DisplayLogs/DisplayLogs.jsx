@@ -28,8 +28,6 @@ export default function DisplayLogs({ requestedData, onMessage }) {
             requestedData.endTime
           );
 
-          console.log(data);
-
           setLogsStatus(data);
         } catch (err) {
           console.error(err.message);
