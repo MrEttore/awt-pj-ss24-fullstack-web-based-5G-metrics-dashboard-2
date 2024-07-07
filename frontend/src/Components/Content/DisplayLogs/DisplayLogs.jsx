@@ -15,7 +15,6 @@ export default function DisplayLogs({ requestedData, onMessage }) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: API call
   useEffect(() => {
     const fetchLogsData = async () => {
       if (requestedData) {
