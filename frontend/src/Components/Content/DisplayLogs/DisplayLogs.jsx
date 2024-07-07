@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react';
 
 import LogItem from '../../LogItem/LogItem';
 import Loader from '../../Loader/Loader';
-import InfoMessage from '../../InfoMessage/InfoMessage';
+import Message from '../../Message/Message';
 import { getGnbLogs } from '../../../Utils/fetching';
+import {
+  EMPTY_MESSAGE,
+  WARNING_TIMESPAN_MISSING,
+} from '../../../Utils/constants';
 
 import './DisplayLogs.css';
 
-export default function DisplayLogs({ requestedData }) {
+export default function DisplayLogs({ requestedData, onMessage }) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -17,6 +21,7 @@ export default function DisplayLogs({ requestedData }) {
       if (requestedData) {
         try {
           setIsLoading(true);
+          onMessage(EMPTY_MESSAGE);
 
           const data = await getGnbLogs(
             requestedData.startTime,
@@ -32,23 +37,19 @@ export default function DisplayLogs({ requestedData }) {
           setIsLoading(false);
         }
       } else {
-        console.warn(
-          `No timespan specified! Specify a valid timespan to dislay the data!`
-        );
+        onMessage(WARNING_TIMESPAN_MISSING);
       }
     };
 
     fetchLogsData();
 
     // TODO: Cleanup function needed?
-  }, [requestedData]);
+  }, [requestedData, onMessage]);
 
   return (
     <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
-      {!isLoading && !requestedData && (
-        <InfoMessage>No data to display</InfoMessage>
-      )}
+      {!isLoading && !requestedData && <Message>No data to display</Message>}
       {!isLoading && requestedData && (
         <ul className="logs">
           {logsStatus.map((log, i) => {
