@@ -100,7 +100,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
     onDataRequest(requestedData);
 
-    console.log('requestedData from form: ', requestedData);
+    console.log('requestedData: ', requestedData);
 
     handleResetForm();
   }
@@ -165,7 +165,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
         </Form>
       )}
 
-      {/* TODO: build handle submit function */}
       {selectedTab === 'telemetry' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitTelemetry}>
           {/* DEVICES */}
