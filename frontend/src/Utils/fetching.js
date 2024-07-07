@@ -54,8 +54,6 @@ export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
 
       const data = await response.json();
 
-      console.log('telemetry data: ', data);
-
       return data;
     } catch (err) {
       console.error(
