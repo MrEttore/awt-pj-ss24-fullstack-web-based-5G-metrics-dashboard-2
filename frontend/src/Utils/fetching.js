@@ -43,11 +43,11 @@ export async function getGnbLogs(timeStart, timeEnd) {
 }
 
 // Fetch gnb telemetry using timespans
-export default async function getGnBTelemetry(timeStart, timeEnd) {
-  if (timeStart && timeEnd) {
+export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
+  if (timeStart && timeEnd && ueId) {
     try {
       const response = await fetch(
-        `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+        `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueId=${ueId.toString()}`
       );
 
       if (!response.ok) throw new Error('API response not ok!');
@@ -64,6 +64,10 @@ export default async function getGnBTelemetry(timeStart, timeEnd) {
     }
   }
 }
+
+// http://localhost:3000/api/gnb/telemetry?timeStart=1&timeEnd=1715076984102&ueId=1  <-- !!
+// or ...
+// http://localhost:3000/api/gnb/telemetry/ue?ueId=1&timeStart=1&timeEnd=1715077195101
 
 // Fetch available ues (devices)
 export async function getGnbUes() {
