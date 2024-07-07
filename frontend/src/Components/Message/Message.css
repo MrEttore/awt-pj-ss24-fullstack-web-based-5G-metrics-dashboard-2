@@ -1,12 +1,10 @@
 @import url('../../Styles/variables.css');
 
-.message {
+.warning {
   margin: 0.1rem;
   padding: 0.5rem;
-  transition: all 0.2s;
-}
+  transition: border 0.1s;
 
-.info {
   text-align: center;
   font-weight: bold;
   color: var(--color-background-900);
@@ -18,6 +16,10 @@
 }
 
 .error {
+  margin: 0.1rem;
+  padding: 0.5rem;
+  transition: border 0.1s;
+
   text-align: center;
   font-weight: bold;
   color: var(--color-background-900);
@@ -28,7 +30,7 @@
   background-color: var(--color-error);
 }
 
-.info:hover {
+.warning:hover {
   border: solid 3px var(--color-warning-dark);
 }
 
