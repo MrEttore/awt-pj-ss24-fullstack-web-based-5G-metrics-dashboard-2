@@ -15,10 +15,7 @@ import './DisplayHealth.css';
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
 export default function DisplayHealth({ requestedData, onMessage }) {
-  // Set state to define health status of modules
   const [healthStatus, setHealthStatus] = useState([]);
-
-  // Set state to manage laoding message
   const [isLoading, setIsLoading] = useState(false);
 
   // TODO: Add further useEffect() hook to display live data???
@@ -37,8 +34,6 @@ export default function DisplayHealth({ requestedData, onMessage }) {
           );
 
           const processedData = transformHealthData(data);
-
-          console.log('processedData health: ', processedData);
 
           setHealthStatus(processedData);
         } catch (err) {
