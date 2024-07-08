@@ -74,9 +74,11 @@ async def filter_data(text):
                     js = json.loads(json_obj)
                     await send_data(js, 'gnb/telemetry')
                 elif 'gnb.logs' in destination:
-                    await send_data(json_obj, 'gnb/logs')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'gnb/logs')
                 elif 'gnb.configuration' in destination:
-                    await send_data(json_obj, 'gnb/configuration')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'gnb/configuration')
                 elif 'cn5g.telemetry' in destination:
                     js = json.loads(json_obj)
                     await send_data(js, 'cn5g/telemetry')
