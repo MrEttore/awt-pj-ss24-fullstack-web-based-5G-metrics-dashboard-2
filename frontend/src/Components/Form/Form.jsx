@@ -1,14 +1,14 @@
-import '../Forms.css';
+import './Form.css';
 
-export default function TelemetryForm({
+export default function Form({
   selectedTab,
-  isLiveDataOn,
   onSubmit,
+  isLiveDataOn,
   children,
 }) {
   return (
     <form className={`${selectedTab}Form`} onSubmit={onSubmit}>
-      {/* TIME + LIVE DATA + METRICS + BTNS */}
+      {/* TIME + LIVE DATA + BTNS + etc ... */}
       {children}
     </form>
   );

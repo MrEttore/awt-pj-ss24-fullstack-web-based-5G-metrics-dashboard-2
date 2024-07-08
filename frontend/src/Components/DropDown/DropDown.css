@@ -37,7 +37,8 @@
   background-color: var(--color-background-100);
   border-radius: 30px;
   margin-top: 0.5rem;
-  margin-left: -4px;
+  margin-left: -6px;
+  overflow: hidden;
 }
 
 .select .react-select__option {

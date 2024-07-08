@@ -1,0 +1,13 @@
+@import url('../../Styles/variables.css');
+
+.healthStatusForm,
+.logsForm,
+.telemetryForm {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  text-transform: uppercase;
+  width: 100%;
+}

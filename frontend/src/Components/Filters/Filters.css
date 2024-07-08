@@ -1,0 +1,6 @@
+@import url('../../Styles/variables.css');
+
+.filters {
+  display: flex;
+  flex-direction: row;
+}

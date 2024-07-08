@@ -1,6 +1,4 @@
-import { CN5G_MODULES } from './constants';
-
-/// Transforms the data from the cn5g-telemetry API ///
+import { CN5G_MODULES, DASHBOARD_METRICS } from './constants.js';
 
 export function transformHealthData(data) {
   // Initialize the structure to store each module's data
@@ -23,11 +21,35 @@ export function transformHealthData(data) {
   // Convert the object to an array of objects
   const result = CN5G_MODULES.map((module) => ({
     moduleName: module,
-    data: moduleData[module],
+    moduleData: moduleData[module],
   }));
 
   return result;
 }
 
-// const transformedHealthData = transformHealthData(data);
-// console.log(JSON.stringify(transformedHealthData, null, 2));
+export function transformTelemetryData(data) {
+  // Initialize the structure to store each module's data
+  const metricData = {};
+  DASHBOARD_METRICS.forEach((metric) => {
+    metricData[metric] = [];
+  });
+
+  // Process each record
+  data.forEach((record) => {
+    const timestamp = record.timestamp;
+    DASHBOARD_METRICS.forEach((metric) => {
+      if (record.ues[0].hasOwnProperty(metric)) {
+        const value = record.ues[0][metric];
+        metricData[metric].push({ timestamp, value });
+      }
+    });
+  });
+
+  // Convert the object to an array of objects
+  const result = DASHBOARD_METRICS.map((metric) => ({
+    metricName: metric,
+    metricData: metricData[metric],
+  }));
+
+  return result;
+}

@@ -2,19 +2,20 @@ import { useEffect, useState } from 'react';
 
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
+import {
+  CN5G_MODULES,
+  EMPTY_MESSAGE,
+  WARNING_TIMESPAN_MISSING,
+} from '../../../Utils/constants';
 import { transformHealthData } from '../../../Utils/transformData';
-import { CN5G_MODULES } from '../../../Utils/constants';
 import { getCn5gData } from '../../../Utils/fetching';
 
 import './DisplayHealth.css';
 
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
-export default function DisplayHealth({ requestedData }) {
-  // Set state to define health status of modules
+export default function DisplayHealth({ requestedData, onMessage }) {
   const [healthStatus, setHealthStatus] = useState([]);
-
-  // Set state to manage laoding message
   const [isLoading, setIsLoading] = useState(false);
 
   // TODO: Add further useEffect() hook to display live data???
@@ -25,6 +26,7 @@ export default function DisplayHealth({ requestedData }) {
       if (requestedData) {
         try {
           setIsLoading(true);
+          onMessage(EMPTY_MESSAGE);
 
           const data = await getCn5gData(
             requestedData.startTime,
@@ -40,16 +42,14 @@ export default function DisplayHealth({ requestedData }) {
           setIsLoading(false);
         }
       } else {
-        console.warn(
-          `No timespan specified! Specify a valid timespan to dislay the data!`
-        );
+        onMessage(WARNING_TIMESPAN_MISSING);
       }
     };
 
     fetchHealthData();
 
     // TODO: Cleanup function needed?
-  }, [requestedData]); // add healthStatus??
+  }, [requestedData, onMessage]);
 
   return (
     <div className={`contentHealth ${isLoading ? 'loading' : ''}`}>
@@ -57,7 +57,9 @@ export default function DisplayHealth({ requestedData }) {
       {!isLoading && requestedData && (
         <div className="items">
           {healthStatus.map((m, i) => {
-            return <HealthItem name={m.moduleName} rawData={m.data} key={i} />;
+            return (
+              <HealthItem name={m.moduleName} rawData={m.moduleData} key={i} />
+            );
           })}
         </div>
       )}
