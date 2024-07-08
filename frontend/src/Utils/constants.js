@@ -40,11 +40,11 @@ export const DASHBOARD_METRICS = [
 
 // API urls
 
-export const CN5G_BASE_URL = 'http://localhost:5173/api/cn5g/telemetry';
+export const CN5G_BASE_URL = 'http://localhost/api/cn5g/telemetry';
 
-export const GNB_LOGS_URL = 'http://localhost:5173/api/gnb/logs';
+export const GNB_LOGS_URL = 'http://localhost/api/gnb/logs';
 
-export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
+export const GNB_TELEMETRY_URL = 'http://localhost/api/gnb/telemetry';
 
 // Warning i.e., error messages
 
