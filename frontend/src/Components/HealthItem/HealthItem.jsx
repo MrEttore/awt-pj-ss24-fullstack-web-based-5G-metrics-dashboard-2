@@ -1,6 +1,7 @@
 import { Line } from 'react-chartjs-2';
 
 import './HealthItem.css';
+import { COLOR_MODULE_ON, COLOR_MODULE_OFF } from '../../Styles/graphColors';
 
 import {
   Chart as ChartJS,
@@ -106,10 +107,6 @@ export default function HealthItem({ name, rawData = [] }) {
 
   const messages = rawData.map((dp) => dp.message);
 
-  // console.log('labels: ', labels);
-  // console.log('healthData: ', healthData);
-  // console.log('messages: ', messages);
-
   const data = {
     labels: labels,
     datasets: [
@@ -120,10 +117,10 @@ export default function HealthItem({ name, rawData = [] }) {
         fill: false,
         stepped: true,
         pointBackgroundColor: healthData.map((value) =>
-          value === 'Healthy' ? 'green' : 'red'
+          value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
         pointBorderColor: healthData.map((value) =>
-          value === 'Healthy' ? 'green' : 'red'
+          value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
         pointRadius: 2,
         pointHoverRadius: 7,

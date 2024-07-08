@@ -34,6 +34,20 @@ class GnbTelemetryModel {
         })
     }
 
+    #extractUeIds(data) {
+        const ueIds = new Set(); // Verwenden Sie ein Set, um Duplikate zu vermeiden
+    
+        data.forEach(record => {
+            if (record.ues && Array.isArray(record.ues)) {
+                record.ues.forEach(ue => {
+                    ueIds.add(ue.ueId);
+                });
+            }
+        });
+    
+        return Array.from(ueIds); // Konvertieren Sie das Set zurück in ein Array
+    }
+
     async getAll(params) {
         const rows = await this.#getAll(params);
 
@@ -47,6 +61,10 @@ class GnbTelemetryModel {
         //     const row = await this.#get(id)
         //     rows.push(row)
         // }
+
+        if ('ues' in params) {
+            return this.#extractUeIds(rows)
+        }
         return rows
     }
 

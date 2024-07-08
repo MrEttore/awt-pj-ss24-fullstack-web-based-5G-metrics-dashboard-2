@@ -1,5 +1,8 @@
+import React, { useState, useEffect } from 'react';
+
+import { TfiDashboard } from 'react-icons/tfi';
+
 import './Header.css';
-import { useState, useEffect } from 'react';
 
 function Header() {
   const [time, setTime] = useState(new Date());
@@ -13,10 +16,17 @@ function Header() {
 
   return (
     <header className="header">
-      <h1>5G Metric Dashboard</h1>
-      <p className="date">
-        {time.toLocaleDateString() + ' | ' + time.toLocaleTimeString()}
-      </p>
+      <div className="leftColumn">
+        <TfiDashboard />
+      </div>
+      <div className="centerColumn">
+        <h1 className="title">5G Metric Dashboard</h1>
+      </div>
+      <div className="rightColumn">
+        <p className="date">
+          {time.toLocaleDateString()} | {time.toLocaleTimeString()}
+        </p>
+      </div>
     </header>
   );
 }

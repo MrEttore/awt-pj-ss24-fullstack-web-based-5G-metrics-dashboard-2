@@ -1,7 +1,7 @@
 import './SelectTimespan.css';
 
 export default function SelectTimespan({
-  label = 'Select time',
+  label = 'timespan',
   isLiveDataOn,
   startTime,
   endTime,

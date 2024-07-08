@@ -1,10 +1,39 @@
+@import url('../../../Styles/variables.css');
+
 .contentTelemetry {
+  height: 550px;
+  padding: 0.5rem;
+
+  border-radius: 10px;
+  border-top: 4px solid var(--color-primary-light);
+  border-bottom: 4px solid var(--color-primary-light);
+
+  background-color: var(--color-background-500);
+}
+
+.items {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+
+  max-height: 100%;
+
+  gap: 0.5rem;
+
+  background-color: var(--color-background-500);
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 10px;
+}
+
+.loading {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   border-radius: 10px;
 
   padding: 0.5rem;
-  background-color: #37446b;
+  background-color: var(--color-background-500);
 }

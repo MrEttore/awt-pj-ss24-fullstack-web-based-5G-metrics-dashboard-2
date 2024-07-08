@@ -1,8 +1,6 @@
 @import url('../../Styles/variables.css');
 
-.controlsContainer {
+.filters {
   display: flex;
-  flex-direction: column;
-
-  gap: 0.5rem;
+  flex-direction: row;
 }
