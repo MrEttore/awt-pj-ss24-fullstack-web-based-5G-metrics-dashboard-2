@@ -1,39 +1,37 @@
-@import url('../../Styles/variables.css');
-
-.warning {
+.message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0.1rem;
   padding: 0.5rem;
   transition: border 0.1s;
-
   text-align: center;
   font-weight: bold;
   color: var(--color-background-900);
-
-  border: solid 2px var(--color-warning-dark);
   border-radius: 10rem;
+}
 
+.warning {
+  border: 2px solid var(--color-warning-dark);
   background-color: var(--color-warning);
 }
 
 .error {
-  margin: 0.1rem;
-  padding: 0.5rem;
-  transition: border 0.1s;
-
-  text-align: center;
-  font-weight: bold;
-  color: var(--color-background-900);
-
-  border: solid 2px var(--color-error-dark);
-  border-radius: 10rem;
-
+  border: 2px solid var(--color-error-dark);
   background-color: var(--color-error);
 }
 
-.warning:hover {
-  border: solid 3px var(--color-warning-dark);
+.messageText {
+  margin: 0;
 }
 
-.error:hover {
-  border: solid 3px var(--color-error-dark);
+.messageIcon {
+  margin-right: 0.5rem;
+  margin-left: 0.2rem;
+  margin-bottom: -0.3rem;
+  font-size: 1.2rem;
+}
+
+.message:hover {
+  border-width: 3px;
 }
