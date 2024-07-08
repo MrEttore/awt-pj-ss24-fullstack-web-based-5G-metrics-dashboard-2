@@ -195,7 +195,6 @@ class GnbTelemetryModel {
         const ID = await this.#add({
             id, frame, slot, pci, dlCarrierFreq, ulCarrierFreq, avgLdpcIterations, timestamp
         })
-
         for (let ue of ues) {
             await this.#ueModel.add({
                 ...ue,
