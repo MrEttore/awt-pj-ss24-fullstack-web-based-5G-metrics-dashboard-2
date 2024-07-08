@@ -1,7 +1,8 @@
 import asyncio
 from pyppeteer import launch
 from dotenv import load_dotenv
-import os, re, json, requests
+import os, re, json
+import aiohttp
 
 # Load environment variables from .env.local
 load_dotenv(dotenv_path=".env.local")
@@ -12,48 +13,54 @@ email = os.getenv('EMAIL')
 password = os.getenv('PW')
 
 async def intercept_websockets():
-    # Launch the browser
-    browser = await launch(headless=True, args=['--start-maximized', '--incognito', '--no-sandbox'], executablePath='/usr/bin/chromium')
-    page = await browser.newPage()
+    try:
+        # Launch the browser
+        browser = await launch(headless=True, args=['--no-sandbox', '--disable-setuid-sandbox'], executablePath='/usr/bin/chromium')
+        page = await browser.newPage()
 
-    # Intercept WebSocket messages
-    def log_websocket_frame(event_type, event):
-        if event_type == 'Network.webSocketFrameReceived':
-            #print(f"WebSocket Frame Received: {event['response']['payloadData']}")
-            # send_data(event['response']['payloadData'])
-            filter_data(event['response']['payloadData'])
-        elif event_type == 'Network.webSocketFrameSent':
-            # print(f"WebSocket Frame Sent: {event['response']['payloadData']}")
-            '''
-            How do I find the useful data? Problem: Data is contained as json inside the websocket frame which are not json themselves
-            Solution: Look for substrings that always occur before the json data --> extract_json_from_string
-            '''
-            # send_data(event['response']['payloadData'])
-            filter_data(event['response']['payloadData'])
-    
-    def send_data(json_data, url_ending):
-        # Send json data to the backend server
-        url = 'http://backend:3000/api/' + url_ending
-        response = requests.post(url, json=json_data, headers={'Content-Type': 'application/json'})
-        print(json_data)
-        # send json_data to the backend server
+        # Set up WebSocket interception
+        client = page._client
+        await client.send('Network.enable')
+        
+        # Set up WebSocket interception with proper async handling
+        setup_websocket_callbacks(client)
 
+        # Open the authentication page and log in
+        await page.goto(auth_url)
+        await page.type('#username', email)
+        await page.type('#password', password)
+        await page.click('#kc-login')
 
-    def filter_data(text):
-        # send json objects to endpoints
-        # endpoints vary in the gnb.x field e.g. gnb.logs, gnb.configuration
-        # include the time
-        # json object starts after the metadata e.g. content-length, content-type
-        # different responses:
-        # 1. start with absolutefrequency
-        # 2. status messages start with status (not correctly captured so far)
-        # 3. start with gnbId 
+        while True:
+            await asyncio.sleep(5)  # periodically keep the loop active
 
-        # most messages are part of x.logs, x.details, x.telemetry, x.fronthaul or x.configuration
-        # x can be gnb, cn5g or nothing
-        # fronthaul always prepends nothing
-        # telemtry can prepend everything
+    except Exception as e:
+        print(f"Critical error, attempting to restart: {e}")
+        await browser.close()
+        await intercept_websockets()  # Restart on failure
 
+def setup_websocket_callbacks(client):
+    client.on('Network.webSocketFrameReceived', lambda event: asyncio.ensure_future(log_websocket_frame('Network.webSocketFrameReceived', event)))
+    client.on('Network.webSocketFrameSent', lambda event: asyncio.ensure_future(log_websocket_frame('Network.webSocketFrameSent', event)))
+
+async def log_websocket_frame(event_type, event):
+    try:
+        await filter_data(event['response']['payloadData'])
+    except Exception as e:
+        print(f"Error processing websocket frame: {e}")
+
+async def send_data(json_data, url_ending):
+    try:
+        url = f'http://backend:3000/api/{url_ending}'
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=json_data, headers={'Content-Type': 'application/json'}) as response:
+                response_data = await response.text()  # Optionally process response
+                print(f"Data sent: {json_data}")
+    except Exception as e:
+        print(f"Error sending data: {e}")
+
+async def filter_data(text):
+    try:
         lines = text.split('\n')
         destination = None
         for line in lines:
@@ -61,61 +68,41 @@ async def intercept_websockets():
                 destination = line.split(':', 1)[1].strip()
                 break
         if destination:
-            json = extract_json_from_string(text)
-            #print('should send something')
-            if json:
+            json_obj = extract_json_from_string(text)
+            if json_obj:
                 if 'gnb.telemetry' in destination:
-                    #print('')
-                    send_data(json, 'gnb/telemetry')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'gnb/telemetry')
                 elif 'gnb.logs' in destination:
-                    send_data(json, 'gnb/logs')
+                    await send_data(json_obj, 'gnb/logs')
                 elif 'gnb.configuration' in destination:
-                    send_data(json, 'gnb/configuration')
-                #elif 'gnb.details' in destination:
-                    # send_data(json, 'gnb/details')
+                    await send_data(json_obj, 'gnb/configuration')
                 elif 'cn5g.telemetry' in destination:
-                    send_data(json, 'cn5g/telemetry')
+                    js = json.loads(json_obj)
+                    await send_data(js, 'cn5g/telemetry')
+                else:
+                    print('Unknown destination')
+    except Exception as e:
+        print(f"Error filtering data: {e}")
 
-    def extract_json_from_string(text):
-        # Regular expression to find JSON objects within a string
-        json_pattern = re.compile(r'\{.*?\}')
-
-        # Find all JSON substrings
+def extract_json_from_string(text):
+    try:
+        json_pattern = re.compile(r'(\{s*[^\}\{]{3,}?:.*\})', re.DOTALL)
         json_matches = json_pattern.findall(text)
-        
-        extracted_data = []
-        for match in json_matches:
-            try:
-                # Parse JSON
-                data = json.loads(match)
-                extracted_data.append(data)
-            except json.JSONDecodeError:
-                # Handle invalid JSON if necessary
-                pass
-        if len(extracted_data) > 0:
-            return extracted_data
+        if json_matches:
+            return json_matches[0]
         else:
-            return None
+            print('No JSON found')
+    except Exception as e:
+        print(f"Error extracting JSON: {e}")
 
-    client = page._client
-    await client.send('Network.enable')
-
-    client.on('Network.webSocketFrameReceived', lambda event: log_websocket_frame('Network.webSocketFrameReceived', event))
-    client.on('Network.webSocketFrameSent', lambda event: log_websocket_frame('Network.webSocketFrameSent', event))
-
-    # Open the authentication page
-    await page.goto(auth_url)
-
-    # Fill in the email and password fields and log in
-    await page.type('#username', email)
-    await page.type('#password', password)
-    await page.click('#kc-login')
-
-    # Wait for a while to capture WebSocket messages
+async def main():
     while True:
-        await asyncio.sleep(3600)  # Wait for 1 hour
+        try:
+            await intercept_websockets()
+        except Exception as e:
+            print(f"Critical error, restarting: {e}")
+            await asyncio.sleep(1)  # Cool-down period before restart
 
-    # Close the browser
-    await browser.close()
-
-asyncio.get_event_loop().run_until_complete(intercept_websockets())
+if __name__ == "__main__":
+    asyncio.run(main())
