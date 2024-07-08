@@ -1,16 +1,7 @@
 import { Line } from 'react-chartjs-2';
 
 import './HealthItem.css';
-import {
-  COLOR_MODULE_ON,
-  COLOR_MODULE_OFF,
-  COLOR_LABEL_TEXT,
-  COLOR_AXIS_BORDER,
-  COLOR_DATASET_LINE,
-  COLOR_DATASET_POINT_BACKGROUND,
-  COLOR_DATASET_POINT_BORDER,
-  COLOR_GRAPH_GRID,
-} from '../../Styles/graphColors';
+import { COLOR_MODULE_ON, COLOR_MODULE_OFF } from '../../Styles/graphColors';
 
 import {
   Chart as ChartJS,
@@ -49,7 +40,7 @@ export default function HealthItem({ name, rawData = [] }) {
           rawData.length !== 0
             ? name.toUpperCase()
             : `${name.toUpperCase()} (No data)`,
-        color: COLOR_LABEL_TEXT,
+        color: rawData.length !== 0 ? color : '#FEBE10',
       },
       legend: {
         display: false,
@@ -69,18 +60,18 @@ export default function HealthItem({ name, rawData = [] }) {
       x: {
         display: true,
         title: {
-          color: COLOR_LABEL_TEXT,
+          color: color,
         },
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color: color,
         },
         border: {
-          color: COLOR_AXIS_BORDER,
+          color: '#37446b',
           width: 2,
         },
         grid: {
           display: true,
-          color: COLOR_GRAPH_GRID,
+          color: 'rgb(245, 245, 245, 0.1)',
           lineWidth: 1,
         },
       },
@@ -93,10 +84,10 @@ export default function HealthItem({ name, rawData = [] }) {
         stack: 'demo',
         stackWeight: 1,
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color: color,
         },
         border: {
-          color: COLOR_AXIS_BORDER,
+          color: '#37446b',
           width: 2,
         },
       },
@@ -122,7 +113,7 @@ export default function HealthItem({ name, rawData = [] }) {
       {
         label: 'Health',
         data: healthData.map((value) => (value === 'Healthy' ? 'ON' : 'OFF')),
-        borderColor: COLOR_DATASET_LINE,
+        borderColor: 'rgb(245, 245, 245, 0.1)',
         fill: false,
         stepped: true,
         pointBackgroundColor: healthData.map((value) =>
@@ -131,7 +122,7 @@ export default function HealthItem({ name, rawData = [] }) {
         pointBorderColor: healthData.map((value) =>
           value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
-        pointRadius: 3,
+        pointRadius: 2,
         pointHoverRadius: 7,
       },
     ],
