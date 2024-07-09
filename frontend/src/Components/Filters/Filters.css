@@ -3,4 +3,59 @@
 .filters {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.startTimeFilter,
+.endTimeFilter,
+.liveDataFilter {
+  display: flex;
+  flex-direction: row;
+
+  background-color: var(--color-primary-light);
+  border: solid 2px var(--color-background-900);
+  border-radius: 20px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-background-900);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
+
+  padding: 0.4rem;
+}
+
+.devicesFilter,
+.metricsFilter {
+  display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+
+  background-color: var(--color-primary-light);
+  border: solid 2px var(--color-background-900);
+  border-radius: 20px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-background-900);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
+
+  padding: 0.4rem;
+}
+
+.startTimeFilter span,
+.endTimeFilter span,
+.devicesFilter span,
+.metricsFilter span,
+.liveDataFilter span {
+  font-weight: bold;
+}
+
+.startTimeFilter:hover,
+.endTimeFilter:hover,
+.liveDataFilter:hover,
+.devicesFilter:hover,
+.metricsFilter:hover {
+  transform: scale(1.01);
+  transition: 0.2s;
 }
