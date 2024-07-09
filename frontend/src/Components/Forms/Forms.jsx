@@ -100,8 +100,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
     onDataRequest(requestedData);
 
-    console.log('requestedData: ', requestedData);
-
     handleResetForm();
   }
 
@@ -130,6 +128,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       const metrics = metricsArray.map((m) => {
         return { value: m, label: m };
       });
+
+      metrics.unshift({ value: 'all', label: 'All metrics' });
 
       setMetrics(metrics);
     }
@@ -169,8 +169,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
         <Form selectedTab={selectedTab} onSubmit={handleSubmitTelemetry}>
           {/* DEVICES */}
           <DropDown
-            name="device"
-            label="device"
+            name="devices"
+            label="devices"
             options={devices}
             selectedOptions={selectedDevices}
             onSelectOption={setSelectedDevices}

@@ -1,23 +1,35 @@
 import { useState, useEffect } from 'react';
 
-import { getGnBTelemetry } from '../../../Utils/fetching';
-import { transformTelemetryData } from '../../../Utils/transformData';
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
+import Message from '../../Message/Message';
+import { getGnBTelemetry } from '../../../Utils/fetching';
+import {
+  transformTelemetryData,
+  filterRequestedTelemetryData,
+} from '../../../Utils/transformData';
+import {
+  INFO_NO_TELEMETRY_DATA,
+  WARNING_TIMESPAN_MISSING,
+  EMPTY_MESSAGE,
+} from '../../../Utils/constants';
 
 import './DisplayTelemetry.css';
 
-export default function DisplayTelemetry({ requestedData }) {
+export default function DisplayTelemetry({ requestedData, onMessage }) {
   const [telemetryStatus, setTelemetryStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
 
   useEffect(() => {
     const fetchTelemetryData = async () => {
       if (requestedData) {
         try {
           setIsLoading(true);
+          onMessage(EMPTY_MESSAGE);
 
-          // TODO: update api call with ueId ...
+          // TODO: update api call with arr of ueIds ...
           const data = await getGnBTelemetry(
             requestedData.startTime,
             requestedData.endTime,
@@ -26,27 +38,35 @@ export default function DisplayTelemetry({ requestedData }) {
 
           const processedData = transformTelemetryData(data);
 
-          console.log('processedData telemetry: ', processedData);
+          const filteredTelemetryData = filterRequestedTelemetryData(
+            processedData,
+            requestedData
+          );
 
-          setTelemetryStatus(processedData);
+          setTelemetryStatus(filteredTelemetryData);
         } catch (err) {
           console.error(err.message);
         } finally {
           setIsLoading(false);
         }
       } else {
-        // TODO: take out and build a warning message instead
-        // ...
+        onMessage(WARNING_TIMESPAN_MISSING);
       }
     };
 
     fetchTelemetryData();
-  }, [requestedData]);
+  }, [requestedData, onMessage]);
 
   return (
-    <div className="contentTelemetry">
-      {isLoading && <Loader>Loading Data ...</Loader>}
-
+    <div
+      className={`contentTelemetry ${!requestedData ? 'noData' : ''} ${
+        isLoading ? 'loading' : ''
+      }`}
+    >
+      {isLoading && <Loader>Loading Telemetry ...</Loader>}
+      {!isLoading && !requestedData && (
+        <Message message={INFO_NO_TELEMETRY_DATA} />
+      )}
       {!isLoading && requestedData && (
         <div className="items">
           {telemetryStatus.map((m, i) => {
@@ -58,8 +78,6 @@ export default function DisplayTelemetry({ requestedData }) {
               />
             );
           })}
-
-          {/* TODO: add default display */}
         </div>
       )}
     </div>

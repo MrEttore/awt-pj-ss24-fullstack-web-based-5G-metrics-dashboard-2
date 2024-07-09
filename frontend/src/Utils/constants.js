@@ -52,5 +52,20 @@ export const EMPTY_MESSAGE = { type: null, text: '' };
 
 export const WARNING_TIMESPAN_MISSING = {
   type: 'warning',
-  text: 'No timespan specified. Specify a valid timespan to dislay the data!',
+  text: 'No timespan specified. Specify a valid timespan to display the data!',
+};
+
+export const INFO_NO_LOGS_AVAILABLE = {
+  type: 'info',
+  text: 'No logs to display',
+};
+
+export const INFO_NO_HEALTH_DATA = {
+  type: 'info',
+  text: 'No health data to display',
+};
+
+export const INFO_NO_TELEMETRY_DATA = {
+  type: 'info',
+  text: 'No telemetry data to display',
 };
