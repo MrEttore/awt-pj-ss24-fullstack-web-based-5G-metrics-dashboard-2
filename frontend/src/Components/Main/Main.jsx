@@ -42,25 +42,20 @@ function Main() {
   return (
     <main className="main">
       <ControlBar>
-        {/* TABS */}
         <Tabs selectedTab={selectedTab} onSelectTab={handleSelectedTab} />
 
-        {/* FORMS */}
         <Forms
           selectedTab={selectedTab}
           onDataRequest={handleDataRequest}
           onDataReset={handleDataReset}
         />
 
-        {/* MESSAGES/ FILTERS */}
         <InformationDisplay>
-          <Filters />
+          <Filters filters={requestedData} />
           <Messages message={message} />
         </InformationDisplay>
-        {/* ... */}
       </ControlBar>
 
-      {/* CONTENT */}
       <Content
         selectedTab={selectedTab}
         requestedData={requestedData}

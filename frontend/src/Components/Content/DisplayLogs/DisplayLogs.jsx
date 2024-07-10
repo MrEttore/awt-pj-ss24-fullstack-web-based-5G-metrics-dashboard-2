@@ -7,6 +7,7 @@ import { getGnbLogs } from '../../../Utils/fetching';
 import {
   EMPTY_MESSAGE,
   WARNING_TIMESPAN_MISSING,
+  INFO_NO_LOGS_AVAILABLE,
 } from '../../../Utils/constants';
 
 import './DisplayLogs.css';
@@ -46,7 +47,9 @@ export default function DisplayLogs({ requestedData, onMessage }) {
   return (
     <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
-      {!isLoading && !requestedData && <Message>No data to display</Message>}
+      {!isLoading && !requestedData && (
+        <Message message={INFO_NO_LOGS_AVAILABLE} />
+      )}
       {!isLoading && requestedData && (
         <ul className="logs">
           {logsStatus.map((log, i) => {

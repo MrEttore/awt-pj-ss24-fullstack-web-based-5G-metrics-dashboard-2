@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
+import Message from '../../Message/Message';
+import { transformHealthData } from '../../../Utils/transformData';
+import { getCn5gData } from '../../../Utils/fetching';
 import {
-  CN5G_MODULES,
+  INFO_NO_HEALTH_DATA,
   EMPTY_MESSAGE,
   WARNING_TIMESPAN_MISSING,
 } from '../../../Utils/constants';
-import { transformHealthData } from '../../../Utils/transformData';
-import { getCn5gData } from '../../../Utils/fetching';
 
 import './DisplayHealth.css';
 
@@ -37,7 +38,12 @@ export default function DisplayHealth({ requestedData, onMessage }) {
 
           setHealthStatus(processedData);
         } catch (err) {
-          console.err(err.message);
+          console.error(err.message);
+          // TODO: add error when fetch fails ...
+          onMessage({
+            type: 'error',
+            text: err.message,
+          });
         } finally {
           setIsLoading(false);
         }
@@ -52,21 +58,21 @@ export default function DisplayHealth({ requestedData, onMessage }) {
   }, [requestedData, onMessage]);
 
   return (
-    <div className={`contentHealth ${isLoading ? 'loading' : ''}`}>
+    <div
+      className={`contentHealth ${!requestedData ? 'noData' : ''} ${
+        isLoading ? 'loading' : ''
+      }`}
+    >
       {isLoading && <Loader>Loading Data ...</Loader>}
+      {!isLoading && !requestedData && (
+        <Message message={INFO_NO_HEALTH_DATA} />
+      )}
       {!isLoading && requestedData && (
         <div className="items">
           {healthStatus.map((m, i) => {
             return (
               <HealthItem name={m.moduleName} rawData={m.moduleData} key={i} />
             );
-          })}
-        </div>
-      )}
-      {!isLoading && !requestedData && (
-        <div className="items">
-          {CN5G_MODULES.map((m, i) => {
-            return <HealthItem name={m} key={i} />;
           })}
         </div>
       )}

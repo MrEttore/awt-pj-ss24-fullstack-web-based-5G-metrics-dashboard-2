@@ -3,11 +3,13 @@ import { Line } from 'react-chartjs-2';
 import './TelemetryItem.css';
 import {
   COLOR_LABEL_TEXT,
+  COLOR_LABEL_TEXT_NO_DATA,
   COLOR_AXIS_BORDER,
   COLOR_DATASET_LINE,
   COLOR_DATASET_POINT_BACKGROUND,
   COLOR_DATASET_POINT_BORDER,
   COLOR_GRAPH_GRID,
+  COLOR_MODULE_ON,
 } from '../../Styles/graphColors';
 
 import {
@@ -44,11 +46,9 @@ export default function TelemetryItem({ name, rawData = [] }) {
     plugins: {
       title: {
         display: true,
-        text:
-          rawData.length !== 0
-            ? name.toUpperCase()
-            : `${name.toUpperCase()} (No data)`,
-        color: COLOR_LABEL_TEXT,
+        text: name.toUpperCase(),
+        color:
+          rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
       },
       // TODO: legend needed?
       legend: {
@@ -59,10 +59,12 @@ export default function TelemetryItem({ name, rawData = [] }) {
       x: {
         display: true,
         title: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         border: {
           color: COLOR_AXIS_BORDER,
@@ -80,7 +82,8 @@ export default function TelemetryItem({ name, rawData = [] }) {
         labels: allValuesAreStrings ? uniqueLablesY : undefined,
         position: 'left',
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         border: {
           color: COLOR_AXIS_BORDER,
@@ -110,9 +113,9 @@ export default function TelemetryItem({ name, rawData = [] }) {
         borderColor: COLOR_DATASET_LINE,
         fill: false,
         stepped: false,
-        pointBackgroundColor: COLOR_DATASET_POINT_BACKGROUND,
-        pointBorderColor: COLOR_DATASET_POINT_BORDER,
-        pointRadius: 3,
+        pointBackgroundColor: COLOR_MODULE_ON,
+        pointBorderColor: COLOR_MODULE_ON,
+        pointRadius: 2,
         pointHoverRadius: 5,
       },
     ],

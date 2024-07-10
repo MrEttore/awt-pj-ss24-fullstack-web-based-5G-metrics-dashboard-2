@@ -1,4 +1,4 @@
-/** TOGGLE SWITCH */
+@import url('../../Styles/variables.css');
 
 .toggleSwitchContainer {
   display: flex;
@@ -37,7 +37,7 @@
 }
 
 .toggleInput:checked + .toggleLabel {
-  background-color: #228b22;
+  background-color: var(--color-primary-light);
 }
 
 .toggleInput:checked + .toggleLabel::before {

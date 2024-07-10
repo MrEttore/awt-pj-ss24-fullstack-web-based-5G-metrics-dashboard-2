@@ -1,6 +1,5 @@
 import { CN5G_BASE_URL, GNB_LOGS_URL, GNB_TELEMETRY_URL } from './constants.js';
 
-// Fetch cn5g telemetry using timespans
 export async function getCn5gData(timeStart, timeEnd) {
   if (timeStart && timeEnd) {
     try {
@@ -14,14 +13,11 @@ export async function getCn5gData(timeStart, timeEnd) {
 
       return data;
     } catch (err) {
-      console.error(
-        `Failed to fetch the data inside getCn5gData: ${err.message}`
-      );
+      console.error(`Failed to fetch the modules health data: ${err.message}`);
     }
   } else throw new Error('Select a valid start and endtime for the request!');
 }
 
-// Fetch gnb logs using timespans
 export async function getGnbLogs(timeStart, timeEnd) {
   if (timeStart && timeEnd) {
     try {
@@ -42,7 +38,7 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
-// Fetch gnb telemetry using timespans
+// TODO: ueId should be an arr of ids ...
 export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
   if (timeStart && timeEnd && ueId) {
     try {
@@ -63,11 +59,6 @@ export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
   }
 }
 
-// http://localhost:3000/api/gnb/telemetry?timeStart=1&timeEnd=1715076984102&ueId=1  <-- !!
-// or ...
-// http://localhost:3000/api/gnb/telemetry/ue?ueId=1&timeStart=1&timeEnd=1715077195101
-
-// Fetch available ues (devices)
 export async function getGnbUes() {
   try {
     const response = await fetch(`${GNB_TELEMETRY_URL}?ues`);

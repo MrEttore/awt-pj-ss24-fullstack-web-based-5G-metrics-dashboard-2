@@ -4,6 +4,3 @@ env/
 
 # Local variables
 .env.local
-
-# Dockerignore file
-.dockerignore

@@ -5,10 +5,9 @@ import {
   COLOR_MODULE_ON,
   COLOR_MODULE_OFF,
   COLOR_LABEL_TEXT,
+  COLOR_LABEL_TEXT_NO_DATA,
   COLOR_AXIS_BORDER,
   COLOR_DATASET_LINE,
-  COLOR_DATASET_POINT_BACKGROUND,
-  COLOR_DATASET_POINT_BORDER,
   COLOR_GRAPH_GRID,
 } from '../../Styles/graphColors';
 
@@ -35,8 +34,6 @@ ChartJS.register(
 );
 
 export default function HealthItem({ name, rawData = [] }) {
-  const color = '#F5F5F5';
-
   // Set the display options
   const options = {
     responsive: true,
@@ -45,11 +42,9 @@ export default function HealthItem({ name, rawData = [] }) {
     plugins: {
       title: {
         display: true,
-        text:
-          rawData.length !== 0
-            ? name.toUpperCase()
-            : `${name.toUpperCase()} (No data)`,
-        color: COLOR_LABEL_TEXT,
+        text: name.toUpperCase(),
+        color:
+          rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
       },
       legend: {
         display: false,
@@ -69,10 +64,12 @@ export default function HealthItem({ name, rawData = [] }) {
       x: {
         display: true,
         title: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         border: {
           color: COLOR_AXIS_BORDER,
@@ -93,7 +90,8 @@ export default function HealthItem({ name, rawData = [] }) {
         stack: 'demo',
         stackWeight: 1,
         ticks: {
-          color: COLOR_LABEL_TEXT,
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
         },
         border: {
           color: COLOR_AXIS_BORDER,
@@ -131,7 +129,7 @@ export default function HealthItem({ name, rawData = [] }) {
         pointBorderColor: healthData.map((value) =>
           value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
-        pointRadius: 3,
+        pointRadius: healthData.length <= 60 ? 3 : 2,
         pointHoverRadius: 7,
       },
     ],

@@ -53,3 +53,15 @@ export function transformTelemetryData(data) {
 
   return result;
 }
+
+export function filterRequestedTelemetryData(data, filters) {
+  if (filters.metrics[0].value === 'all') return data;
+
+  const requestedMetrics = filters.metrics.map((m) => m.value);
+
+  const filteredMetricData = data.filter((m) =>
+    requestedMetrics.includes(m.metricName)
+  );
+
+  return filteredMetricData;
+}
