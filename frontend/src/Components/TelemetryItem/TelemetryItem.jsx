@@ -9,6 +9,7 @@ import {
   COLOR_DATASET_POINT_BACKGROUND,
   COLOR_DATASET_POINT_BORDER,
   COLOR_GRAPH_GRID,
+  COLOR_MODULE_ON,
 } from '../../Styles/graphColors';
 
 import {
@@ -112,8 +113,8 @@ export default function TelemetryItem({ name, rawData = [] }) {
         borderColor: COLOR_DATASET_LINE,
         fill: false,
         stepped: false,
-        pointBackgroundColor: COLOR_DATASET_POINT_BACKGROUND,
-        pointBorderColor: COLOR_DATASET_POINT_BORDER,
+        pointBackgroundColor: COLOR_MODULE_ON,
+        pointBorderColor: COLOR_MODULE_ON,
         pointRadius: 2,
         pointHoverRadius: 5,
       },

@@ -57,15 +57,15 @@ export const WARNING_TIMESPAN_MISSING = {
 
 export const INFO_NO_LOGS_AVAILABLE = {
   type: 'info',
-  text: 'No logs to display',
+  text: 'No logs to display.',
 };
 
 export const INFO_NO_HEALTH_DATA = {
   type: 'info',
-  text: 'No health data to display',
+  text: 'No health data to display.',
 };
 
 export const INFO_NO_TELEMETRY_DATA = {
   type: 'info',
-  text: 'No telemetry data to display',
+  text: 'No telemetry data to display.',
 };

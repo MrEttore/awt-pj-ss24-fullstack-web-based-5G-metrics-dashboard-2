@@ -3,6 +3,12 @@ import './Filters.css';
 export default function Filters({ filters }) {
   if (!filters) return <div className="filters"></div>;
 
+  // const dateStart = new Date(filters.startTime);
+  // const dateStringStart = dateStart.toLocaleString();
+
+  // const dateEnd = new Date(filters.endTime);
+  // const dateStringEnd = dateEnd.toLocaleString();
+
   return (
     <div className="filters">
       {'startTime' in filters && (
