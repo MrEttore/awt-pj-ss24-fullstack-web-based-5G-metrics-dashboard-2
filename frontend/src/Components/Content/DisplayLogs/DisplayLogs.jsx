@@ -6,7 +6,6 @@ import Message from '../../Message/Message';
 import { getGnbLogs } from '../../../Utils/fetching';
 import {
   EMPTY_MESSAGE,
-  WARNING_TIMESPAN_MISSING,
   INFO_NO_LOGS_AVAILABLE,
 } from '../../../Utils/constants';
 
@@ -18,24 +17,32 @@ export default function DisplayLogs({ requestedData, onMessage }) {
 
   useEffect(() => {
     const fetchLogsData = async () => {
-      if (requestedData) {
-        try {
-          setIsLoading(true);
-          onMessage(EMPTY_MESSAGE);
+      if (!requestedData) {
+        onMessage({
+          type: 'warning',
+          text: 'No timespan specified. Specify a valid timespan to display the data!',
+        });
+        return;
+      }
 
-          const data = await getGnbLogs(
-            requestedData.startTime,
-            requestedData.endTime
-          );
+      try {
+        setIsLoading(true);
+        onMessage(EMPTY_MESSAGE);
 
-          setLogsStatus(data);
-        } catch (err) {
-          console.error(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        onMessage(WARNING_TIMESPAN_MISSING);
+        const { startTime, endTime } = requestedData;
+
+        const { data, error } = await getGnbLogs(startTime, endTime);
+
+        if (error) throw new Error(error);
+
+        setLogsStatus(data);
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: error.message,
+        });
+      } finally {
+        setIsLoading(false);
       }
     };
 

@@ -10,7 +10,6 @@ import {
 } from '../../../Utils/transformData';
 import {
   INFO_NO_TELEMETRY_DATA,
-  WARNING_TIMESPAN_MISSING,
   EMPTY_MESSAGE,
 } from '../../../Utils/constants';
 
@@ -24,33 +23,45 @@ export default function DisplayTelemetry({ requestedData, onMessage }) {
 
   useEffect(() => {
     const fetchTelemetryData = async () => {
-      if (requestedData) {
-        try {
-          setIsLoading(true);
-          onMessage(EMPTY_MESSAGE);
+      if (!requestedData) {
+        onMessage({
+          type: 'warning',
+          text: 'No timespan specified. Specify a valid timespan to display the data!',
+        });
+        return;
+      }
 
-          // TODO: update api call with arr of ueIds ...
-          const data = await getGnBTelemetry(
-            requestedData.startTime,
-            requestedData.endTime,
-            requestedData.devices[0].value
-          );
+      try {
+        setIsLoading(true);
+        onMessage(EMPTY_MESSAGE);
 
-          const processedData = transformTelemetryData(data);
+        const { startTime, endTime, devices } = requestedData;
+        const [device] = devices;
 
-          const filteredTelemetryData = filterRequestedTelemetryData(
-            processedData,
-            requestedData
-          );
+        // TODO: update api call with arr of ueIds ...
+        const { data, error } = await getGnBTelemetry(
+          startTime,
+          endTime,
+          device.value
+        );
 
-          setTelemetryStatus(filteredTelemetryData);
-        } catch (err) {
-          console.error(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        onMessage(WARNING_TIMESPAN_MISSING);
+        if (error) throw new Error(error);
+
+        const processedData = transformTelemetryData(data);
+
+        const filteredTelemetryData = filterRequestedTelemetryData(
+          processedData,
+          requestedData
+        );
+
+        setTelemetryStatus(filteredTelemetryData);
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: error.message,
+        });
+      } finally {
+        setIsLoading(false);
       }
     };
 
