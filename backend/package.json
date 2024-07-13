@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "NODE_ENV=prod DB_PATH=test.db node server.js",
-    "dev": "DB_PATH=test.db node --watch server",
+    "start": "NODE_ENV=prod node server.js",
+    "dev": "node --watch server",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
