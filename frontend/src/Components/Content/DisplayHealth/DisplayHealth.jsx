@@ -5,11 +5,7 @@ import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
 import { transformHealthData } from '../../../Utils/transformData';
 import { getCn5gData } from '../../../Utils/fetching';
-import {
-  INFO_NO_HEALTH_DATA,
-  EMPTY_MESSAGE,
-  WARNING_TIMESPAN_MISSING,
-} from '../../../Utils/constants';
+import { INFO_NO_HEALTH_DATA, EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
@@ -24,31 +20,34 @@ export default function DisplayHealth({ requestedData, onMessage }) {
 
   useEffect(() => {
     const fetchHealthData = async () => {
-      if (requestedData) {
-        try {
-          setIsLoading(true);
-          onMessage(EMPTY_MESSAGE);
+      if (!requestedData) {
+        onMessage({
+          type: 'warning',
+          text: 'No timespan specified. Specify a valid timespan to display the data!',
+        });
+        return;
+      }
 
-          const data = await getCn5gData(
-            requestedData.startTime,
-            requestedData.endTime
-          );
+      try {
+        setIsLoading(true);
+        onMessage(EMPTY_MESSAGE);
 
-          const processedData = transformHealthData(data);
+        const { startTime, endTime } = requestedData;
 
-          setHealthStatus(processedData);
-        } catch (err) {
-          console.error(err.message);
-          // TODO: add error when fetch fails ...
-          onMessage({
-            type: 'error',
-            text: err.message,
-          });
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        onMessage(WARNING_TIMESPAN_MISSING);
+        const { data, error } = await getCn5gData(startTime, endTime);
+
+        if (error) throw new Error(error);
+
+        const processedData = transformHealthData(data);
+
+        setHealthStatus(processedData);
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: error.message,
+        });
+      } finally {
+        setIsLoading(false);
       }
     };
 

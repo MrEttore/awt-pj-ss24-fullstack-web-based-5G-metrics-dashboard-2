@@ -50,11 +50,6 @@ export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
 
 export const EMPTY_MESSAGE = { type: null, text: '' };
 
-export const WARNING_TIMESPAN_MISSING = {
-  type: 'warning',
-  text: 'No timespan specified. Specify a valid timespan to display the data!',
-};
-
 export const INFO_NO_LOGS_AVAILABLE = {
   type: 'info',
   text: 'No logs to display.',
