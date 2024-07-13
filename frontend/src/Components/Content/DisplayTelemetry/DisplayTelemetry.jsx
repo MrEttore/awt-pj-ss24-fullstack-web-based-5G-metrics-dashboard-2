@@ -8,10 +8,7 @@ import {
   transformTelemetryData,
   filterRequestedTelemetryData,
 } from '../../../Utils/transformData';
-import {
-  INFO_NO_TELEMETRY_DATA,
-  EMPTY_MESSAGE,
-} from '../../../Utils/constants';
+import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -76,7 +73,12 @@ export default function DisplayTelemetry({ requestedData, onMessage }) {
     >
       {isLoading && <Loader>Loading Telemetry ...</Loader>}
       {!isLoading && !requestedData && (
-        <Message message={INFO_NO_TELEMETRY_DATA} />
+        <Message
+          message={{
+            type: 'info',
+            text: 'No telemetry data to display.',
+          }}
+        />
       )}
       {!isLoading && requestedData && (
         <div className="items">

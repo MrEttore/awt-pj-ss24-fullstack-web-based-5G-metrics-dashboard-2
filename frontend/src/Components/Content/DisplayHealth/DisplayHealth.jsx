@@ -5,7 +5,7 @@ import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
 import { transformHealthData } from '../../../Utils/transformData';
 import { getCn5gData } from '../../../Utils/fetching';
-import { INFO_NO_HEALTH_DATA, EMPTY_MESSAGE } from '../../../Utils/constants';
+import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
@@ -64,7 +64,12 @@ export default function DisplayHealth({ requestedData, onMessage }) {
     >
       {isLoading && <Loader>Loading Data ...</Loader>}
       {!isLoading && !requestedData && (
-        <Message message={INFO_NO_HEALTH_DATA} />
+        <Message
+          message={{
+            type: 'info',
+            text: 'No health data to display.',
+          }}
+        />
       )}
       {!isLoading && requestedData && (
         <div className="items">
