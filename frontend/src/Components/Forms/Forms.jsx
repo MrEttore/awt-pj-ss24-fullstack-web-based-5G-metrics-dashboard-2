@@ -98,6 +98,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       isLiveDataOn: isLiveDataToggled,
     };
 
+    console.log(requestedData);
+
     onDataRequest(requestedData);
 
     handleResetForm();
@@ -109,11 +111,11 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       try {
         const data = await getGnbUes();
 
-        const daviceData = data.map((dev) => {
-          return { value: dev, label: `UE${dev}` };
+        const deviceData = data.map((device) => {
+          return { value: device, label: `UE${device}` };
         });
 
-        setDevices(daviceData);
+        setDevices(deviceData);
       } catch (err) {
         console.error(err.message);
       }
@@ -173,7 +175,12 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             label="devices"
             options={devices}
             selectedOptions={selectedDevices}
-            onSelectOption={setSelectedDevices}
+            onSelectOption={(selected) =>
+              setSelectedDevices(
+                Array.isArray(selected) ? selected : [selected]
+              )
+            }
+            isMulti={false}
           />
 
           {/* METRICS */}
@@ -183,6 +190,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             options={metrics}
             selectedOptions={selectedMetrics}
             onSelectOption={setSelectedMetrics}
+            isMulti={true}
           />
 
           {/* TIME */}
