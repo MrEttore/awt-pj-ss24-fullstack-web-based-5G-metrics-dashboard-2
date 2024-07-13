@@ -34,15 +34,17 @@ export function transformTelemetryData(data) {
     metricData[metric] = [];
   });
 
-  // Process each record
   data.forEach((record) => {
     const timestamp = record.timestamp;
-    DASHBOARD_METRICS.forEach((metric) => {
-      if (record.ues[0].hasOwnProperty(metric)) {
-        const value = record.ues[0][metric];
-        metricData[metric].push({ timestamp, value });
-      }
-    });
+
+    if (record.ues && record.ues.length > 0 && record.ues[0]) {
+      DASHBOARD_METRICS.forEach((metric) => {
+        if (record.ues[0].hasOwnProperty(metric)) {
+          const value = record.ues[0][metric];
+          metricData[metric].push({ timestamp, value });
+        }
+      });
+    }
   });
 
   // Convert the object to an array of objects
