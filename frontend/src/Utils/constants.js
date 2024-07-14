@@ -49,18 +49,3 @@ export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
 // Warning i.e., error messages
 
 export const EMPTY_MESSAGE = { type: null, text: '' };
-
-export const INFO_NO_LOGS_AVAILABLE = {
-  type: 'info',
-  text: 'No logs to display.',
-};
-
-export const INFO_NO_HEALTH_DATA = {
-  type: 'info',
-  text: 'No health data to display.',
-};
-
-export const INFO_NO_TELEMETRY_DATA = {
-  type: 'info',
-  text: 'No telemetry data to display.',
-};

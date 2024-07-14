@@ -1,34 +1,35 @@
 import './Filters.css';
 
-export default function Filters({ filters }) {
+export default function Filters({ filters, isThereError }) {
   if (!filters) return <div className="filters"></div>;
 
-  // const dateStart = new Date(filters.startTime);
-  // const dateStringStart = dateStart.toLocaleString();
+  if (isThereError) return <div className="filters"></div>;
 
-  // const dateEnd = new Date(filters.endTime);
-  // const dateStringEnd = dateEnd.toLocaleString();
+  const { startTime, endTime, devices, metrics, isLiveDataOn } = filters;
+
+  const startTimeString = new Date(startTime).toLocaleString();
+  const startEndString = new Date(endTime).toLocaleString();
 
   return (
     <div className="filters">
       {'startTime' in filters && (
         <div className="startTimeFilter">
           <p>
-            Start time: <span>{filters.startTime}</span>
+            Start time: <span>{startTimeString}</span>
           </p>
         </div>
       )}
       {'endTime' in filters && (
         <div className="endTimeFilter">
           <p>
-            End time: <span>{filters.endTime}</span>
+            End time: <span>{startEndString}</span>
           </p>
         </div>
       )}
       {'devices' in filters && (
         <div className="devicesFilter">
           <p>Devices: </p>
-          {filters.devices.map((d, i) => (
+          {devices.map((d, i) => (
             <p key={i}>
               <span>{d.label}</span>
             </p>
@@ -38,7 +39,7 @@ export default function Filters({ filters }) {
       {'metrics' in filters && (
         <div className="metricsFilter">
           <p>Metrics: </p>
-          {filters.metrics.map((d, i) => (
+          {metrics.map((d, i) => (
             <p key={i}>
               <span>{d.label}</span>
             </p>
@@ -48,7 +49,7 @@ export default function Filters({ filters }) {
       {'isLiveDataOn' in filters && (
         <div className="liveDataFilter">
           <p>
-            Live data: <span>{filters.isLiveDataOn ? 'on' : 'off'}</span>
+            Live data: <span>{isLiveDataOn ? 'on' : 'off'}</span>
           </p>
         </div>
       )}

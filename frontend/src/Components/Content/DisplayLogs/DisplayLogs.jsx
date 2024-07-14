@@ -4,16 +4,17 @@ import LogItem from '../../LogItem/LogItem';
 import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
 import { getGnbLogs } from '../../../Utils/fetching';
-import {
-  EMPTY_MESSAGE,
-  INFO_NO_LOGS_AVAILABLE,
-} from '../../../Utils/constants';
+import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayLogs.css';
 
-export default function DisplayLogs({ requestedData, onMessage }) {
+export default function DisplayLogs({ requestedData, onMessage, resetFlag }) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (resetFlag) setLogsStatus([]);
+  }, [resetFlag]);
 
   useEffect(() => {
     const fetchLogsData = async () => {
@@ -41,6 +42,7 @@ export default function DisplayLogs({ requestedData, onMessage }) {
           type: 'error',
           text: error.message,
         });
+        setLogsStatus([]);
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +57,12 @@ export default function DisplayLogs({ requestedData, onMessage }) {
     <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
       {!isLoading && !requestedData && (
-        <Message message={INFO_NO_LOGS_AVAILABLE} />
+        <Message
+          message={{
+            type: 'info',
+            text: 'No logs to display.',
+          }}
+        />
       )}
       {!isLoading && requestedData && (
         <ul className="logs">

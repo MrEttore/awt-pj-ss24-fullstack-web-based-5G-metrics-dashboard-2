@@ -4,17 +4,34 @@ import DisplayTelemetry from './DisplayTelemetry/DisplayTelemetry.jsx';
 
 import './Content.css';
 
-export default function Content({ selectedTab, requestedData, onMessage }) {
+export default function Content({
+  selectedTab,
+  requestedData,
+  onMessage,
+  resetFlag,
+}) {
   return (
     <div className="contentContainer">
       {selectedTab === 'healthStatus' && (
-        <DisplayHealth requestedData={requestedData} onMessage={onMessage} />
+        <DisplayHealth
+          requestedData={requestedData}
+          onMessage={onMessage}
+          resetFlag={resetFlag}
+        />
       )}
       {selectedTab === 'telemetry' && (
-        <DisplayTelemetry requestedData={requestedData} onMessage={onMessage} />
+        <DisplayTelemetry
+          requestedData={requestedData}
+          onMessage={onMessage}
+          resetFlag={resetFlag}
+        />
       )}
       {selectedTab === 'logs' && (
-        <DisplayLogs requestedData={requestedData} onMessage={onMessage} />
+        <DisplayLogs
+          requestedData={requestedData}
+          onMessage={onMessage}
+          resetFlag={resetFlag}
+        />
       )}
     </div>
   );

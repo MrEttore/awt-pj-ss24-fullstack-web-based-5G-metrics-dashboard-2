@@ -18,24 +18,34 @@ function Main() {
   // Set state to control the data requests
   const [requestedData, setRequestedData] = useState(null);
 
-  // TODO: update to messages arr
+  // Set state to control the reset flag
+  const [resetFlag, setResetFlag] = useState(false);
+
   // Set state to control info/error messages
   const [message, setMessage] = useState(EMPTY_MESSAGE);
 
+  // Set state to mark an error message
+  const [error, setError] = useState(false);
+
   function handleSelectedTab(e) {
+    setError(false);
     setSelectedTab(e.target.value);
     setRequestedData(null);
   }
 
   function handleDataRequest(data) {
+    setError(false);
+    setResetFlag(false);
     setRequestedData(data);
   }
 
   function handleDataReset() {
     setRequestedData(null);
+    setResetFlag(true);
   }
 
   const handleMessage = useCallback((msg) => {
+    if (msg.type === 'error') setError(true);
     setMessage(msg);
   }, []);
 
@@ -51,7 +61,7 @@ function Main() {
         />
 
         <InformationDisplay>
-          <Filters filters={requestedData} />
+          <Filters filters={requestedData} isThereError={error} />
           <Messages message={message} />
         </InformationDisplay>
       </ControlBar>
@@ -60,6 +70,7 @@ function Main() {
         selectedTab={selectedTab}
         requestedData={requestedData}
         onMessage={handleMessage}
+        resetFlag={resetFlag}
       />
     </main>
   );
