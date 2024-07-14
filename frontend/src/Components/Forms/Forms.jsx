@@ -12,26 +12,19 @@ import { getGnbUes } from '../../Utils/fetching';
 import './Forms.css';
 
 export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
-  // Set state for <ToggleLiveDataSwitch/> component
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
 
-  // Set state for the <SelectTimespan/> component
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
 
-  // Set state to manage the currently selected metric
   const [selectedMetrics, setSelectedMetrics] = useState([]);
 
-  // Set state to manage the currently selected device
   const [selectedDevices, setSelectedDevices] = useState([]);
 
-  // Set state to manage available metrics
   const [metrics, setMetrics] = useState([]);
 
-  // Set state to manage available devices
   const [devices, setDevices] = useState([]);
 
-  // Reset timespan input fields
   function handleResetForm() {
     setStartTime(null);
     setEndTime(null);
@@ -131,7 +124,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
-          {/* TIME */}
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
@@ -139,14 +131,12 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             onInputEndTime={setEndTime}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
             onToggle={handleToggle}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
@@ -156,7 +146,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {selectedTab === 'telemetry' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitTelemetry}>
-          {/* DEVICES */}
           <DropDown
             name="devices"
             label="devices"
@@ -170,7 +159,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             isMulti={false}
           />
 
-          {/* METRICS */}
           <DropDown
             name="metrics"
             label="metrics"
@@ -180,7 +168,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             isMulti={true}
           />
 
-          {/* TIME */}
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
@@ -188,14 +175,12 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             onInputEndTime={setEndTime}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
             onToggle={handleToggle}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
@@ -205,7 +190,6 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {selectedTab === 'logs' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
-          {/* TIME */}
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
@@ -213,14 +197,12 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             onInputEndTime={setEndTime}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live logs"
             isToggled={isLiveDataToggled}
             onToggle={handleToggle}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}

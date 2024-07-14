@@ -102,7 +102,7 @@ export default function TelemetryItem({ name, rawData = [] }) {
 
   const telemetryData = rawData.map((dp) => dp.value);
 
-  // console.log(telemetryData);
+  console.log('telemetryData.length: ', telemetryData.length);
 
   const data = {
     labels: labelsX,
@@ -115,7 +115,7 @@ export default function TelemetryItem({ name, rawData = [] }) {
         stepped: false,
         pointBackgroundColor: COLOR_MODULE_ON,
         pointBorderColor: COLOR_MODULE_ON,
-        pointRadius: 2,
+        pointRadius: telemetryData.length <= 500 ? 2 : 1,
         pointHoverRadius: 5,
       },
     ],
