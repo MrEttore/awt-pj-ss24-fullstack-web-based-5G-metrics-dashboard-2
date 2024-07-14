@@ -26,27 +26,41 @@ export async function getCn5gData(timeStart, timeEnd) {
 }
 
 export async function getGnbLogs(timeStart, timeEnd) {
-  if (!timeStart && !timeEnd)
-    return {
-      data: null,
-      error: new Error('Select a valid start and endtime for the request!'),
-    };
+  if (timeStart && timeEnd){
+    try {
+      const response = await fetch(
+        `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      );
 
-  try {
-    const response = await fetch(
-      `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
-    );
+      if (!response.ok) throw new Error('Response not ok');
 
-    if (!response.ok) throw new Error('Response not ok');
+      const data = await response.json();
 
-    const data = await response.json();
+      return { data: data, error: null };
+    } catch (err) {
+      return {
+        data: null,
+        error: `${err.message}. Please check your internet connection and try again`,
+      };
+    }
+  }
+  else {
+    try {
+      const response = await fetch(
+        `${GNB_LOGS_URL}`
+      );
 
-    return { data: data, error: null };
-  } catch (err) {
-    return {
-      data: null,
-      error: `${err.message}. Please check your internet connection and try again`,
-    };
+      if (!response.ok) throw new Error('API response not ok!');
+
+      const data = await response.json();
+
+      return { data: data, error: null };
+    } catch (err) {
+      return {
+        data: null,
+        error: `${err.message}. Please check your internet connection and try again`,
+      };
+    }
   }
 }
 
