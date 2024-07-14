@@ -11,12 +11,16 @@ import './DisplayHealth.css';
 
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
-export default function DisplayHealth({ requestedData, onMessage }) {
+export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
   const [healthStatus, setHealthStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // TODO: Add further useEffect() hook to display live data???
   // ...
+
+  useEffect(() => {
+    if (resetFlag) setHealthStatus([]);
+  }, [resetFlag]);
 
   useEffect(() => {
     const fetchHealthData = async () => {
@@ -46,6 +50,7 @@ export default function DisplayHealth({ requestedData, onMessage }) {
           type: 'error',
           text: error.message,
         });
+        setHealthStatus([]);
       } finally {
         setIsLoading(false);
       }

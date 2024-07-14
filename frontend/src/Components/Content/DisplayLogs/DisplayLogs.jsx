@@ -8,9 +8,13 @@ import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayLogs.css';
 
-export default function DisplayLogs({ requestedData, onMessage }) {
+export default function DisplayLogs({ requestedData, onMessage, resetFlag }) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (resetFlag) setLogsStatus([]);
+  }, [resetFlag]);
 
   useEffect(() => {
     const fetchLogsData = async () => {
@@ -38,6 +42,7 @@ export default function DisplayLogs({ requestedData, onMessage }) {
           type: 'error',
           text: error.message,
         });
+        setLogsStatus([]);
       } finally {
         setIsLoading(false);
       }

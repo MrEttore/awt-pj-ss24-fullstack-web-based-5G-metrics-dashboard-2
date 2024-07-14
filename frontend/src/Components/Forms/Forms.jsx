@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Form from '../Form/Form';
 import ToggleLiveDataSwitch from '../ToggleLiveDataSwitch/ToggleLiveDataSwitch';
-import SelectTimespan from '../SelectTimespan/SelectTimespan';
+import TimespanSelector from '../TimespanSelector/TimespanSelector';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
 
@@ -16,8 +16,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
 
   // Set state for the <SelectTimespan/> component
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   // Set state to manage the currently selected metric
   const [selectedMetrics, setSelectedMetrics] = useState([]);
@@ -33,8 +33,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
   // Reset timespan input fields
   function handleResetForm() {
-    setStartTime('');
-    setEndTime('');
+    setStartTime(null);
+    setEndTime(null);
     setSelectedMetrics([]);
     setSelectedDevices([]);
   }
@@ -49,56 +49,44 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   // TODO: handle live data
   // ...
 
-  // Handle submit of health form
   function handleSubmitHealth(e) {
-    // prevent the page to reload
     e.preventDefault();
 
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
 
-    // console.log(requestedData);
-
     handleResetForm();
   }
 
-  // Handle submit of logs form
   function handleSubmitLogs(e) {
-    // prevent the page to reload
     e.preventDefault();
 
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
 
-    // console.log(requestedData);
-
     handleResetForm();
   }
 
-  // Handle submit of telemtry form
   function handleSubmitTelemetry(e) {
-    // prevent the page to reload
     e.preventDefault();
 
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       devices: selectedDevices,
       metrics: selectedMetrics,
       isLiveDataOn: isLiveDataToggled,
     };
-
-    console.log(requestedData);
 
     onDataRequest(requestedData);
 
@@ -144,8 +132,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       {selectedTab === 'healthStatus' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
           {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
@@ -194,8 +181,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
           />
 
           {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
@@ -220,8 +206,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       {selectedTab === 'logs' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
           {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
