@@ -19,6 +19,7 @@
   background-color: gray;
   height: 1.2rem;
   width: 2.4rem;
+  border: 2px solid var(--color-background-900);
   border-radius: 11.5px;
   cursor: pointer;
   position: relative;
@@ -37,7 +38,7 @@
 }
 
 .toggleInput:checked + .toggleLabel {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-success-dark);
 }
 
 .toggleInput:checked + .toggleLabel::before {

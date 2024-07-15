@@ -22,15 +22,15 @@ export default function DisplayLogs({
   }, [resetFlag]);
 
   useEffect(() => {
-    const fetchLogsData = async () => {
-      if (!requestedData) {
-        onMessage({
-          type: 'warning',
-          text: 'No timespan specified. Specify a valid timespan to display the data!',
-        });
-        return;
-      }
+    if (!requestedData && !isLiveDataToggled)
+      onMessage({
+        type: 'warning',
+        text: 'No timespan specified. Specify a valid timespan to display the data!',
+      });
+  }, [requestedData, isLiveDataToggled, onMessage]);
 
+  useEffect(() => {
+    const fetchLogsData = async () => {
       try {
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
@@ -61,6 +61,8 @@ export default function DisplayLogs({
       }
     };
 
+    if (!requestedData) return;
+
     fetchLogsData();
   }, [requestedData, onMessage]);
 
@@ -75,30 +77,22 @@ export default function DisplayLogs({
           type: 'success',
           text: 'Live data is ON!',
         });
-
-        console.log(liveData);
       } catch (error) {
         onMessage({
           type: 'error',
-          text: 'No live data is not available!',
+          text: 'Live data is not available!',
         });
       }
     };
 
-    if (!isLiveDataToggled) {
-      onMessage({
-        type: 'warning',
-        text: 'No timespan specified. Specify a valid timespan to display the data!',
-      });
-      return;
-    }
+    if (!isLiveDataToggled) return;
 
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
   }, [isLiveDataToggled, onMessage]);
 
   return (
-    <div className="contentLogs">
+    <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>
       {isLoading && <Loader>Loading Logs ...</Loader>}
       {!isLoading && !requestedData && !isLiveDataToggled && (
         <Message
