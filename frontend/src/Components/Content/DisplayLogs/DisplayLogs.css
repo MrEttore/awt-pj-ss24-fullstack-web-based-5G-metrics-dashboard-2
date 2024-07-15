@@ -21,3 +21,22 @@
   width: 100%;
   max-height: 100%;
 }
+
+@keyframes fadeInHighlight {
+  0% {
+    background-color: var(--color-highlight);
+    opacity: 0;
+  }
+  50% {
+    background-color: var(--color-background-900);
+    opacity: 1;
+  }
+  100% {
+    background-color: var(--color-background-900);
+    opacity: 1;
+  }
+}
+
+.log.entering {
+  animation: fadeInHighlight 1s ease-out;
+}
