@@ -36,7 +36,9 @@ export default function DisplayLogs({ requestedData, onMessage, resetFlag }) {
 
         if (error) throw new Error(error);
 
-        if (data.length === 0)
+        const isDataNotAvailable = data.length === 0;
+
+        if (isDataNotAvailable)
           onMessage({
             type: 'info',
             text: 'No logs for the selected timespan!',
