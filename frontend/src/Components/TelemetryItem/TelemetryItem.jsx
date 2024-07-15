@@ -102,8 +102,6 @@ export default function TelemetryItem({ name, rawData = [] }) {
 
   const telemetryData = rawData.map((dp) => dp.value);
 
-  console.log('telemetryData.length: ', telemetryData.length);
-
   const data = {
     labels: labelsX,
     datasets: [
