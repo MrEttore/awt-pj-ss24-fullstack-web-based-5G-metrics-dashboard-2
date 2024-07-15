@@ -8,7 +8,12 @@ import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayLogs.css';
 
-export default function DisplayLogs({ requestedData, onMessage, resetFlag }) {
+export default function DisplayLogs({
+  requestedData,
+  onMessage,
+  resetFlag,
+  isLiveDataToggled,
+}) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 

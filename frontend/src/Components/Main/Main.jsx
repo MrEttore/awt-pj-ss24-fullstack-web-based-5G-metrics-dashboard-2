@@ -81,6 +81,7 @@ function Main() {
         requestedData={requestedData}
         onMessage={handleMessage}
         resetFlag={resetFlag}
+        isLiveDataToggled={isLiveDataToggled}
       />
     </main>
   );
