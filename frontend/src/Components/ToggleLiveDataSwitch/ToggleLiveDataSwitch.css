@@ -17,8 +17,8 @@
 
 .toggleLabel {
   background-color: gray;
-  height: 1.2rem;
-  width: 2.4rem;
+  height: 1.45rem;
+  width: 2.5rem;
   border: 2px solid var(--color-background-900);
   border-radius: 11.5px;
   cursor: pointer;
