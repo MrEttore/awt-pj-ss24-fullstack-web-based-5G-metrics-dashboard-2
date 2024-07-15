@@ -9,6 +9,7 @@ export default function Content({
   requestedData,
   onMessage,
   resetFlag,
+  isLiveDataToggled,
 }) {
   return (
     <div className="contentContainer">
@@ -17,6 +18,7 @@ export default function Content({
           requestedData={requestedData}
           onMessage={onMessage}
           resetFlag={resetFlag}
+          isLiveDataToggled={isLiveDataToggled}
         />
       )}
       {selectedTab === 'telemetry' && (
@@ -24,6 +26,7 @@ export default function Content({
           requestedData={requestedData}
           onMessage={onMessage}
           resetFlag={resetFlag}
+          isLiveDataToggled={isLiveDataToggled}
         />
       )}
       {selectedTab === 'logs' && (
@@ -31,6 +34,7 @@ export default function Content({
           requestedData={requestedData}
           onMessage={onMessage}
           resetFlag={resetFlag}
+          isLiveDataToggled={isLiveDataToggled}
         />
       )}
     </div>

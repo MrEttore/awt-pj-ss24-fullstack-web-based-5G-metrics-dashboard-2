@@ -21,6 +21,9 @@ function Main() {
   // Set state to control the reset flag
   const [resetFlag, setResetFlag] = useState(false);
 
+  // Set state to control live data
+  const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
+
   // Set state to control info/error messages
   const [message, setMessage] = useState(EMPTY_MESSAGE);
 
@@ -31,6 +34,11 @@ function Main() {
     setError(false);
     setSelectedTab(e.target.value);
     setRequestedData(null);
+    setIsLiveDataToggled(false);
+  }
+
+  function handleLiveDataToggle() {
+    setIsLiveDataToggled(!isLiveDataToggled);
   }
 
   function handleDataRequest(data) {
@@ -58,6 +66,8 @@ function Main() {
           selectedTab={selectedTab}
           onDataRequest={handleDataRequest}
           onDataReset={handleDataReset}
+          isLiveDataToggled={isLiveDataToggled}
+          onToggleLiveData={handleLiveDataToggle}
         />
 
         <InformationDisplay>
@@ -71,6 +81,7 @@ function Main() {
         requestedData={requestedData}
         onMessage={handleMessage}
         resetFlag={resetFlag}
+        isLiveDataToggled={isLiveDataToggled}
       />
     </main>
   );

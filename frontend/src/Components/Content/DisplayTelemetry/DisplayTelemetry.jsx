@@ -59,6 +59,16 @@ export default function DisplayTelemetry({
           requestedData
         );
 
+        const isDataNotAvailable = filteredTelemetryData.every(
+          (metric) => metric.metricData.length === 0
+        );
+
+        if (isDataNotAvailable)
+          onMessage({
+            type: 'info',
+            text: 'No telemetry data for the selected timespan!',
+          });
+
         setTelemetryStatus(filteredTelemetryData);
       } catch (error) {
         onMessage({

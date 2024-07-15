@@ -11,10 +11,15 @@ import { getGnbUes } from '../../Utils/fetching';
 
 import './Forms.css';
 
-export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
-  const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
-
+export default function Forms({
+  selectedTab,
+  onDataRequest,
+  onDataReset,
+  isLiveDataToggled,
+  onToggleLiveData,
+}) {
   const [startTime, setStartTime] = useState(null);
+
   const [endTime, setEndTime] = useState(null);
 
   const [selectedMetrics, setSelectedMetrics] = useState([]);
@@ -32,18 +37,13 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     setSelectedDevices([]);
   }
 
-  // TODO: also update the dropdowns ...
-  // Handle the functionality of the live data toggle
-  function handleToggle() {
-    setIsLiveDataToggled(!isLiveDataToggled);
-    handleResetForm();
-  }
-
   // TODO: handle live data
   // ...
 
   function handleSubmitHealth(e) {
     e.preventDefault();
+
+    if (!startTime && !endTime) return;
 
     const requestedData = {
       startTime: startTime.getTime(),
@@ -59,6 +59,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   function handleSubmitLogs(e) {
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
@@ -72,6 +74,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
   function handleSubmitTelemetry(e) {
     e.preventDefault();
+
+    if (!startTime && !endTime) return;
 
     const requestedData = {
       startTime: startTime.getTime(),
@@ -120,6 +124,11 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     getMetrics(DASHBOARD_METRICS);
   }, []);
 
+  // Clear input fields when live data is on
+  useEffect(() => {
+    if (isLiveDataToggled) handleResetForm();
+  }, [isLiveDataToggled]);
+
   return (
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
@@ -129,12 +138,13 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
           <FormControlButtons
@@ -157,6 +167,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
               )
             }
             isMulti={false}
+            isLiveDataOn={isLiveDataToggled}
           />
 
           <DropDown
@@ -166,6 +177,7 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             selectedOptions={selectedMetrics}
             onSelectOption={setSelectedMetrics}
             isMulti={true}
+            isLiveDataOn={isLiveDataToggled}
           />
 
           <TimespanSelector
@@ -173,12 +185,13 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
           <FormControlButtons
@@ -195,12 +208,13 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
           <ToggleLiveDataSwitch
             label="Live logs"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
           <FormControlButtons

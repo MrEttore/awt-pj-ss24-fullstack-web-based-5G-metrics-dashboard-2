@@ -44,6 +44,16 @@ export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
 
         const processedData = transformHealthData(data);
 
+        const isDataNotAvailable = processedData.every(
+          (metric) => metric.moduleData.length === 0
+        );
+
+        if (isDataNotAvailable)
+          onMessage({
+            type: 'info',
+            text: 'No health data for the selected timespan!',
+          });
+
         setHealthStatus(processedData);
       } catch (error) {
         onMessage({

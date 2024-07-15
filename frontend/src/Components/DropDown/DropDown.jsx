@@ -9,6 +9,7 @@ export default function DropDown({
   selectedOptions,
   onSelectOption,
   isMulti,
+  isLiveDataOn,
 }) {
   return (
     <div className={`dropdown ${name}`}>
@@ -26,7 +27,7 @@ export default function DropDown({
         }}
         options={options}
         required
-        isDisabled={false}
+        isDisabled={isLiveDataOn}
       />
     </div>
   );
