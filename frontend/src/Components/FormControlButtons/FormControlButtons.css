@@ -18,7 +18,7 @@
   border: 2px solid var(--color-background-900);
   border-radius: 30px;
   cursor: pointer;
-  transition: all 0.4s;
+  transition: background-color 0.3s, border-color 0.3s, width 0.3s;
 }
 
 .btnSubmit:disabled {
@@ -27,6 +27,15 @@
   cursor: not-allowed;
   border: 2px solid var(--color-background-900);
   border-radius: 30px;
+  width: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btnSubmit:disabled::after {
+  content: '';
+  display: block;
+  font-size: initial;
 }
 
 .btnSubmit:not(:disabled):hover {
@@ -43,7 +52,7 @@
   border: 2px solid var(--color-background-900);
   border-radius: 30px;
   cursor: pointer;
-  transition: all 0.4s;
+  transition: background-color 0.3s, border-color 0.3s, width 0.3s;
 }
 
 .btnReset:disabled {
@@ -52,6 +61,15 @@
   cursor: not-allowed;
   border: 2px solid var(--color-background-900);
   border-radius: 30px;
+  width: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btnReset:disabled::after {
+  content: '';
+  display: block;
+  font-size: initial;
 }
 
 .btnReset:not(:disabled):hover {
