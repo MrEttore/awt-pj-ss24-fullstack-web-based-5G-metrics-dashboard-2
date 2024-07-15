@@ -50,6 +50,23 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
+export async function getLiveGnbLogs() {
+  try {
+    const response = await fetch(`${GNB_LOGS_URL}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    const mostRecentLog = data[data.length - 1];
+
+    return mostRecentLog ? [mostRecentLog] : [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
 // TODO: ueId should be an arr of ids ...
 export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
   if (!timeStart && !timeEnd && !ueId)
@@ -89,3 +106,5 @@ export async function getGnbUes() {
     console.error(`Failed to fetch the data inside getGnbUes: ${err.message}`);
   }
 }
+
+getLiveGnbLogs();
