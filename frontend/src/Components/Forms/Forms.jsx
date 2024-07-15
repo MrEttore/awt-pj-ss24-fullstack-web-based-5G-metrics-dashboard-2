@@ -45,6 +45,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   function handleSubmitHealth(e) {
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
@@ -59,6 +61,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
   function handleSubmitLogs(e) {
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
@@ -72,6 +76,8 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
   function handleSubmitTelemetry(e) {
     e.preventDefault();
+
+    if (!startTime && !endTime) return;
 
     const requestedData = {
       startTime: startTime.getTime(),
