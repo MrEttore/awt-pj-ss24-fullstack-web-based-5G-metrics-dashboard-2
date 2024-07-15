@@ -42,6 +42,12 @@ export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
 
         if (error) throw new Error(error);
 
+        if (data.length === 0)
+          onMessage({
+            type: 'info',
+            text: 'No health data for the selected timespan!',
+          });
+
         const processedData = transformHealthData(data);
 
         setHealthStatus(processedData);

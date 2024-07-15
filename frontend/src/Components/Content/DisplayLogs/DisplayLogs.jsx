@@ -36,6 +36,12 @@ export default function DisplayLogs({ requestedData, onMessage, resetFlag }) {
 
         if (error) throw new Error(error);
 
+        if (data.length === 0)
+          onMessage({
+            type: 'info',
+            text: 'No logs for the selected timespan!',
+          });
+
         setLogsStatus(data);
       } catch (error) {
         onMessage({

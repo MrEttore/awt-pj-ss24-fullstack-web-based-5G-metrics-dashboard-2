@@ -52,6 +52,12 @@ export default function DisplayTelemetry({
 
         if (error) throw new Error(error);
 
+        if (data.length === 0)
+          onMessage({
+            type: 'info',
+            text: 'No telemetry data for the selected timespan!',
+          });
+
         const processedData = transformTelemetryData(data);
 
         const filteredTelemetryData = filterRequestedTelemetryData(
