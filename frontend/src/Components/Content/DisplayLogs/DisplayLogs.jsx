@@ -80,12 +80,18 @@ export default function DisplayLogs({
       } catch (error) {
         onMessage({
           type: 'error',
-          text: 'No live data available!',
+          text: 'No live data is not available!',
         });
       }
     };
 
-    if (!isLiveDataToggled) return;
+    if (!isLiveDataToggled) {
+      onMessage({
+        type: 'warning',
+        text: 'No timespan specified. Specify a valid timespan to display the data!',
+      });
+      return;
+    }
 
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
