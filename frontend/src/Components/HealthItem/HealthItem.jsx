@@ -109,8 +109,6 @@ export default function HealthItem({ name, rawData = [] }) {
 
   const healthData = rawData.map((dp) => dp.status);
 
-  console.log('healthData.length: ', healthData.length);
-
   const messages = rawData.map((dp) => dp.message);
 
   const data = {
