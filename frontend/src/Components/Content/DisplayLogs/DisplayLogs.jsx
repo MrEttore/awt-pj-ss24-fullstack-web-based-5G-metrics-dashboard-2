@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import LogItem from '../../LogItem/LogItem';
 import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
-import { getGnbLogs } from '../../../Utils/fetching';
+import { getGnbLogs, getLiveGnbLogs } from '../../../Utils/fetching';
 import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayLogs.css';
@@ -62,14 +62,39 @@ export default function DisplayLogs({
     };
 
     fetchLogsData();
-
-    // TODO: Cleanup function needed?
   }, [requestedData, onMessage]);
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const liveData = await getLiveGnbLogs();
+
+        setLogsStatus((prevLogs) => [...liveData, ...prevLogs]);
+
+        onMessage({
+          type: 'success',
+          text: 'Live data is ON!',
+        });
+
+        console.log(liveData);
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: 'No live data available!',
+        });
+      }
+    };
+
+    if (!isLiveDataToggled) return;
+
+    const intervalId = setInterval(fetchLiveData, 3000);
+    return () => clearInterval(intervalId);
+  }, [isLiveDataToggled, onMessage]);
 
   return (
     <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
-      {!isLoading && !requestedData && (
+      {!isLoading && !requestedData && !isLiveDataToggled && (
         <Message
           message={{
             type: 'info',
@@ -77,18 +102,16 @@ export default function DisplayLogs({
           }}
         />
       )}
-      {!isLoading && requestedData && (
+      {!isLoading && (requestedData || isLiveDataToggled) && (
         <ul className="logs">
-          {logsStatus.map((log, i) => {
-            return (
-              <LogItem
-                time={log.timestamp}
-                payload={log.payload}
-                logNr={i}
-                key={i}
-              />
-            );
-          })}
+          {logsStatus.map((log, i) => (
+            <LogItem
+              time={log.timestamp}
+              payload={log.payload}
+              logNr={i}
+              key={i}
+            />
+          ))}
         </ul>
       )}
     </div>
