@@ -89,6 +89,12 @@ export function aggregateLiveHealthData(existingData, newData) {
       };
     }
     aggregatedData[moduleName].moduleData.push(...module.moduleData);
+
+    // Ensure only the latest 6 entries are kept
+    if (aggregatedData[moduleName].moduleData.length > 6) {
+      aggregatedData[moduleName].moduleData =
+        aggregatedData[moduleName].moduleData.slice(-6);
+    }
   });
 
   return Object.values(aggregatedData);
