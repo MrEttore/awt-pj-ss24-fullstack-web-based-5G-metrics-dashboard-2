@@ -3,35 +3,40 @@ import { useEffect, useState } from 'react';
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
-import { transformHealthData } from '../../../Utils/transformData';
-import { getCn5gData } from '../../../Utils/fetching';
+import {
+  transformHealthData,
+  aggregateLiveHealthData,
+} from '../../../Utils/transformData';
+import { getCn5gData, getLiveCn5gData } from '../../../Utils/fetching';
 import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
 // TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
 
-export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
+export default function DisplayHealth({
+  requestedData,
+  onMessage,
+  resetFlag,
+  isLiveDataToggled,
+}) {
   const [healthStatus, setHealthStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // TODO: Add further useEffect() hook to display live data???
-  // ...
 
   useEffect(() => {
     if (resetFlag) setHealthStatus([]);
   }, [resetFlag]);
 
   useEffect(() => {
-    const fetchHealthData = async () => {
-      if (!requestedData) {
-        onMessage({
-          type: 'warning',
-          text: 'No timespan specified. Specify a valid timespan to display the data!',
-        });
-        return;
-      }
+    if (!requestedData && !isLiveDataToggled)
+      onMessage({
+        type: 'warning',
+        text: 'No timespan specified. Specify a valid timespan to display the data!',
+      });
+  }, [requestedData, isLiveDataToggled, onMessage]);
 
+  useEffect(() => {
+    const fetchHealthData = async () => {
       try {
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
@@ -66,19 +71,52 @@ export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
       }
     };
 
-    fetchHealthData();
+    if (!requestedData) return;
 
-    // TODO: Cleanup function needed?
+    fetchHealthData();
   }, [requestedData, onMessage]);
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const liveData = await getLiveCn5gData();
+
+        const processedLiveData = transformHealthData(liveData);
+
+        const aggregatedLiveData = aggregateLiveHealthData(
+          healthStatus,
+          processedLiveData
+        );
+
+        setHealthStatus(aggregatedLiveData);
+
+        onMessage({
+          type: 'success',
+          text: 'Live data is ON!',
+        });
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: 'Live data is not available!',
+        });
+      }
+    };
+
+    if (!isLiveDataToggled) return;
+
+    const intervalId = setInterval(fetchLiveData, 3000);
+    return () => clearInterval(intervalId);
+  }, [isLiveDataToggled, onMessage, healthStatus]);
 
   return (
     <div
-      className={`contentHealth ${!requestedData ? 'noData' : ''} ${
-        isLoading ? 'loading' : ''
-      }`}
+      className={`contentHealth ${
+        !requestedData && !isLiveDataToggled ? 'noData' : ''
+      } ${isLoading ? 'loading' : ''}`}
     >
       {isLoading && <Loader>Loading Data ...</Loader>}
-      {!isLoading && !requestedData && (
+
+      {!isLoading && !requestedData && !isLiveDataToggled && (
         <Message
           message={{
             type: 'info',
@@ -86,14 +124,15 @@ export default function DisplayHealth({ requestedData, onMessage, resetFlag }) {
           }}
         />
       )}
-      {!isLoading && requestedData && (
-        <div className="items">
+
+      {!isLoading && (requestedData || isLiveDataToggled) && (
+        <ul className="items">
           {healthStatus.map((m, i) => {
             return (
               <HealthItem name={m.moduleName} rawData={m.moduleData} key={i} />
             );
           })}
-        </div>
+        </ul>
       )}
     </div>
   );

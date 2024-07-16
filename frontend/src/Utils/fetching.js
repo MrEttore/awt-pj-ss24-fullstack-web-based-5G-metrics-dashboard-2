@@ -25,6 +25,23 @@ export async function getCn5gData(timeStart, timeEnd) {
   }
 }
 
+export async function getLiveCn5gData() {
+  try {
+    const response = await fetch(`${CN5G_BASE_URL}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    const mostRecentLog = data[data.length - 1];
+
+    return mostRecentLog ? [mostRecentLog] : [];
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
 export async function getGnbLogs(timeStart, timeEnd) {
   if (!timeStart && !timeEnd)
     return {
@@ -47,6 +64,23 @@ export async function getGnbLogs(timeStart, timeEnd) {
       data: null,
       error: `${err.message}. Please check your internet connection and try again`,
     };
+  }
+}
+
+export async function getLiveGnbLogs() {
+  try {
+    const response = await fetch(`${GNB_LOGS_URL}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    const mostRecentLog = data[data.length - 1];
+
+    return mostRecentLog ? [mostRecentLog] : [];
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 }
 

@@ -34,6 +34,15 @@ export default function Message({ message }) {
           <p className="messageText">{message.text}</p>
         </div>
       )}
+
+      {message.type === 'success' && (
+        <div className="success">
+          <span className="messageIcon">
+            <FiInfo />
+          </span>
+          <p className="messageText">{message.text}</p>
+        </div>
+      )}
     </>
   );
 }
