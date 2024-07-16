@@ -18,53 +18,70 @@ function Main() {
   // Set state to control the data requests
   const [requestedData, setRequestedData] = useState(null);
 
-  // TODO: update to messages arr
+  // Set state to control the reset flag
+  const [resetFlag, setResetFlag] = useState(false);
+
+  // Set state to control live data
+  const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
+
   // Set state to control info/error messages
   const [message, setMessage] = useState(EMPTY_MESSAGE);
 
+  // Set state to mark an error message
+  const [error, setError] = useState(false);
+
   function handleSelectedTab(e) {
+    setError(false);
     setSelectedTab(e.target.value);
     setRequestedData(null);
+    setIsLiveDataToggled(false);
+  }
+
+  function handleLiveDataToggle() {
+    setIsLiveDataToggled(!isLiveDataToggled);
   }
 
   function handleDataRequest(data) {
+    setError(false);
+    setResetFlag(false);
     setRequestedData(data);
   }
 
   function handleDataReset() {
     setRequestedData(null);
+    setResetFlag(true);
   }
 
   const handleMessage = useCallback((msg) => {
+    if (msg.type === 'error') setError(true);
     setMessage(msg);
   }, []);
 
   return (
     <main className="main">
       <ControlBar>
-        {/* TABS */}
         <Tabs selectedTab={selectedTab} onSelectTab={handleSelectedTab} />
 
-        {/* FORMS */}
         <Forms
           selectedTab={selectedTab}
           onDataRequest={handleDataRequest}
           onDataReset={handleDataReset}
+          isLiveDataToggled={isLiveDataToggled}
+          onToggleLiveData={handleLiveDataToggle}
         />
 
-        {/* MESSAGES/ FILTERS */}
         <InformationDisplay>
-          <Filters />
+          <Filters filters={requestedData} isThereError={error} />
           <Messages message={message} />
         </InformationDisplay>
-        {/* ... */}
       </ControlBar>
 
-      {/* CONTENT */}
       <Content
         selectedTab={selectedTab}
         requestedData={requestedData}
         onMessage={handleMessage}
+        resetFlag={resetFlag}
+        isLiveDataToggled={isLiveDataToggled}
       />
     </main>
   );

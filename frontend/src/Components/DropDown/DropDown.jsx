@@ -8,6 +8,8 @@ export default function DropDown({
   options = [],
   selectedOptions,
   onSelectOption,
+  isMulti,
+  isLiveDataOn,
 }) {
   return (
     <div className={`dropdown ${name}`}>
@@ -17,15 +19,15 @@ export default function DropDown({
         classNamePrefix="react-select"
         id="select"
         unstyled
-        isMulti
+        isMulti={isMulti}
         isSearchable
         value={selectedOptions}
-        onChange={(e) => {
-          onSelectOption(e);
+        onChange={(selected) => {
+          onSelectOption(selected);
         }}
         options={options}
         required
-        isDisabled={false}
+        isDisabled={isLiveDataOn}
       />
     </div>
   );

@@ -1,8 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const cors = require('cors'); // Importing cors module
 const app = express();
+const corsOptions = {
+  origin: 'http://localhost:5173', // Allow only the specific frontend origin
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 204,
+  credentials: true,
+};
 
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
   if (req.headers['content-type'] === 'application/json') {
     let data = '';

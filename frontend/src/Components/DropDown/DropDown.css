@@ -28,6 +28,14 @@
   align-items: center;
 }
 
+.react-select__control--is-disabled {
+  cursor: not-allowed;
+}
+
+.react-select__control--is-disabled .react-select__placeholder {
+  opacity: 0;
+}
+
 .select .react-select__menu {
   /* Styles for the menu */
   display: flex;

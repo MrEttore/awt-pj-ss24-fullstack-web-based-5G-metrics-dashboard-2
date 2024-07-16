@@ -1,52 +1,104 @@
 import { useState, useEffect } from 'react';
 
-import { getGnBTelemetry } from '../../../Utils/fetching';
-import { transformTelemetryData } from '../../../Utils/transformData';
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
+import Message from '../../Message/Message';
+import { getGnBTelemetry } from '../../../Utils/fetching';
+import {
+  transformTelemetryData,
+  filterRequestedTelemetryData,
+} from '../../../Utils/transformData';
+import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayTelemetry.css';
 
-export default function DisplayTelemetry({ requestedData }) {
+export default function DisplayTelemetry({
+  requestedData,
+  onMessage,
+  resetFlag,
+}) {
   const [telemetryStatus, setTelemetryStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
+
+  useEffect(() => {
+    if (resetFlag) setTelemetryStatus([]);
+  }, [resetFlag]);
+
   useEffect(() => {
     const fetchTelemetryData = async () => {
-      if (requestedData) {
-        try {
-          setIsLoading(true);
+      if (!requestedData) {
+        onMessage({
+          type: 'warning',
+          text: 'No timespan specified. Specify a valid timespan to display the data!',
+        });
+        return;
+      }
 
-          // TODO: update api call with ueId ...
-          const data = await getGnBTelemetry(
-            requestedData.startTime,
-            requestedData.endTime,
-            requestedData.devices[0].value
-          );
+      try {
+        setIsLoading(true);
+        onMessage(EMPTY_MESSAGE);
 
-          const processedData = transformTelemetryData(data);
+        const { startTime, endTime, devices } = requestedData;
+        const [device] = devices;
 
-          console.log('processedData telemetry: ', processedData);
+        // TODO: update api call with arr of ueIds ...
+        const { data, error } = await getGnBTelemetry(
+          startTime,
+          endTime,
+          device.value
+        );
 
-          setTelemetryStatus(processedData);
-        } catch (err) {
-          console.error(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        // TODO: take out and build a warning message instead
-        // ...
+        if (error) throw new Error(error);
+
+        const processedData = transformTelemetryData(data);
+
+        const filteredTelemetryData = filterRequestedTelemetryData(
+          processedData,
+          requestedData
+        );
+
+        const isDataNotAvailable = filteredTelemetryData.every(
+          (metric) => metric.metricData.length === 0
+        );
+
+        if (isDataNotAvailable)
+          onMessage({
+            type: 'info',
+            text: 'No telemetry data for the selected timespan!',
+          });
+
+        setTelemetryStatus(filteredTelemetryData);
+      } catch (error) {
+        onMessage({
+          type: 'error',
+          text: error.message,
+        });
+        setTelemetryStatus([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchTelemetryData();
-  }, [requestedData]);
+  }, [requestedData, onMessage]);
 
   return (
-    <div className="contentTelemetry">
-      {isLoading && <Loader>Loading Data ...</Loader>}
-
+    <div
+      className={`contentTelemetry ${!requestedData ? 'noData' : ''} ${
+        isLoading ? 'loading' : ''
+      }`}
+    >
+      {isLoading && <Loader>Loading Telemetry ...</Loader>}
+      {!isLoading && !requestedData && (
+        <Message
+          message={{
+            type: 'info',
+            text: 'No telemetry data to display.',
+          }}
+        />
+      )}
       {!isLoading && requestedData && (
         <div className="items">
           {telemetryStatus.map((m, i) => {
@@ -58,8 +110,6 @@ export default function DisplayTelemetry({ requestedData }) {
               />
             );
           })}
-
-          {/* TODO: add default display */}
         </div>
       )}
     </div>

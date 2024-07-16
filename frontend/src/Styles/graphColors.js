@@ -1,4 +1,5 @@
 export const COLOR_LABEL_TEXT = '#FFFFFF';
+export const COLOR_LABEL_TEXT_NO_DATA = ' #adb5bd';
 export const COLOR_AXIS_BORDER = '#485375';
 export const COLOR_DATASET_LINE = '#7950f2';
 export const COLOR_DATASET_POINT_BACKGROUND = '#6640d9';
