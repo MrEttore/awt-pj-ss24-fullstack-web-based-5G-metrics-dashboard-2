@@ -34,7 +34,6 @@ ChartJS.register(
 );
 
 export default function HealthItem({ name, rawData = [] }) {
-  // Set the display options
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -101,8 +100,6 @@ export default function HealthItem({ name, rawData = [] }) {
     },
   };
 
-  /// Process the rawData array ///
-
   const labels = rawData.map((dp) => {
     const date = new Date(dp.timestamp);
     const dateString = date.toLocaleString();
@@ -129,7 +126,7 @@ export default function HealthItem({ name, rawData = [] }) {
         pointBorderColor: healthData.map((value) =>
           value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
-        pointRadius: healthData.length <= 60 ? 3 : 2,
+        pointRadius: healthData.length <= 1000 ? 2 : 1,
         pointHoverRadius: 7,
       },
     ],

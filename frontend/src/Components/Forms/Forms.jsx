@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Form from '../Form/Form';
 import ToggleLiveDataSwitch from '../ToggleLiveDataSwitch/ToggleLiveDataSwitch';
-import SelectTimespan from '../SelectTimespan/SelectTimespan';
+import TimespanSelector from '../TimespanSelector/TimespanSelector';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
 
@@ -11,88 +11,75 @@ import { getGnbUes } from '../../Utils/fetching';
 
 import './Forms.css';
 
-export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
-  // Set state for <ToggleLiveDataSwitch/> component
-  const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
+export default function Forms({
+  selectedTab,
+  onDataRequest,
+  onDataReset,
+  isLiveDataToggled,
+  onToggleLiveData,
+}) {
+  const [startTime, setStartTime] = useState(null);
 
-  // Set state for the <SelectTimespan/> component
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [endTime, setEndTime] = useState(null);
 
-  // Set state to manage the currently selected metric
   const [selectedMetrics, setSelectedMetrics] = useState([]);
 
-  // Set state to manage the currently selected device
   const [selectedDevices, setSelectedDevices] = useState([]);
 
-  // Set state to manage available metrics
   const [metrics, setMetrics] = useState([]);
 
-  // Set state to manage available devices
   const [devices, setDevices] = useState([]);
 
-  // Reset timespan input fields
   function handleResetForm() {
-    setStartTime('');
-    setEndTime('');
+    setStartTime(null);
+    setEndTime(null);
     setSelectedMetrics([]);
     setSelectedDevices([]);
-  }
-
-  // TODO: also update the dropdowns ...
-  // Handle the functionality of the live data toggle
-  function handleToggle() {
-    setIsLiveDataToggled(!isLiveDataToggled);
-    handleResetForm();
   }
 
   // TODO: handle live data
   // ...
 
-  // Handle submit of health form
   function handleSubmitHealth(e) {
-    // prevent the page to reload
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
 
-    // console.log(requestedData);
-
     handleResetForm();
   }
 
-  // Handle submit of logs form
   function handleSubmitLogs(e) {
-    // prevent the page to reload
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
 
-    // console.log(requestedData);
-
     handleResetForm();
   }
 
-  // Handle submit of telemtry form
   function handleSubmitTelemetry(e) {
-    // prevent the page to reload
     e.preventDefault();
 
+    if (!startTime && !endTime) return;
+
     const requestedData = {
-      startTime: startTime,
-      endTime: endTime,
+      startTime: startTime.getTime(),
+      endTime: endTime.getTime(),
       devices: selectedDevices,
       metrics: selectedMetrics,
       isLiveDataOn: isLiveDataToggled,
@@ -109,11 +96,11 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
       try {
         const data = await getGnbUes();
 
-        const daviceData = data.map((dev) => {
-          return { value: dev, label: `UE${dev}` };
+        const deviceData = data.map((device) => {
+          return { value: device, label: `UE${device}` };
         });
 
-        setDevices(daviceData);
+        setDevices(deviceData);
       } catch (err) {
         console.error(err.message);
       }
@@ -137,27 +124,29 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
     getMetrics(DASHBOARD_METRICS);
   }, []);
 
+  // Clear input fields when live data is on
+  useEffect(() => {
+    if (isLiveDataToggled) handleResetForm();
+  }, [isLiveDataToggled]);
+
   return (
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
-          {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
@@ -167,41 +156,44 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {selectedTab === 'telemetry' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitTelemetry}>
-          {/* DEVICES */}
           <DropDown
             name="devices"
             label="devices"
             options={devices}
             selectedOptions={selectedDevices}
-            onSelectOption={setSelectedDevices}
+            onSelectOption={(selected) =>
+              setSelectedDevices(
+                Array.isArray(selected) ? selected : [selected]
+              )
+            }
+            isMulti={false}
+            isLiveDataOn={isLiveDataToggled}
           />
 
-          {/* METRICS */}
           <DropDown
             name="metrics"
             label="metrics"
             options={metrics}
             selectedOptions={selectedMetrics}
             onSelectOption={setSelectedMetrics}
+            isMulti={true}
+            isLiveDataOn={isLiveDataToggled}
           />
 
-          {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}
@@ -211,23 +203,20 @@ export default function Forms({ selectedTab, onDataRequest, onDataReset }) {
 
       {selectedTab === 'logs' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
-          {/* TIME */}
-          <SelectTimespan
-            isLiveDataOn={isLiveDataToggled}
+          <TimespanSelector
             startTime={startTime}
             endTime={endTime}
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
+            isLiveDataOn={isLiveDataToggled}
           />
 
-          {/* LIVE DATA */}
           <ToggleLiveDataSwitch
             label="Live logs"
             isToggled={isLiveDataToggled}
-            onToggle={handleToggle}
+            onToggle={onToggleLiveData}
           />
 
-          {/* BTNS */}
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
             onReset={onDataReset}

@@ -34,15 +34,17 @@ export function transformTelemetryData(data) {
     metricData[metric] = [];
   });
 
-  // Process each record
   data.forEach((record) => {
     const timestamp = record.timestamp;
-    DASHBOARD_METRICS.forEach((metric) => {
-      if (record.ues[0].hasOwnProperty(metric)) {
-        const value = record.ues[0][metric];
-        metricData[metric].push({ timestamp, value });
-      }
-    });
+
+    if (record.ues && record.ues.length > 0 && record.ues[0]) {
+      DASHBOARD_METRICS.forEach((metric) => {
+        if (record.ues[0].hasOwnProperty(metric)) {
+          const value = record.ues[0][metric];
+          metricData[metric].push({ timestamp, value });
+        }
+      });
+    }
   });
 
   // Convert the object to an array of objects
@@ -64,4 +66,36 @@ export function filterRequestedTelemetryData(data, filters) {
   );
 
   return filteredMetricData;
+}
+
+export function aggregateLiveHealthData(existingData, newData) {
+  const aggregatedData = {};
+
+  // Aggregate existing data
+  existingData.forEach((module) => {
+    aggregatedData[module.moduleName] = {
+      moduleName: module.moduleName,
+      moduleData: [...module.moduleData],
+    };
+  });
+
+  // Aggregate new data
+  newData.forEach((module) => {
+    const moduleName = module.moduleName;
+    if (!aggregatedData[moduleName]) {
+      aggregatedData[moduleName] = {
+        moduleName: moduleName,
+        moduleData: [],
+      };
+    }
+    aggregatedData[moduleName].moduleData.push(...module.moduleData);
+
+    // Ensure only the latest 6 entries are kept
+    if (aggregatedData[moduleName].moduleData.length > 6) {
+      aggregatedData[moduleName].moduleData =
+        aggregatedData[moduleName].moduleData.slice(-6);
+    }
+  });
+
+  return Object.values(aggregatedData);
 }

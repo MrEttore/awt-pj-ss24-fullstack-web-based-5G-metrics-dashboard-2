@@ -3,6 +3,7 @@
 .healthItem {
   display: flex;
   flex-direction: column;
+  height: 14rem;
   gap: 0.5rem;
   align-items: center;
   justify-content: center;

@@ -1,6 +1,15 @@
+import React, { useEffect, useState } from 'react';
 import './LogItem.css';
 
-export default function LogItem({ time, payload, logNr }) {
+const LogItem = React.memo(({ time, payload, logNr }) => {
+  // const [isEntering, setIsEntering] = useState(true);
+
+  // useEffect(() => {
+  //   setIsEntering(true);
+  //   const timer = setTimeout(() => setIsEntering(false), 1000);
+  //   return () => clearTimeout(timer);
+  // }, [time, payload]);
+
   const date = new Date(time);
   const dateString = date.toLocaleString();
 
@@ -12,4 +21,6 @@ export default function LogItem({ time, payload, logNr }) {
       </div>
     </li>
   );
-}
+});
+
+export default LogItem;
