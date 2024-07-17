@@ -17,6 +17,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     await controller.get(req, res)
 });
+/* Mount get */
+router.get('/lastEntries/:amount', async (req, res) => {
+    await controller.getLastEntries(req, res)
+});
 
 /* Mount add */
 router.post('/', async (req, res) => {

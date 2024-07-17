@@ -58,9 +58,31 @@ class Cn5gTelemetryModel {
             })
         })
     }
+    /*
+    *   Get last x entries
+    */
+    async getLastEntries(amountOfEntries) {
+        let query = SELECT
+        let paramList = []
+
+        query += ' ORDER BY timestamp DESC LIMIT ?'
+        paramList.push(amountOfEntries)
+        console.log(query)
+        return new Promise((resolve, reject) => {
+            this.#db.all(query, paramList, (err, rows) => {
+                if (err)
+                    reject(err)
+                else
+                    resolve(rows
+                        .map(row => row.jsonData)
+                        .map(JSON.parse)
+                    )
+            })
+        })
+    }
 
     async getAll(params) {
-        let query = SELECT 
+        let query = SELECT
         const {
             timeStart,
             timeEnd,
