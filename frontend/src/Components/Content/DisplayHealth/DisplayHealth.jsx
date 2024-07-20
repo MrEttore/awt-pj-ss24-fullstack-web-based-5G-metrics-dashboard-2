@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
-import Message from '../../Message/Message';
 import {
   transformHealthData,
   aggregateLiveHealthData,
 } from '../../../Utils/transformData';
 import { getCn5gData, getLiveCn5gData } from '../../../Utils/fetching';
-import { EMPTY_MESSAGE } from '../../../Utils/constants';
+import { CN5G_MODULES, EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
@@ -22,17 +21,21 @@ export default function DisplayHealth({
 }) {
   const [healthStatus, setHealthStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
   useEffect(() => {
     if (resetFlag) setHealthStatus([]);
   }, [resetFlag]);
 
   useEffect(() => {
-    if (!requestedData && !isLiveDataToggled)
+    if (!requestedData && !isLiveDataToggled) {
       onMessage({
         type: 'warning',
-        text: 'No timespan specified. Specify a valid timespan to display the data!',
+        text: 'To display the data select a timespan or turn the live data on.',
       });
+
+      setIsLiveDataLoading(false);
+    }
   }, [requestedData, isLiveDataToggled, onMessage]);
 
   useEffect(() => {
@@ -79,6 +82,8 @@ export default function DisplayHealth({
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
+        setIsLiveDataLoading(true);
+
         const liveData = await getLiveCn5gData();
 
         const processedLiveData = transformHealthData(liveData);
@@ -104,32 +109,36 @@ export default function DisplayHealth({
 
     if (!isLiveDataToggled) return;
 
+    if (!isLiveDataLoading)
+      onMessage({ type: 'info', text: 'Activating live data ...' });
+
     const intervalId = setInterval(fetchLiveData, 3000);
-    return () => clearInterval(intervalId);
-  }, [isLiveDataToggled, onMessage, healthStatus]);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isLiveDataToggled, onMessage, healthStatus, isLiveDataLoading]);
 
   return (
-    <div
-      className={`contentHealth ${
-        !requestedData && !isLiveDataToggled ? 'noData' : ''
-      } ${isLoading ? 'loading' : ''}`}
-    >
+    <div className={`contentHealth  ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Data ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
-        <Message
-          message={{
-            type: 'info',
-            text: 'No health data to display.',
-          }}
-        />
+        <ul className="items">
+          {CN5G_MODULES.map((module, i) => {
+            return <HealthItem name={module} key={i} />;
+          })}
+        </ul>
       )}
 
       {!isLoading && (requestedData || isLiveDataToggled) && (
         <ul className="items">
-          {healthStatus.map((m, i) => {
+          {healthStatus.map((module, i) => {
             return (
-              <HealthItem name={m.moduleName} rawData={m.moduleData} key={i} />
+              <HealthItem
+                name={module.moduleName}
+                rawData={module.moduleData}
+                key={i}
+              />
             );
           })}
         </ul>
