@@ -34,10 +34,11 @@ ChartJS.register(
 );
 
 export default function HealthItem({ name, rawData = [] }) {
+  // GRAPH'S OPTIONS
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    // which plugins we want to activate
     plugins: {
       title: {
         display: true,
@@ -111,6 +112,8 @@ export default function HealthItem({ name, rawData = [] }) {
 
   const messages = rawData.map((dp) => dp.message);
 
+  // DATA'S OPTIONS
+
   const data = {
     labels: labels,
     datasets: [
@@ -126,7 +129,7 @@ export default function HealthItem({ name, rawData = [] }) {
         pointBorderColor: healthData.map((value) =>
           value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
         ),
-        pointRadius: healthData.length <= 1000 ? 2 : 1,
+        pointRadius: healthData.length <= 6 ? 4 : 1,
         pointHoverRadius: 7,
       },
     ],
