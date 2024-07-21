@@ -33,12 +33,32 @@ export async function getLiveCn5gData() {
 
     const data = await response.json();
 
-    const mostRecentLog = data[data.length - 1];
+    const mostRecentDatapoint = data[data.length - 1];
 
-    return mostRecentLog ? [mostRecentLog] : [];
-  } catch (error) {
-    console.error(error);
+    return mostRecentDatapoint ? [mostRecentDatapoint] : [];
+  } catch (err) {
+    console.error(err);
     return [];
+  }
+}
+
+export async function getRecentCn5gData() {
+  try {
+    const response = await fetch(`${CN5G_BASE_URL}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    // Get the last 6 elements of the data array
+    const recentData = data.slice(-6);
+
+    return { recentData: recentData, error: null };
+  } catch (err) {
+    return {
+      recentData: [],
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
   }
 }
 
