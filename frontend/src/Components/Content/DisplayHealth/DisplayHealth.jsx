@@ -38,7 +38,7 @@ export default function DisplayHealth({
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
       onMessage({
-        type: 'warning',
+        type: 'info',
         text: 'To display further data select a timespan or turn the live data on.',
       });
 
@@ -59,23 +59,29 @@ export default function DisplayHealth({
 
         const { data, error } = await getCn5gData(startTime, endTime);
 
+        const numDatapoints = data.length;
+
         if (error) throw new Error(error);
 
         const processedData = transformHealthData(data);
 
-        const isDataNotAvailable = processedData.every(
-          (metric) => metric.moduleData.length === 0
-        );
-
-        if (isDataNotAvailable)
+        if (numDatapoints === 0) {
           onMessage({
-            type: 'info',
+            type: 'success-queried-data-not-found',
             text: 'No health data for the selected timespan!',
           });
+          setHealthStatus(processedData);
+          return;
+        }
 
         setHealthStatus(processedData);
 
         console.log('UseEffect: Fetch queried data!');
+
+        onMessage({
+          type: 'success-queried-data-found',
+          text: `Successfully returned ${numDatapoints} datapoints!`,
+        });
       } catch (err) {
         onMessage({
           type: 'error',
@@ -113,8 +119,8 @@ export default function DisplayHealth({
         console.log('UseEffect: Fetch live data!');
 
         onMessage({
-          type: 'success',
-          text: 'Live data is ON!',
+          type: 'success-live-data',
+          text: 'Live data is on!',
         });
       } catch (err) {
         onMessage({
@@ -141,6 +147,8 @@ export default function DisplayHealth({
         setIsLoading(true);
 
         const { recentData, error } = await getRecentCn5gData();
+
+        console.log(recentData);
 
         if (error) throw new Error(error);
 
@@ -170,32 +178,38 @@ export default function DisplayHealth({
       {isLoading && <Loader>Loading Data ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
-        <ul className="items">
-          {healthStatus.map((module, i) => {
-            return (
-              <HealthItem
-                name={module.moduleName}
-                rawData={module.moduleData}
-                key={i}
-              />
-            );
-          })}
-        </ul>
+        <>
+          <div className="newDiv"></div>
+          <ul className="items">
+            {healthStatus.map((module, i) => {
+              return (
+                <HealthItem
+                  name={module.moduleName}
+                  rawData={module.moduleData}
+                  key={i}
+                />
+              );
+            })}
+          </ul>
+        </>
       )}
 
       {!isLoading && (requestedData || isLiveDataToggled) && (
-        <ul className="items">
-          {healthStatus.map((module, i) => {
-            return (
-              <HealthItem
-                name={module.moduleName}
-                rawData={module.moduleData}
-                isLoading={isLoading}
-                key={i}
-              />
-            );
-          })}
-        </ul>
+        <>
+          <div className="newDiv"></div>
+          <ul className="items">
+            {healthStatus.map((module, i) => {
+              return (
+                <HealthItem
+                  name={module.moduleName}
+                  rawData={module.moduleData}
+                  isLoading={isLoading}
+                  key={i}
+                />
+              );
+            })}
+          </ul>
+        </>
       )}
     </div>
   );

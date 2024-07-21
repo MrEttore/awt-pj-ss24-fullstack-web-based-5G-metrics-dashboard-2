@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 480px;
+  height: 555px;
   padding: 0.5rem;
   border-radius: 10px;
   border-top: 4px solid var(--color-primary-light);
@@ -15,7 +15,7 @@
 .contentLogs.live {
   display: flex;
   align-items: flex-start;
-  height: 480px;
+  height: 555px;
   padding: 0.5rem;
   border-radius: 10px;
   border-top: 4px solid var(--color-primary-light);
