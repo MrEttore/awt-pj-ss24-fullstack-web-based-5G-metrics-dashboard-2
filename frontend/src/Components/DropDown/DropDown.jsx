@@ -10,9 +10,14 @@ export default function DropDown({
   onSelectOption,
   isMulti,
   isLiveDataOn,
+  isActive,
 }) {
   return (
-    <div className={`dropdown ${name}`}>
+    <div
+      className={`dropdown ${name} ${
+        !isActive || isLiveDataOn ? 'inactive' : ''
+      }`}
+    >
       <label htmlFor="select">{label}</label>
       <Select
         className="select"
@@ -26,7 +31,7 @@ export default function DropDown({
           onSelectOption(selected);
         }}
         options={options}
-        required
+        required={!isActive ? false : true}
         isDisabled={isLiveDataOn}
       />
     </div>

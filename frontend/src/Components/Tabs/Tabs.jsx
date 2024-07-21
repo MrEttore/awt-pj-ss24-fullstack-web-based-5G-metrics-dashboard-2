@@ -16,7 +16,7 @@ export default function Tabs({ selectedTab, onSelectTab }) {
         onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
-        Health Status
+        Cn5g modules
       </Tab>
       <Tab
         value="telemetry"

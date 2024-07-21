@@ -37,9 +37,6 @@ export default function Forms({
     setSelectedDevices([]);
   }
 
-  // TODO: handle live data
-  // ...
-
   function handleSubmitHealth(e) {
     e.preventDefault();
 
@@ -90,7 +87,8 @@ export default function Forms({
     handleResetForm();
   }
 
-  // Load the devices for the dropdown
+  // GET LIST OF AVAILABLE DEVICES
+
   useEffect(() => {
     const getDevices = async () => {
       try {
@@ -109,7 +107,8 @@ export default function Forms({
     getDevices();
   }, []);
 
-  // Load the metrics for the dropdown
+  // GET LIST OF AVAILABLE METRICS
+
   useEffect(() => {
     function getMetrics(metricsArray) {
       const metrics = metricsArray.map((m) => {
@@ -124,7 +123,7 @@ export default function Forms({
     getMetrics(DASHBOARD_METRICS);
   }, []);
 
-  // Clear input fields when live data is on
+  // CLEAR INPUT FIELDS WHEN LIVE DATA IS ON
   useEffect(() => {
     if (isLiveDataToggled) handleResetForm();
   }, [isLiveDataToggled]);
@@ -133,6 +132,10 @@ export default function Forms({
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
+          <DropDown name="devices" label="devices" isActive={false} />
+
+          <DropDown name="metrics" label="metrics" isActive={false} />
+
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
@@ -168,6 +171,7 @@ export default function Forms({
             }
             isMulti={false}
             isLiveDataOn={isLiveDataToggled}
+            isActive={true}
           />
 
           <DropDown
@@ -178,6 +182,7 @@ export default function Forms({
             onSelectOption={setSelectedMetrics}
             isMulti={true}
             isLiveDataOn={isLiveDataToggled}
+            isActive={true}
           />
 
           <TimespanSelector
@@ -203,6 +208,10 @@ export default function Forms({
 
       {selectedTab === 'logs' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
+          <DropDown name="devices" label="devices" isActive={false} />
+
+          <DropDown name="metrics" label="metrics" isActive={false} />
+
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
