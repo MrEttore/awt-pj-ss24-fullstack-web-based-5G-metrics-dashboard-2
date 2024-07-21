@@ -16,26 +16,38 @@ export default function DisplayTelemetry({
   requestedData,
   onMessage,
   resetFlag,
+  isLiveDataToggled,
 }) {
   const [telemetryStatus, setTelemetryStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
   // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
+
+  // RESET HEALTH STATUS
 
   useEffect(() => {
     if (resetFlag) setTelemetryStatus([]);
   }, [resetFlag]);
 
+  // SET INITIAL UI MESSAGE
+
+  useEffect(() => {
+    if (!requestedData && !isLiveDataToggled) {
+      onMessage({
+        type: 'info',
+        text: 'To display further data select a timespan or turn the live data on.',
+      });
+
+      setIsLiveDataLoading(false);
+      setTelemetryStatus([]);
+    }
+  }, [requestedData, isLiveDataToggled, onMessage]);
+
+  // FETCH QUERIED DATA
+
   useEffect(() => {
     const fetchTelemetryData = async () => {
-      if (!requestedData) {
-        onMessage({
-          type: 'warning',
-          text: 'No timespan specified. Specify a valid timespan to display the data!',
-        });
-        return;
-      }
-
       try {
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
@@ -50,26 +62,32 @@ export default function DisplayTelemetry({
           device.value
         );
 
+        const numDatapoints = data.length;
+
         if (error) throw new Error(error);
 
         const processedData = transformTelemetryData(data);
+
+        if (numDatapoints === 0) {
+          onMessage({
+            type: 'success-queried-data-not-found',
+            text: 'No telemetry data for the selected timespan!',
+          });
+          setTelemetryStatus(processedData);
+          return;
+        }
 
         const filteredTelemetryData = filterRequestedTelemetryData(
           processedData,
           requestedData
         );
 
-        const isDataNotAvailable = filteredTelemetryData.every(
-          (metric) => metric.metricData.length === 0
-        );
-
-        if (isDataNotAvailable)
-          onMessage({
-            type: 'info',
-            text: 'No telemetry data for the selected timespan!',
-          });
-
         setTelemetryStatus(filteredTelemetryData);
+
+        onMessage({
+          type: 'success-queried-data-found',
+          text: `Successfully returned ${numDatapoints} datapoints!`,
+        });
       } catch (error) {
         onMessage({
           type: 'error',
@@ -81,8 +99,16 @@ export default function DisplayTelemetry({
       }
     };
 
+    if (!requestedData) return;
+
     fetchTelemetryData();
   }, [requestedData, onMessage]);
+
+  // FETCH LIVE DATA
+  // ...
+
+  // FETCH RECENT DATA
+  // ...
 
   return (
     <div
