@@ -27,6 +27,38 @@ export function transformHealthData(data) {
   return result;
 }
 
+export function aggregateLiveHealthData(existingData, newData) {
+  const aggregatedData = {};
+
+  // Aggregate existing data
+  existingData.forEach((module) => {
+    aggregatedData[module.moduleName] = {
+      moduleName: module.moduleName,
+      moduleData: [...module.moduleData],
+    };
+  });
+
+  // Aggregate new data
+  newData.forEach((module) => {
+    const moduleName = module.moduleName;
+    if (!aggregatedData[moduleName]) {
+      aggregatedData[moduleName] = {
+        moduleName: moduleName,
+        moduleData: [],
+      };
+    }
+    aggregatedData[moduleName].moduleData.push(...module.moduleData);
+
+    // Ensure only the latest 6 entries are kept
+    if (aggregatedData[moduleName].moduleData.length > 6) {
+      aggregatedData[moduleName].moduleData =
+        aggregatedData[moduleName].moduleData.slice(-6);
+    }
+  });
+
+  return Object.values(aggregatedData);
+}
+
 export function transformTelemetryData(data) {
   // Initialize the structure to store each module's data
   const metricData = {};
@@ -66,36 +98,4 @@ export function filterRequestedTelemetryData(data, filters) {
   );
 
   return filteredMetricData;
-}
-
-export function aggregateLiveHealthData(existingData, newData) {
-  const aggregatedData = {};
-
-  // Aggregate existing data
-  existingData.forEach((module) => {
-    aggregatedData[module.moduleName] = {
-      moduleName: module.moduleName,
-      moduleData: [...module.moduleData],
-    };
-  });
-
-  // Aggregate new data
-  newData.forEach((module) => {
-    const moduleName = module.moduleName;
-    if (!aggregatedData[moduleName]) {
-      aggregatedData[moduleName] = {
-        moduleName: moduleName,
-        moduleData: [],
-      };
-    }
-    aggregatedData[moduleName].moduleData.push(...module.moduleData);
-
-    // Ensure only the latest 6 entries are kept
-    if (aggregatedData[moduleName].moduleData.length > 6) {
-      aggregatedData[moduleName].moduleData =
-        aggregatedData[moduleName].moduleData.slice(-6);
-    }
-  });
-
-  return Object.values(aggregatedData);
 }
