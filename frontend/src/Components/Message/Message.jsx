@@ -1,6 +1,7 @@
 import { IoWarningOutline } from 'react-icons/io5';
 import { BiErrorAlt } from 'react-icons/bi';
 import { FiInfo } from 'react-icons/fi';
+import { HiStatusOnline } from 'react-icons/hi';
 import './Message.css';
 
 export default function Message({ message }) {
@@ -38,7 +39,7 @@ export default function Message({ message }) {
       {message.type === 'success' && (
         <div className="success">
           <span className="messageIcon">
-            <FiInfo />
+            <HiStatusOnline />
           </span>
           <p className="messageText">{message.text}</p>
         </div>
