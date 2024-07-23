@@ -1,7 +1,7 @@
 @import url('../../../Styles/variables.css');
 
 .contentTelemetry {
-  height: 555px;
+  height: calc(100vh - 4rem - 0.6rem - 105px - 4.9rem);
   padding: 0.5rem;
   border-radius: 10px;
   border-top: 4px solid var(--color-primary-light);
