@@ -16,6 +16,7 @@ class AbstractController {
     init(app) {
         app.get('/', async (req, res) => await this.getAll(req, res));
         app.get('/:id', async (req, res) => await this.get(req, res));
+        app.get('/lastEntries/:amount', async (req, res) => await this.getLastEntries(req, res));
         app.post('/', async (req, res) => await this.add(req, res));
         app.delete('/:id', async (req, res) => await this.remove(req, res)); // Assuming you want to add a remove operation
 
@@ -54,7 +55,23 @@ class AbstractController {
             res.status(500).json({ error: 'An error occurred while retrieving data' });
         }
     }
+    /* Controller for get operation */
+    async getLastEntries(req, res) {
+        try {
+            console.log('getLastEntries');
+            const AMOUNT = req.params.amount;
+            const row = await this.#model.getLastEntries(AMOUNT);
 
+            if (!row) {
+                return res.status(404).json({ error: 'Data not found' });
+            }
+
+            res.json(row);
+        } catch (error) {
+            console.error('Error retrieving data:', error);
+            res.status(500).json({ error: 'An error occurred while retrieving data' });
+        }
+    }
     /* Controller for add operation */
     async add(req, res) {
         try {

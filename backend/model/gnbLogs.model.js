@@ -33,9 +33,17 @@ class GnbLogsModel {
                  AND timestamp <= ?`
         }
         return new Promise((resolve, reject) => {
-            this.#db.all(query, [timeStart, timeEnd], (err, rows) => {
-                if (err) reject(err)
-                else resolve(rows)
+            this.#db.all(query, paramList, (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    let results = rows.map(row => row.jsonData).map(JSON.parse);
+                    if (results.length > 100) {
+                        const step = Math.ceil(results.length / 100);
+                        results = results.filter((_, index) => index % step === 0);
+                    }
+                    resolve(results);
+                }
             });
         });
     }
