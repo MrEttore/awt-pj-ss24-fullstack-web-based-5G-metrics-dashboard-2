@@ -73,16 +73,8 @@ module.exports.getAll = async function (params) {
     let paramList = []
 
     if (ueId) {
-        // Split ueId into an array of integers
-        const ueIds = ueId.split(',').map(id => parseInt(id.trim(), 10)).filter(id => !isNaN(id));
-    
-        if (ueIds.length > 0) {
-            // Generate placeholders for the query
-            const placeholders = ueIds.map(() => '?').join(',');
-            
-            query += ` AND ueId IN (${placeholders})`;
-            paramList.push(...ueIds);
-        }
+        query += " AND ueId = ?"
+        paramList.push(ueId)
     }
     if (timeStart && timeEnd) {
         query += `

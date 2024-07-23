@@ -58,16 +58,25 @@ class Cn5gTelemetryModel {
             })
         })
     }
-    /*
-    *   Get last x entries
-    */
-    async getLastEntries(amountOfEntries) {
-        let query = SELECT
-        let paramList = []
 
-        query += ' ORDER BY timestamp DESC LIMIT ?'
-        paramList.push(amountOfEntries)
-        console.log(query)
+    /*
+    *   Get all matching entries
+    *   Params: timeStart, timeEnd
+    */
+    async getAll(params) {
+        let query = SELECT
+        const {
+            timeStart,
+            timeEnd,
+        } = params
+
+        let paramList = []
+        if (timeStart && timeEnd && !isNaN(parseInt(timeStart)) && !isNaN(parseInt(timeEnd))) {
+            console.log("Params provided.")
+            query += ' WHERE ? <= timestamp AND timestamp <= ?'
+            paramList.push(timeStart, timeEnd)
+        }
+
         return new Promise((resolve, reject) => {
             this.#db.all(query, paramList, (err, rows) => {
                 if (err)
@@ -79,38 +88,8 @@ class Cn5gTelemetryModel {
                     )
             })
         })
+
     }
-
-    async getAll(params) {
-        let query = SELECT
-        const {
-            timeStart,
-            timeEnd,
-        } = params;
-
-        let paramList = [];
-        if (timeStart && timeEnd && !isNaN(parseInt(timeStart)) && !isNaN(parseInt(timeEnd))) {
-            console.log("Params provided.");
-            query += ' WHERE ? <= timestamp AND timestamp <= ?';
-            paramList.push(timeStart, timeEnd);
-        }
-
-        return new Promise((resolve, reject) => {
-            this.#db.all(query, paramList, (err, rows) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    let results = rows.map(row => row.jsonData).map(JSON.parse);
-                    if (results.length > 100) {
-                        const step = Math.ceil(results.length / 100);
-                        results = results.filter((_, index) => index % step === 0);
-                    }
-                    resolve(results);
-                }
-            });
-        });
-    }
-
 
     /*
     *   Insert new entry

@@ -87,8 +87,6 @@ curl -X GET "http://localhost:3000/api/cn5g/telemetry?timeStart=1&timeEnd=171507
 
 curl -X GET "http://localhost:3000/api/cn5g/telemetry/1"
 
-curl -X GET "http://localhost:3000/api/cn5g/telemetry/lastEntries/10"
-
 curl -X POST "http://localhost:3000/api/cn5g/telemetry" \
      -H "Content-Type: application/json" \
      -d '{
