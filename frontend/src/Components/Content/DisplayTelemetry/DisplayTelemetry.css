@@ -9,6 +9,12 @@
   background-color: var(--color-background-500);
 }
 
+.newDiv {
+  min-height: 4rem;
+  border: 2px solid var(--color-background-900);
+  border-radius: 10px;
+}
+
 .contentTelemetry.noData {
   display: flex;
   align-items: center;
