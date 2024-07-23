@@ -3,7 +3,10 @@ import { Line } from 'react-chartjs-2';
 import './HealthItem.css';
 import {
   COLOR_MODULE_ON,
+  COLOR_MODULE_STARTING,
   COLOR_MODULE_OFF,
+  COLOR_MODULE_NOT_IMPLEMENTED,
+  COLOR_MODULE_UNKNOWN,
   COLOR_LABEL_TEXT,
   COLOR_LABEL_TEXT_NO_DATA,
   COLOR_AXIS_BORDER,
@@ -84,7 +87,7 @@ export default function HealthItem({ name, rawData = [] }) {
       y: {
         display: true,
         type: 'category',
-        labels: ['ON', 'OFF'],
+        labels: ['HEALTHY', 'STARTING', 'STOPPED', 'NOT IMP.'],
         offset: true,
         position: 'left',
         stack: 'demo',
@@ -112,6 +115,20 @@ export default function HealthItem({ name, rawData = [] }) {
 
   const messages = rawData.map((dp) => dp.message);
 
+  const statusMapping = {
+    Healthy: 'HEALTHY',
+    Starting: 'STARTING',
+    Stopped: 'STOPPED',
+    NotImplemented: 'NOT IMP.',
+  };
+
+  const colorMapping = {
+    Healthy: COLOR_MODULE_ON,
+    Starting: COLOR_MODULE_STARTING,
+    Stopped: COLOR_MODULE_OFF,
+    NotImplemented: COLOR_MODULE_NOT_IMPLEMENTED,
+  };
+
   // DATA'S OPTIONS
 
   const data = {
@@ -119,15 +136,15 @@ export default function HealthItem({ name, rawData = [] }) {
     datasets: [
       {
         label: 'Health',
-        data: healthData.map((value) => (value === 'Healthy' ? 'ON' : 'OFF')),
+        data: healthData.map((value) => statusMapping[value] || 'UNKNOWN'),
         borderColor: COLOR_DATASET_LINE,
         fill: false,
         stepped: true,
-        pointBackgroundColor: healthData.map((value) =>
-          value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
+        pointBackgroundColor: healthData.map(
+          (value) => colorMapping[value] || COLOR_MODULE_UNKNOWN
         ),
-        pointBorderColor: healthData.map((value) =>
-          value === 'Healthy' ? COLOR_MODULE_ON : COLOR_MODULE_OFF
+        pointBorderColor: healthData.map(
+          (value) => colorMapping[value] || COLOR_MODULE_UNKNOWN
         ),
         pointRadius: healthData.length <= 6 ? 4 : 1,
         pointHoverRadius: 7,
