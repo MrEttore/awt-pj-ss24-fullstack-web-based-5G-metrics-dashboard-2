@@ -2,6 +2,8 @@ const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 
+const model = require('../model/messages.model');
+
 // Pfad zur JSON-Datei
 const filePath = path.join(__dirname, 'dashboard.oaibox.com.har');
 
@@ -35,12 +37,16 @@ async function loadData() {
                                 endpoint = '/api/cn5g/telemetry';
                                 console.log(payload)
                             } else {
-                                console.error(`Unbekannter Topic-Typ: ${topic}`);
-                                continue;
+                                // console.error(`Unbekannter Topic-Typ: ${topic}`);
+                                // continue;
                             }
 
                             // Senden der Daten an das Backend
-                            await sendToBackend(endpoint, payload);
+                            // await sendToBackend(endpoint, payload);
+
+                            const timestamp = payload.timestamp
+
+                            await model.add(timestamp, topic, match[2])
                         }
                     }
                 }

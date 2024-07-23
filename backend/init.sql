@@ -71,6 +71,21 @@ CREATE TABLE IF NOT EXISTS GnbLogs (
     timestamp BIGINT,
     payload TEXT
 );
+DROP TABLE IF EXISTS Messages;
+CREATE TABLE IF NOT EXISTS Messages (
+    rowId INTEGER PRIMARY KEY,
+    timestamp BIGINT NOT NULL,
+    destination TEXT NOT NULL,
+    payload TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS Ues;
+CREATE TABLE IF NOT EXISTS Ues (
+    rowId INTEGER PRIMARY KEY,
+    timestamp BIGINT NOT NULL,
+    ueId TEXT NOT NULL
+);
+
 
 INSERT INTO GnbLogs (timestamp, payload) VALUES
 (1715076990535, "[NR_MAC]   Frame.Slot 512.0");
