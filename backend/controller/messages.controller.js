@@ -30,7 +30,7 @@ module.exports.add = async function (req, res) {
  */
 module.exports.get = async function (req, res) {
     try {
-        const { topic, timeStart, timeEnd } = req.query;
+        const { topic, timeStart, timeEnd, limit } = req.query;
 
         if (!topic) {
             return res.status(400).json({ error: 'Missing required parameter: topic' });
@@ -52,7 +52,7 @@ module.exports.get = async function (req, res) {
                 return res.status(400).json({ error: 'Invalid topic parameter' });
         }
 
-        const data = await model.get(internalTopic, timeStart, timeEnd);
+        const data = await model.get(internalTopic, timeStart, timeEnd, limit);
         return res.status(200).json(data);
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
@@ -64,9 +64,9 @@ module.exports.get = async function (req, res) {
  */
 module.exports.getLogs = async function (req, res) {
     try {
-        const { timeStart, timeEnd } = req.query;
+        const { timeStart, timeEnd, limit } = req.query;
 
-        const data = await model.get(model.topics.LOGS, timeStart, timeEnd);
+        const data = await model.get(model.topics.LOGS, timeStart, timeEnd, limit);
         return res.status(200).json(data);
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
@@ -78,9 +78,9 @@ module.exports.getLogs = async function (req, res) {
  */
 module.exports.getHealth = async function (req, res) {
     try {
-        const { timeStart, timeEnd } = req.query;
+        const { timeStart, timeEnd, limit } = req.query;
 
-        const data = await model.get(model.topics.HEALTH, timeStart, timeEnd);
+        const data = await model.get(model.topics.HEALTH, timeStart, timeEnd, limit);
         return res.status(200).json(data);
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
@@ -92,7 +92,7 @@ module.exports.getHealth = async function (req, res) {
  */
 module.exports.getTelemetry = async function (req, res) {
     try {
-        const { timeStart, timeEnd, ueIds } = req.query;
+        const { timeStart, timeEnd, ueIds, limit } = req.query;
 
         // Convert ueIds to an array of integers
         let ueIdArray = [];
@@ -100,7 +100,7 @@ module.exports.getTelemetry = async function (req, res) {
             ueIdArray = ueIds.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
         }
 
-        const data = await model.getTelemetry(timeStart, timeEnd, ueIdArray);
+        const data = await model.getTelemetry(timeStart, timeEnd, limit, ueIdArray);
         return res.status(200).json(data);
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
