@@ -2,13 +2,11 @@
 
 .tabContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  height: 3rem;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 13.5%;
+  height: auto;
   border-radius: 10px;
   background-color: var(--color-background-500);
-
-  padding: 0.5rem;
-  width: 40%;
+  padding: 0.2rem;
 }

@@ -2,7 +2,7 @@
 
 .controlsContainer {
   display: flex;
-  flex-direction: column;
-
-  gap: 0.5rem;
+  flex-direction: row;
+  height: auto;
+  gap: 0.3rem;
 }

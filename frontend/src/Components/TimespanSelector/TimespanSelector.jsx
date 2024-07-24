@@ -13,7 +13,9 @@ export default function TimespanSelector({
 }) {
   return (
     <div className="timeSpanContainer">
-      <label htmlFor="time">{label}</label>
+      <label htmlFor="time" className={`${isLiveDataOn ? 'inactive' : ''}`}>
+        {label}
+      </label>
       <div className="inputContainer">
         {/* TODO: add "required"? */}
 
@@ -22,7 +24,7 @@ export default function TimespanSelector({
           onChange={(date) => onInputStartTime(date)}
           showTimeSelect
           dateFormat="dd/MM/yyyy, HH:mm"
-          placeholderText={`${isLiveDataOn ? '' : 'From ...'}`}
+          placeholderText="From ..."
           disabled={isLiveDataOn}
         />
         <DatePicker
@@ -30,7 +32,7 @@ export default function TimespanSelector({
           onChange={(date) => onInputEndTime(date)}
           showTimeSelect
           dateFormat="dd/MM/yyyy, HH:mm"
-          placeholderText={`${isLiveDataOn ? '' : 'To ...'}`}
+          placeholderText="To ..."
           disabled={isLiveDataOn}
         />
       </div>

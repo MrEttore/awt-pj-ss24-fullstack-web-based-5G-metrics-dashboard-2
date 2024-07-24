@@ -61,7 +61,6 @@ function Main() {
     <main className="main">
       <ControlBar>
         <Tabs selectedTab={selectedTab} onSelectTab={handleSelectedTab} />
-
         <Forms
           selectedTab={selectedTab}
           onDataRequest={handleDataRequest}
@@ -69,12 +68,12 @@ function Main() {
           isLiveDataToggled={isLiveDataToggled}
           onToggleLiveData={handleLiveDataToggle}
         />
-
-        <InformationDisplay>
-          <Filters filters={requestedData} isThereError={error} />
-          <Messages message={message} />
-        </InformationDisplay>
       </ControlBar>
+
+      <InformationDisplay>
+        <Filters filters={requestedData} isThereError={error} />
+        <Messages message={message} />
+      </InformationDisplay>
 
       <Content
         selectedTab={selectedTab}

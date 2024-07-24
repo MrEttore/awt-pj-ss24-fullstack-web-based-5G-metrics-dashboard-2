@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-left: auto;
 }
 
 /** Btn SUBMIT */
@@ -22,14 +23,9 @@
 }
 
 .btnSubmit:disabled {
-  color: var(--color-background-100);
-  background-color: var(--color-background-100);
+  pointer-events: none;
+  opacity: 0.5;
   cursor: not-allowed;
-  border: 2px solid var(--color-background-900);
-  border-radius: 30px;
-  width: 0.5rem;
-  position: relative;
-  overflow: hidden;
 }
 
 .btnSubmit:disabled::after {
@@ -56,14 +52,9 @@
 }
 
 .btnReset:disabled {
-  color: var(--color-background-100);
-  background-color: var(--color-background-100);
+  pointer-events: none;
+  opacity: 0.5;
   cursor: not-allowed;
-  border: 2px solid var(--color-background-900);
-  border-radius: 30px;
-  width: 0.5rem;
-  position: relative;
-  overflow: hidden;
 }
 
 .btnReset:disabled::after {

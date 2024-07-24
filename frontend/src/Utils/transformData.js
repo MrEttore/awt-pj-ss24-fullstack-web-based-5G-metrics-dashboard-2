@@ -1,30 +1,71 @@
 import { CN5G_MODULES, DASHBOARD_METRICS } from './constants.js';
 
 export function transformHealthData(data) {
-  // Initialize the structure to store each module's data
   const moduleData = {};
   CN5G_MODULES.forEach((module) => {
     moduleData[module] = [];
   });
 
-  // Process each record
   data.forEach((record) => {
     const timestamp = record.timestamp;
     CN5G_MODULES.forEach((module) => {
-      if (record[module]) {
+      if (record[module] && typeof record[module] === 'object') {
         const { status, message } = record[module];
         moduleData[module].push({ timestamp, status, message });
+      } else if (record[module] === null) {
+        moduleData[module].push({
+          timestamp,
+          status: 'null',
+          message: 'retured status: null',
+        });
+      } else if (typeof record[module] === 'string') {
+        moduleData[module].push({
+          timestamp,
+          status: record[module],
+          message: '',
+        });
       }
     });
   });
 
-  // Convert the object to an array of objects
   const result = CN5G_MODULES.map((module) => ({
     moduleName: module,
     moduleData: moduleData[module],
   }));
 
   return result;
+}
+
+export function aggregateLiveHealthData(existingData, newData) {
+  const aggregatedData = {};
+
+  // Aggregate existing data
+  existingData.forEach((module) => {
+    aggregatedData[module.moduleName] = {
+      moduleName: module.moduleName,
+      moduleData: [...module.moduleData],
+    };
+  });
+
+  // Aggregate new data
+  newData.forEach((module) => {
+    const moduleName = module.moduleName;
+    if (!aggregatedData[moduleName]) {
+      aggregatedData[moduleName] = {
+        moduleName: moduleName,
+        moduleData: [],
+      };
+    }
+    aggregatedData[moduleName].moduleData.push(...module.moduleData);
+
+    // Ensure only the latest 6 entries are kept
+    if (aggregatedData[moduleName].moduleData.length > 6) {
+      aggregatedData[moduleName].moduleData =
+        aggregatedData[moduleName].moduleData.slice(-6);
+    }
+  });
+
+  return Object.values(aggregatedData);
 }
 
 export function transformTelemetryData(data) {
@@ -66,36 +107,4 @@ export function filterRequestedTelemetryData(data, filters) {
   );
 
   return filteredMetricData;
-}
-
-export function aggregateLiveHealthData(existingData, newData) {
-  const aggregatedData = {};
-
-  // Aggregate existing data
-  existingData.forEach((module) => {
-    aggregatedData[module.moduleName] = {
-      moduleName: module.moduleName,
-      moduleData: [...module.moduleData],
-    };
-  });
-
-  // Aggregate new data
-  newData.forEach((module) => {
-    const moduleName = module.moduleName;
-    if (!aggregatedData[moduleName]) {
-      aggregatedData[moduleName] = {
-        moduleName: moduleName,
-        moduleData: [],
-      };
-    }
-    aggregatedData[moduleName].moduleData.push(...module.moduleData);
-
-    // Ensure only the latest 6 entries are kept
-    if (aggregatedData[moduleName].moduleData.length > 6) {
-      aggregatedData[moduleName].moduleData =
-        aggregatedData[moduleName].moduleData.slice(-6);
-    }
-  });
-
-  return Object.values(aggregatedData);
 }

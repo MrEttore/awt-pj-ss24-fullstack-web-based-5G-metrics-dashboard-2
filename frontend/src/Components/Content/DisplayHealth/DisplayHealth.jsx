@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
-import Message from '../../Message/Message';
 import {
   transformHealthData,
   aggregateLiveHealthData,
 } from '../../../Utils/transformData';
-import { getCn5gData, getLiveCn5gData } from '../../../Utils/fetching';
+import {
+  getCn5gData,
+  getLiveCn5gData,
+  getRecentCn5gData,
+} from '../../../Utils/fetching';
 import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
@@ -22,18 +25,29 @@ export default function DisplayHealth({
 }) {
   const [healthStatus, setHealthStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
+
+  // RESET HEALTH STATUS
 
   useEffect(() => {
     if (resetFlag) setHealthStatus([]);
   }, [resetFlag]);
 
+  // SET INITIAL UI MESSAGE
+
   useEffect(() => {
-    if (!requestedData && !isLiveDataToggled)
+    if (!requestedData && !isLiveDataToggled) {
       onMessage({
-        type: 'warning',
-        text: 'No timespan specified. Specify a valid timespan to display the data!',
+        type: 'info',
+        text: 'To display further data select a timespan or turn the live data on.',
       });
+
+      setIsLiveDataLoading(false);
+      setHealthStatus([]);
+    }
   }, [requestedData, isLiveDataToggled, onMessage]);
+
+  // FETCH QUERIED DATA
 
   useEffect(() => {
     const fetchHealthData = async () => {
@@ -45,25 +59,33 @@ export default function DisplayHealth({
 
         const { data, error } = await getCn5gData(startTime, endTime);
 
+        const numDatapoints = data.length;
+
         if (error) throw new Error(error);
 
         const processedData = transformHealthData(data);
 
-        const isDataNotAvailable = processedData.every(
-          (metric) => metric.moduleData.length === 0
-        );
-
-        if (isDataNotAvailable)
+        if (numDatapoints === 0) {
           onMessage({
-            type: 'info',
+            type: 'success-queried-data-not-found',
             text: 'No health data for the selected timespan!',
           });
+          setHealthStatus(processedData);
+          return;
+        }
 
         setHealthStatus(processedData);
-      } catch (error) {
+
+        console.log('UseEffect: Fetch queried data!');
+
+        onMessage({
+          type: 'success-queried-data-found',
+          text: `Successfully returned ${numDatapoints} datapoints!`,
+        });
+      } catch (err) {
         onMessage({
           type: 'error',
-          text: error.message,
+          text: err.message,
         });
         setHealthStatus([]);
       } finally {
@@ -76,9 +98,13 @@ export default function DisplayHealth({
     fetchHealthData();
   }, [requestedData, onMessage]);
 
+  // FETCH LIVE DATA
+
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
+        setIsLiveDataLoading(true);
+
         const liveData = await getLiveCn5gData();
 
         const processedLiveData = transformHealthData(liveData);
@@ -90,11 +116,13 @@ export default function DisplayHealth({
 
         setHealthStatus(aggregatedLiveData);
 
+        console.log('UseEffect: Fetch live data!');
+
         onMessage({
-          type: 'success',
-          text: 'Live data is ON!',
+          type: 'success-live-data',
+          text: 'Live data is on!',
         });
-      } catch (error) {
+      } catch (err) {
         onMessage({
           type: 'error',
           text: 'Live data is not available!',
@@ -104,35 +132,84 @@ export default function DisplayHealth({
 
     if (!isLiveDataToggled) return;
 
+    if (!isLiveDataLoading)
+      onMessage({ type: 'info', text: 'Activating live data ...' });
+
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
-  }, [isLiveDataToggled, onMessage, healthStatus]);
+  }, [isLiveDataToggled, onMessage, healthStatus, isLiveDataLoading]);
+
+  // FETCH RECENT DATA
+
+  useEffect(() => {
+    const fetchRecentData = async () => {
+      try {
+        setIsLoading(true);
+
+        const { recentData, error } = await getRecentCn5gData();
+
+        console.log(recentData);
+
+        if (error) throw new Error(error);
+
+        const processedRecentData = transformHealthData(recentData);
+
+        setHealthStatus(processedRecentData);
+
+        console.log('UseEffect: Fetch recent data!');
+      } catch (err) {
+        onMessage({
+          type: 'error',
+          text: err.message,
+        });
+        setHealthStatus([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (requestedData || isLiveDataToggled) return;
+
+    fetchRecentData();
+  }, [onMessage, requestedData, isLiveDataToggled]);
 
   return (
-    <div
-      className={`contentHealth ${
-        !requestedData && !isLiveDataToggled ? 'noData' : ''
-      } ${isLoading ? 'loading' : ''}`}
-    >
+    <div className={`contentHealth  ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Data ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
-        <Message
-          message={{
-            type: 'info',
-            text: 'No health data to display.',
-          }}
-        />
+        <>
+          <div className="newDiv"></div>
+          <ul className="items">
+            {healthStatus.map((module, i) => {
+              return (
+                <HealthItem
+                  name={module.moduleName}
+                  rawData={module.moduleData}
+                  key={i}
+                />
+              );
+            })}
+          </ul>
+        </>
       )}
 
       {!isLoading && (requestedData || isLiveDataToggled) && (
-        <ul className="items">
-          {healthStatus.map((m, i) => {
-            return (
-              <HealthItem name={m.moduleName} rawData={m.moduleData} key={i} />
-            );
-          })}
-        </ul>
+        <>
+          <div className="newDiv"></div>
+          <ul className="items">
+            {healthStatus.map((module, i) => {
+              return (
+                <HealthItem
+                  name={module.moduleName}
+                  rawData={module.moduleData}
+                  isLoading={isLoading}
+                  key={i}
+                />
+              );
+            })}
+          </ul>
+        </>
       )}
     </div>
   );

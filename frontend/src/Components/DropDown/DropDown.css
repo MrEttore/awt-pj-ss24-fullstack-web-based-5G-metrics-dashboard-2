@@ -14,16 +14,19 @@
   padding: 0.3rem;
 }
 
+.inactive {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 /** custom CSS for the <Select/> component **/
 
 .select .react-select__placeholder {
-  /* Styles for the placeholder */
   font-size: 0.8rem;
   text-transform: initial;
   color: var(--color-background-500);
 }
 .select .react-select__control {
-  /* Styles for the control */
   padding: 8px;
   align-items: center;
 }
@@ -32,12 +35,7 @@
   cursor: not-allowed;
 }
 
-.react-select__control--is-disabled .react-select__placeholder {
-  opacity: 0;
-}
-
 .select .react-select__menu {
-  /* Styles for the menu */
   display: flex;
   flex-direction: column;
   width: 12rem;
@@ -50,7 +48,6 @@
 }
 
 .select .react-select__option {
-  /* Styles for the options */
   display: flex;
   justify-content: center;
   padding: 8px;
@@ -61,46 +58,37 @@
 }
 
 .select .react-select__option:hover {
-  /* Hover styles for the options */
   transition: all 0.1s;
   border-radius: 30px;
   font-weight: bolder;
 }
 
 .select .react-select__indicators {
-  /* Styles for the arrow */
   color: var(--color-background-900);
 }
 
 .select .react-select__single-value {
-  /* Styles for the single value */
-  /* background-color: #f0f0f0; */
   border-radius: 2px;
   color: var(--color-background-900);
   padding: 2px;
 }
 
 .select .react-select__multi-value {
-  /* Styles for the multi value */
-  /* background-color: #f0f0f0; */
   border-radius: 2px;
   color: #080f25;
   padding: 2px;
 }
 
 .select .react-select__multi-value__label {
-  /* Styles for the label of multi value */
   color: #080f25;
   font-size: 0.85rem;
 }
 
 .select .react-select__multi-value__remove {
-  /* Styles for the remove button of multi value */
   color: red;
   cursor: pointer;
 }
 
 .select .react-select__multi-value__remove:hover {
-  /* Hover styles for the remove button of multi value */
   color: #800020;
 }

@@ -16,18 +16,29 @@ export default function DisplayLogs({
 }) {
   const [logsStatus, setLogsStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
+
+  // RESET HEALTH STATUS
 
   useEffect(() => {
     if (resetFlag) setLogsStatus([]);
   }, [resetFlag]);
 
+  // SET INITIAL UI MESSAGE
+
   useEffect(() => {
-    if (!requestedData && !isLiveDataToggled)
+    if (!requestedData && !isLiveDataToggled) {
       onMessage({
-        type: 'warning',
-        text: 'No timespan specified. Specify a valid timespan to display the data!',
+        type: 'info',
+        text: 'To display further data select a timespan or turn the live data on.',
       });
+
+      setIsLiveDataLoading(false);
+      setLogsStatus([]);
+    }
   }, [requestedData, isLiveDataToggled, onMessage]);
+
+  // FETCH QUERIED DATA
 
   useEffect(() => {
     const fetchLogsData = async () => {
@@ -39,17 +50,25 @@ export default function DisplayLogs({
 
         const { data, error } = await getGnbLogs(startTime, endTime);
 
+        const numDatapoints = data.length;
+
         if (error) throw new Error(error);
 
-        const isDataNotAvailable = data.length === 0;
-
-        if (isDataNotAvailable)
+        if (numDatapoints === 0) {
           onMessage({
-            type: 'info',
+            type: 'success-queried-data-not-found',
             text: 'No logs for the selected timespan!',
           });
+          setLogsStatus(data);
+          return;
+        }
 
         setLogsStatus(data);
+
+        onMessage({
+          type: 'success-queried-data-found',
+          text: `Successfully returned ${numDatapoints} logs!`,
+        });
       } catch (error) {
         onMessage({
           type: 'error',
@@ -66,16 +85,20 @@ export default function DisplayLogs({
     fetchLogsData();
   }, [requestedData, onMessage]);
 
+  // FETCH LIVE DATA
+
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
+        setIsLiveDataLoading(true);
+
         const liveData = await getLiveGnbLogs();
 
         setLogsStatus((prevLogs) => [...liveData, ...prevLogs]);
 
         onMessage({
-          type: 'success',
-          text: 'Live data is ON!',
+          type: 'success-live-data',
+          text: 'Live data is on!',
         });
       } catch (error) {
         onMessage({
@@ -87,9 +110,15 @@ export default function DisplayLogs({
 
     if (!isLiveDataToggled) return;
 
+    if (!isLiveDataLoading)
+      onMessage({ type: 'info', text: 'Activating live data ...' });
+
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
-  }, [isLiveDataToggled, onMessage]);
+  }, [isLiveDataToggled, onMessage, isLiveDataLoading]);
+
+  // FETCH RECENT DATA
+  // ...
 
   return (
     <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>
