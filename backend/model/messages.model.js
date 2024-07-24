@@ -1,4 +1,5 @@
-const db = require("../database/sqlite3")
+const db = require("../database/sqlite3");
+const queries = require('../sql/messages.sql');
 
 module.exports.topics = {
     TELEMETRY: 'gnb.telemetry',
@@ -72,12 +73,7 @@ module.exports.add = async function (timestamp, destination, payload) {
 
 async function addUe(timestamp, ueId) {
     return new Promise((resolve, reject) => {
-
-        const insert = `
-        INSERT INTO Ues (timestamp, ueId)
-        VALUES ( ?, ? )`
-
-        db.run(insert, [timestamp, ueId], function (err) {
+        db.run(queries.ADD_UE, [timestamp, ueId], function (err) {
             if (err) {
                 return reject(err)
             }
@@ -88,9 +84,6 @@ async function addUe(timestamp, ueId) {
 
 async function addMessage(timestamp, destination, payload) {
     return new Promise((resolve, reject) => {
-        const INSERT = `
-            INSERT INTO Messages (timestamp, destination, payload)
-            VALUES ( ?, ?, ? )`
 
         // verify params
         try {
@@ -101,7 +94,7 @@ async function addMessage(timestamp, destination, payload) {
 
         // payload = JSON.stringify(payload)
 
-        db.run(INSERT, [timestamp, destination, payload], function (err) {
+        db.run(queries.ADD_MESSAGE, [timestamp, destination, payload], function (err) {
             if (err) {
                 return reject(err)
             }
@@ -115,36 +108,6 @@ async function addMessage(timestamp, destination, payload) {
  */
 module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_TIME, limit = LIMIT) {
     return new Promise((resolve, reject) => {
-        const QUERY = `
-            SELECT payload FROM Messages
-            WHERE destination LIKE ?
-            AND ? <= timestamp
-            AND timestamp <= ?
-            ORDER BY timestamp
-        `
-        const query2 = `WITH NumberedMessages AS (
-            SELECT 
-                rowId, 
-                timestamp, 
-                destination, 
-                payload,
-                ROW_NUMBER() OVER (ORDER BY timestamp) AS row_num
-            FROM Messages
-            WHERE destination LIKE ? AND ? <= timestamp AND timestamp <= ?
-        )
-        SELECT 
-            rowId, 
-            timestamp, 
-            destination, 
-            payload
-        FROM 
-            NumberedMessages
-        WHERE 
-            (row_num - 1) % (SELECT CASE WHEN COUNT(*) > ? THEN COUNT(*) / ? ELSE 1 END FROM NumberedMessages) = 0
-        ORDER BY 
-            timestamp
-        LIMIT ?`
-
         if (topic != this.topics.HEALTH
             && topic != this.topics.TELEMETRY
             && topic != this.topics.LOGS
@@ -156,7 +119,7 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
             return reject('Invalid time interval')
         }
 
-        db.all(query2, [`%${topic}`, timeStart, timeEnd, limit, limit, limit], (err, rows) => {
+        db.all(queries.GET_WITH_REDUCTION, [`%${topic}`, timeStart, timeEnd, limit, limit, limit], (err, rows) => {
             if (err)
                 return reject(err)
             return resolve(
@@ -167,10 +130,10 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
     })
 }
 
-module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds=[]) {
+module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds = []) {
     // Abrufen aller Telemetriedatensätze innerhalb des angegebenen Zeitintervalls
     const rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd, limit);
-    
+
     // Iteriere über jede Zeile und filtere das 'ues' Feld basierend auf 'ueIds'
     for (let row of rows) {
         if (Array.isArray(row.ues)) {
@@ -210,18 +173,12 @@ module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds=[
  */
 module.exports.getUEs = async function (timeStart = MIN_TIME, timeEnd = MAX_TIME) {
     return new Promise((resolve, reject) => {
-        const query = `
-            SELECT DISTINCT ueId FROM Ues
-            WHERE ? <= timestamp
-            AND timestamp <= ?
-        `
-
         // verify params
         if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
             return reject('Invalid time interval')
         }
 
-        db.all(query, [timeStart, timeEnd], (err, rows) => {
+        db.all(queries.GET_UES, [timeStart, timeEnd], (err, rows) => {
             if (err)
                 return reject(err)
             return resolve(rows
@@ -237,10 +194,6 @@ module.exports.getUEs = async function (timeStart = MIN_TIME, timeEnd = MAX_TIME
  */
 module.exports.getLatestTimestamp = async function (topic) {
     return new Promise((resolve, reject) => {
-        const query = `
-        SELECT timestamp FROM Messages
-        WHERE destination LIKE ?
-        ORDER BY timestamp DESC`
 
         // validate parameters
         if (topic != this.topics.HEALTH
@@ -250,7 +203,7 @@ module.exports.getLatestTimestamp = async function (topic) {
             return reject('Invalid topic')
         }
 
-        db.get(query, [`%${topic}`], (err, row) => {
+        db.get(queries.GET_LATEST_TIMESTAMP, [`%${topic}`], (err, row) => {
             if (err)
                 return reject(err)
             return resolve(row)
