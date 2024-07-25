@@ -127,7 +127,12 @@ module.exports.addTelemetry = async function(req, res) {
     if (!timestamp || isNaN(timestamp)) {
     }
 
-    await model.add(timestamp, model.topics.TELEMETRY, JSON.stringify(req.body))
+    try {
+        const id = await model.add(timestamp, model.topics.TELEMETRY, JSON.stringify(req.body))
+        return res.status(201).json({ success: true, id: id });
+    } catch (error) {
+        return res.status(500).json({error: error.toString()})
+    }
 }
 
 module.exports.addHealth = async function(req, res) {
@@ -135,8 +140,12 @@ module.exports.addHealth = async function(req, res) {
 
     if (!timestamp ||isNaN(timestamp)) {}
 
-    await model.add(timestamp, model.topics.HEALTH, JSON.stringify(req.body))
-
+    try {
+        const id = await model.add(timestamp, model.topics.HEALTH, JSON.stringify(req.body))
+        return res.status(201).json({ success: true, id: id });
+    } catch (error) {
+        return res.status(500).json({error: error.toString()})
+    }
 }
 
 module.exports.addLogs = async function(req, res) {
@@ -146,7 +155,33 @@ module.exports.addLogs = async function(req, res) {
     try {
         id = await model.add(timestamp, model.topics.LOGS, JSON.stringify(req.body))
     } catch (error) {
-        return res.status(500)
+        return res.status(500).json({error: error.toString()})
     }
     return res.status(201).json({ success: true, id: id });
+}
+
+module.exports.getLatestTimestamp = async function (req, res) {
+    const { topic } = req.query
+
+    let internalTopic;
+    switch (topic) {
+        case 'telemetry':
+            internalTopic = model.topics.TELEMETRY;
+            break;
+        case 'health':
+            internalTopic = model.topics.HEALTH;
+            break;
+        case 'logs':
+            internalTopic = model.topics.LOGS;
+            break;
+        default:
+            return res.status(400).json({ error: 'Invalid topic parameter' });
+    }
+
+    try {
+        const latestTimestamp = await model.getLatestTimestamp(internalTopic)
+        return res.status(200).json(latestTimestamp)
+    } catch (error) {
+        return res.status(500).json({ error: error.toString() });
+    }
 }

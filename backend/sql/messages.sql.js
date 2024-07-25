@@ -4,6 +4,12 @@ module.exports = {
     
     ADD_MESSAGE: `INSERT INTO Messages (timestamp, destination, payload)
         VALUES ( ?, ?, ? )`,
+
+    GET: `SELECT payload
+        FROM Messages
+        WHERE destination LIKE ? AND ? <= timestamp AND timestamp <= ?
+        ORDER BY timestamp ASC
+    `,
     
     GET_WITH_REDUCTION: `WITH NumberedMessages AS (
             SELECT 
@@ -16,17 +22,15 @@ module.exports = {
             WHERE destination LIKE ? AND ? <= timestamp AND timestamp <= ?
         )
         SELECT 
-            rowId, 
             timestamp, 
-            destination, 
             payload
         FROM 
             NumberedMessages
         WHERE 
-            (row_num - 1) % (SELECT CASE WHEN COUNT(*) > ? THEN COUNT(*) / ? ELSE 1 END FROM NumberedMessages) = 0
+            (row_num - 1) % (SELECT CASE WHEN COUNT(*) > ? THEN FLOOR(COUNT(*) * 1.0 / ?) ELSE 1 END FROM NumberedMessages) = 0
         ORDER BY 
             timestamp
-        LIMIT ?`,
+        `,
 
     GET_UES: `
         SELECT DISTINCT ueId FROM Ues
@@ -36,5 +40,29 @@ module.exports = {
     GET_LATEST_TIMESTAMP: `
         SELECT timestamp FROM Messages
         WHERE destination LIKE ?
-        ORDER BY timestamp DESC`
+        ORDER BY timestamp DESC`,
+    
+    GET_2: `WITH NumberedMessages AS (
+        SELECT
+            rowId,
+            timestamp,
+            destination,
+            payload,
+            ROW_NUMBER() OVER (ORDER BY timestamp) AS row_num
+        FROM Messages
+        WHERE destination LIKE ? AND timestamp BETWEEN ? AND ?
+    ),
+    ModuloTeiler AS (
+        SELECT
+            CASE
+                WHEN COUNT(*) > ? THEN FLOOR(COUNT(*) * 1.0 / ?)
+                ELSE 1
+            END AS teiler
+        FROM NumberedMessages
+    )
+    SELECT *
+    FROM NumberedMessages, ModuloTeiler
+    WHERE (row_num - 1) % teiler = 0
+    LIMIT ?;
+    `
 }

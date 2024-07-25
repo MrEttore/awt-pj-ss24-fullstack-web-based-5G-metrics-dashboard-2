@@ -56,7 +56,7 @@ module.exports.add = async function (timestamp, destination, payload) {
     try {
         JSON.parse(payload)
     } catch (e) {
-        return reject('Invalid payload')
+        throw new Error('Invalid payload')
     }
 
     await addMessage(timestamp, destination, payload)

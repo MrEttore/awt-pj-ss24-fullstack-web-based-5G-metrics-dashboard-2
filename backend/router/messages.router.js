@@ -44,4 +44,6 @@ router.post('/gnb/logs', controller.addLogs);
 
 router.post('/cn5g/telemetry', controller.addHealth);
 
+router.get('/latestTimestamp', controller.getLatestTimestamp);
+
 module.exports = router;
