@@ -65,7 +65,7 @@ module.exports.add = async function (timestamp, destination, payload) {
 
     // maintain separate Ues table to improve performance of getUEs
     if (destination.endsWith('gnb.telemetry') && payloadObj.ues) {
-        for (uesElement of payloadObj.ues) {
+        for (let uesElement of payloadObj.ues) {
             await addUe(timestamp, uesElement.ueId)
         }
     }
@@ -103,6 +103,27 @@ async function addMessage(timestamp, destination, payload) {
     })
 }
 
+function applyDataReduction(rows, limit) {
+    if (rows.length <= limit) {
+        return rows;
+    }
+
+    const step = Math.ceil(rows.length / limit);
+    const reducedRows = [];
+
+    for (let i = 0; i < rows.length; i += step) {
+        reducedRows.push(rows[i]);
+    }
+
+    // Wenn die letzte Zeile nicht im reduzierten Ergebnis ist, fügen wir sie hinzu
+    if (reducedRows[reducedRows.length - 1] !== rows[rows.length - 1]) {
+        reducedRows.push(rows[rows.length - 1]);
+    }
+
+    return reducedRows;
+}
+
+
 /**
  * GET /api/messages?topic=_&timeStart=_&timeEnd=_
  */
@@ -114,18 +135,20 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
         ) {
             return reject('Invalid topic')
         }
-
         if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
             return reject('Invalid time interval')
         }
 
-        db.all(queries.GET_WITH_REDUCTION, [`%${topic}`, timeStart, timeEnd, limit, limit, limit], (err, rows) => {
+        db.all(queries.GET, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
+            console.log(queries.GET_WITH_REDUCTION)
             if (err)
                 return reject(err)
             return resolve(
-                rows.map(row => row.payload)
-                    .map(JSON.parse)
-            )
+                applyDataReduction(
+                    rows.map(row => row.payload)
+                        .map(JSON.parse),
+                    limit
+                ))
         })
     })
 }
