@@ -92,14 +92,24 @@ export default function DisplayLogs({
       try {
         setIsLiveDataLoading(true);
 
-        const liveData = await getLiveGnbLogs();
+        const newLog = await getLiveGnbLogs();
 
-        setLogsStatus((prevLogs) => [...liveData, ...prevLogs]);
+        if (
+          logsStatus.length === 0 ||
+          newLog[0].rowId !== logsStatus[0].rowId
+        ) {
+          setLogsStatus((logsStatus) => [...newLog, ...logsStatus]);
 
-        onMessage({
-          type: 'success-live-data',
-          text: 'Live data is on!',
-        });
+          onMessage({
+            type: 'success-live-data',
+            text: 'Live data is on!',
+          });
+        } else {
+          onMessage({
+            type: 'success-live-data',
+            text: 'Live data is on! Waiting for new logs ...',
+          });
+        }
       } catch (error) {
         onMessage({
           type: 'error',
@@ -115,7 +125,7 @@ export default function DisplayLogs({
 
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
-  }, [isLiveDataToggled, onMessage, isLiveDataLoading]);
+  }, [isLiveDataToggled, onMessage, isLiveDataLoading, logsStatus]);
 
   // FETCH RECENT DATA
   // ...
