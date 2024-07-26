@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "start": "NODE_ENV=prod DB_PATH=test.db node server.js",
-    "dev": "DB_PATH=test.db node --watch server",
+    "dev": "node --watch server",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
