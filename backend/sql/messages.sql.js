@@ -11,27 +11,6 @@ module.exports = {
         ORDER BY timestamp ASC
     `,
     
-    GET_WITH_REDUCTION: `WITH NumberedMessages AS (
-            SELECT 
-                rowId, 
-                timestamp, 
-                destination, 
-                payload,
-                ROW_NUMBER() OVER (ORDER BY timestamp) AS row_num
-            FROM Messages
-            WHERE destination LIKE ? AND ? <= timestamp AND timestamp <= ?
-        )
-        SELECT 
-            timestamp, 
-            payload
-        FROM 
-            NumberedMessages
-        WHERE 
-            (row_num - 1) % (SELECT CASE WHEN COUNT(*) > ? THEN FLOOR(COUNT(*) * 1.0 / ?) ELSE 1 END FROM NumberedMessages) = 0
-        ORDER BY 
-            timestamp
-        `,
-
     GET_UES: `
         SELECT DISTINCT ueId FROM Ues
         WHERE ? <= timestamp
