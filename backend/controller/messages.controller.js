@@ -97,7 +97,8 @@ module.exports.getTelemetry = async function (req, res) {
         // Convert ueIds to an array of integers
         let ueIdArray = [];
         if (ueIds) {
-            ueIdArray = ueIds.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+            ueIdArray = ueIds.split(',').map(id => String(id));
+            console.log(ueIdArray)
         }
 
         const data = await model.getTelemetry(timeStart, timeEnd, limit, ueIdArray);
