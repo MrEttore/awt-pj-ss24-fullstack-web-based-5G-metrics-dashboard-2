@@ -103,7 +103,7 @@ async function addMessage(timestamp, destination, payload) {
     })
 }
 
-function applyDataReduction(rows, limit) {
+function applyDataReduction(rows, limit=LIMIT) {
     if (rows.length <= limit) {
         return rows;
     }
