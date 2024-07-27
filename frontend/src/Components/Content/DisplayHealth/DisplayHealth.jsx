@@ -5,13 +5,13 @@ import Loader from '../../Loader/Loader';
 import {
   transformHealthData,
   aggregateLiveHealthData,
-} from '../../../Utils/transformData';
+} from '../../../utils/transformData';
 import {
   getCn5gData,
   getLiveCn5gData,
   getRecentCn5gData,
-} from '../../../Utils/fetching';
-import { EMPTY_MESSAGE } from '../../../Utils/constants';
+} from '../../../utils/fetching';
+import { EMPTY_MESSAGE } from '../../../utils/constants';
 
 import './DisplayHealth.css';
 

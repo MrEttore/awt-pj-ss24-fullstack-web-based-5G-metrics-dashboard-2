@@ -10,7 +10,7 @@ import {
   COLOR_DATASET_POINT_BORDER,
   COLOR_GRAPH_GRID,
   COLOR_MODULE_ON,
-} from '../../Styles/graphColors';
+} from '../../styles/graphColors';
 
 import {
   Chart as ChartJS,

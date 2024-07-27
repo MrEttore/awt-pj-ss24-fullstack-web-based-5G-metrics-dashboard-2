@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
-import { getGnBTelemetry } from '../../../Utils/fetching';
+import { getGnBTelemetry } from '../../../utils/fetching';
 import {
   transformTelemetryData,
   filterRequestedTelemetryData,
-} from '../../../Utils/transformData';
-import { EMPTY_MESSAGE } from '../../../Utils/constants';
+} from '../../../utils/transformData';
+import { EMPTY_MESSAGE } from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -24,7 +24,7 @@ export default function DisplayTelemetry({
 
   // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
 
-  // RESET HEALTH STATUS
+  // RESET TELEMETRY STATUS
 
   useEffect(() => {
     if (resetFlag) setTelemetryStatus([]);
@@ -62,11 +62,15 @@ export default function DisplayTelemetry({
           device.value
         );
 
+        console.log('data_Telemetry: ', data);
+
         const numDatapoints = data.length;
 
         if (error) throw new Error(error);
 
         const processedData = transformTelemetryData(data);
+
+        console.log('processedData_Telemetry: ', processedData);
 
         if (numDatapoints === 0) {
           onMessage({
@@ -126,17 +130,20 @@ export default function DisplayTelemetry({
         />
       )}
       {!isLoading && requestedData && (
-        <div className="items">
-          {telemetryStatus.map((m, i) => {
-            return (
-              <TelemetryItem
-                name={m.metricName}
-                rawData={m.metricData}
-                key={i}
-              />
-            );
-          })}
-        </div>
+        <>
+          {/* <div className="newDiv"></div> */}
+          <div className="items">
+            {telemetryStatus.map((m, i) => {
+              return (
+                <TelemetryItem
+                  name={m.metricName}
+                  rawData={m.metricData}
+                  key={i}
+                />
+              );
+            })}
+          </div>
+        </>
       )}
     </div>
   );

@@ -6,8 +6,8 @@ import TimespanSelector from '../TimespanSelector/TimespanSelector';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
 
-import { DASHBOARD_METRICS } from '../../Utils/constants';
-import { getGnbUes } from '../../Utils/fetching';
+import { DASHBOARD_METRICS } from '../../utils/constants';
+import { getGnbUes } from '../../utils/fetching';
 
 import './Forms.css';
 

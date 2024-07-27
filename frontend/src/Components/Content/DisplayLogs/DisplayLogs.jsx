@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import LogItem from '../../LogItem/LogItem';
 import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
-import { getGnbLogs, getLiveGnbLogs } from '../../../Utils/fetching';
-import { EMPTY_MESSAGE } from '../../../Utils/constants';
+import { getGnbLogs, getLiveGnbLogs } from '../../../utils/fetching';
+import { EMPTY_MESSAGE } from '../../../utils/constants';
 
 import './DisplayLogs.css';
 

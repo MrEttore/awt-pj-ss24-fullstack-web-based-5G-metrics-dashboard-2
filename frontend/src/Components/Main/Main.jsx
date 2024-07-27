@@ -7,7 +7,7 @@ import Forms from '../Forms/Forms.jsx';
 import InformationDisplay from '../InformationDisplay/InformationDisplay.jsx';
 import Filters from '../Filters/Filters.jsx';
 import Messages from '../Messages/Messages.jsx';
-import { EMPTY_MESSAGE } from '../../Utils/constants.js';
+import { EMPTY_MESSAGE } from '../../utils/constants.js';
 
 import './Main.css';
 
