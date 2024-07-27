@@ -14,6 +14,8 @@ export const CN5G_MODULES = [
   'extdn',
   'asterisk',
   'openspeedtest',
+  'oaiExtDnUplinkState',
+  'oaiExtDnDownlinkInstances',
 ];
 
 export const DASHBOARD_METRICS = [
@@ -40,11 +42,13 @@ export const DASHBOARD_METRICS = [
 
 // API urls
 
-export const CN5G_BASE_URL = 'http://localhost:80/api/cn5g/telemetry';
+export const CN5G_URL = 'http://localhost:5173/api/cn5g/telemetry';
 
-export const GNB_LOGS_URL = 'http://localhost:80/api/gnb/logs';
+export const GNB_LOGS_URL = 'http://localhost:5173/api/gnb/logs';
 
-export const GNB_TELEMETRY_URL = 'http://localhost:80/api/gnb/telemetry';
+export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
+
+export const UES_URL = 'http://localhost:5173/api/ues';
 
 // Warning i.e., error messages
 
