@@ -1,4 +1,11 @@
-import { CN5G_BASE_URL, GNB_LOGS_URL, GNB_TELEMETRY_URL } from './constants.js';
+import {
+  CN5G_URL,
+  GNB_LOGS_URL,
+  GNB_TELEMETRY_URL,
+  UES_URL,
+} from './constants.js';
+
+// CN5G
 
 export async function getCn5gData(timeStart, timeEnd) {
   if (!timeStart && !timeEnd)
@@ -9,7 +16,7 @@ export async function getCn5gData(timeStart, timeEnd) {
 
   try {
     const response = await fetch(
-      `${CN5G_BASE_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      `${CN5G_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -27,7 +34,7 @@ export async function getCn5gData(timeStart, timeEnd) {
 
 export async function getLiveCn5gData() {
   try {
-    const response = await fetch(`${CN5G_BASE_URL}`);
+    const response = await fetch(`${CN5G_URL}`);
 
     if (!response.ok) throw new Error('Response not ok');
 
@@ -44,7 +51,7 @@ export async function getLiveCn5gData() {
 
 export async function getRecentCn5gData() {
   try {
-    const response = await fetch(`${CN5G_BASE_URL}`);
+    const response = await fetch(`${CN5G_URL}`);
 
     if (!response.ok) throw new Error('Response not ok');
 
@@ -61,6 +68,8 @@ export async function getRecentCn5gData() {
     };
   }
 }
+
+// LOGS
 
 export async function getGnbLogs(timeStart, timeEnd) {
   if (!timeStart && !timeEnd)
@@ -104,6 +113,8 @@ export async function getLiveGnbLogs() {
   }
 }
 
+// TELEMETRY
+
 // TODO: ueId should be an arr of ids ...
 export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
   if (!timeStart && !timeEnd && !ueId)
@@ -132,7 +143,7 @@ export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
 
 export async function getGnbUes() {
   try {
-    const response = await fetch(`${GNB_TELEMETRY_URL}?ues`);
+    const response = await fetch(`${UES_URL}`);
 
     if (!response.ok) throw new Error("API response not ok!'");
 
