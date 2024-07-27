@@ -125,7 +125,7 @@ export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
 
   try {
     const response = await fetch(
-      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueId=${ueId.toString()}`
+      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${ueId.toString()}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
