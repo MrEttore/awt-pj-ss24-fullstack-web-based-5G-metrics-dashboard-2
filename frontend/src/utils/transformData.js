@@ -39,7 +39,6 @@ export function transformHealthData(data) {
 export function aggregateLiveHealthData(existingData, newData) {
   const aggregatedData = {};
 
-  // Aggregate existing data
   existingData.forEach((module) => {
     aggregatedData[module.moduleName] = {
       moduleName: module.moduleName,
@@ -47,7 +46,6 @@ export function aggregateLiveHealthData(existingData, newData) {
     };
   });
 
-  // Aggregate new data
   newData.forEach((module) => {
     const moduleName = module.moduleName;
     if (!aggregatedData[moduleName]) {
@@ -58,7 +56,6 @@ export function aggregateLiveHealthData(existingData, newData) {
     }
     aggregatedData[moduleName].moduleData.push(...module.moduleData);
 
-    // Ensure only the latest 6 entries are kept
     if (aggregatedData[moduleName].moduleData.length > 6) {
       aggregatedData[moduleName].moduleData =
         aggregatedData[moduleName].moduleData.slice(-6);
@@ -69,7 +66,6 @@ export function aggregateLiveHealthData(existingData, newData) {
 }
 
 export function transformTelemetryData(data) {
-  // Initialize the structure to store each module's data
   const metricData = {};
   DASHBOARD_METRICS.forEach((metric) => {
     metricData[metric] = [];
@@ -88,7 +84,6 @@ export function transformTelemetryData(data) {
     }
   });
 
-  // Convert the object to an array of objects
   const result = DASHBOARD_METRICS.map((metric) => ({
     metricName: metric,
     metricData: metricData[metric],
