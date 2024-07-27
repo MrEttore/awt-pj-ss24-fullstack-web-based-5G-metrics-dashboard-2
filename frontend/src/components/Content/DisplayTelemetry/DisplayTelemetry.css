@@ -11,12 +11,6 @@
   background-color: var(--color-background-500);
 }
 
-/* Added to ensure flex children take equal space */
-.generalDataItems,
-.telemetryItems {
-  flex: 1;
-}
-
 .generalTelemetryItems {
   display: grid;
   flex: 0 40%;
@@ -25,6 +19,7 @@
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: var(--color-background-500);
+  border-radius: 10px;
 }
 
 .ueTelemetryItems {
@@ -32,9 +27,9 @@
   flex: 1;
   grid-template-columns: 1fr;
   gap: 0.5rem;
-  background-color: var(--color-background-500);
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color: var(--color-background-500);
   border-radius: 10px;
 }
 
