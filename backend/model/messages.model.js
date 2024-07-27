@@ -140,7 +140,6 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
         }
 
         db.all(queries.GET, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
-            console.log(queries.GET_WITH_REDUCTION)
             if (err)
                 return reject(err)
             return resolve(
