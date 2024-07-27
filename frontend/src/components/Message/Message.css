@@ -1,3 +1,5 @@
+@import url('../../styles/variables.css');
+
 .warning {
   display: flex;
   align-items: center;
