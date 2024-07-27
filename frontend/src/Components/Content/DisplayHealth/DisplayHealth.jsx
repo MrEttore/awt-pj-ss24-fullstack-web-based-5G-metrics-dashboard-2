@@ -15,8 +15,6 @@ import { EMPTY_MESSAGE } from '../../../Utils/constants';
 
 import './DisplayHealth.css';
 
-// TODO: 'oaiExtDnUplinkState', 'oaiExtDnDownlinkInstances' ??
-
 export default function DisplayHealth({
   requestedData,
   onMessage,
@@ -148,8 +146,6 @@ export default function DisplayHealth({
 
         const { recentData, error } = await getRecentCn5gData();
 
-        console.log(recentData);
-
         if (error) throw new Error(error);
 
         const processedRecentData = transformHealthData(recentData);
@@ -162,6 +158,8 @@ export default function DisplayHealth({
           type: 'error',
           text: err.message,
         });
+
+        // TODO: add display of modules when fetch fails
         setHealthStatus([]);
       } finally {
         setIsLoading(false);
@@ -179,7 +177,6 @@ export default function DisplayHealth({
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
         <>
-          <div className="newDiv"></div>
           <ul className="items">
             {healthStatus.map((module, i) => {
               return (
@@ -196,14 +193,12 @@ export default function DisplayHealth({
 
       {!isLoading && (requestedData || isLiveDataToggled) && (
         <>
-          <div className="newDiv"></div>
           <ul className="items">
             {healthStatus.map((module, i) => {
               return (
                 <HealthItem
                   name={module.moduleName}
                   rawData={module.moduleData}
-                  isLoading={isLoading}
                   key={i}
                 />
               );
