@@ -154,7 +154,7 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
 
 module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds = []) {
     // Abrufen aller Telemetriedatensätze innerhalb des angegebenen Zeitintervalls
-    const rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd, limit);
+    let rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd, Infinity);
 
     // Iteriere über jede Zeile und filtere das 'ues' Feld basierend auf 'ueIds'
     for (let row of rows) {
@@ -164,8 +164,10 @@ module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds =
         }
     }
 
+    rows = rows.filter(row => row.ues.length > 0)
+
     // Rückgabe der gefilterten Zeilen
-    return rows;
+    return applyDataReduction(rows, limit);
 }
 
 // /**
