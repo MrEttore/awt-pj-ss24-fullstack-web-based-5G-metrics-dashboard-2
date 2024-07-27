@@ -27,8 +27,6 @@ export default function DisplayTelemetry({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
-
   // RESET TELEMETRY STATUS
 
   useEffect(() => {
@@ -97,6 +95,7 @@ export default function DisplayTelemetry({
           filteredUeTelemetryData
         );
 
+        // TODO: update setState
         setUeTelemetryStatus(filteredUeTelemetryData);
         setGeneralTelemetryStatus(DASHBOARD_GENERAL_METRICS);
 
