@@ -1,0 +1,53 @@
+@import url('../../../styles/variables.css');
+
+.contentLogs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 4rem - 0.6rem - 105px - 4.9rem);
+  padding: 0.5rem;
+  border-radius: 10px;
+  border-top: 4px solid var(--color-primary-light);
+  border-bottom: 4px solid var(--color-primary-light);
+  background-color: var(--color-background-500);
+}
+
+.contentLogs.live {
+  display: flex;
+  align-items: flex-start;
+  height: 555px;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border-top: 4px solid var(--color-primary-light);
+  border-bottom: 4px solid var(--color-primary-light);
+  background-color: var(--color-background-500);
+}
+
+.logs {
+  border-radius: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  list-style-type: none;
+  width: 100%;
+  max-height: 100%;
+}
+
+@keyframes fadeInHighlight {
+  0% {
+    background-color: var(--color-highlight);
+    opacity: 0;
+  }
+  50% {
+    background-color: var(--color-background-900);
+    opacity: 1;
+  }
+  100% {
+    background-color: var(--color-background-900);
+    opacity: 1;
+  }
+}
+
+.log.entering {
+  animation: fadeInHighlight 1s ease-out;
+}
