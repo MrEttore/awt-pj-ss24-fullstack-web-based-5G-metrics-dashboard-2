@@ -86,6 +86,8 @@ export default function DisplayTelemetry({
           requestedData
         );
 
+        console.log('filteredTelemetryData_Telemetry: ', filteredTelemetryData);
+
         setTelemetryStatus(filteredTelemetryData);
 
         onMessage({
@@ -115,24 +117,48 @@ export default function DisplayTelemetry({
   // ...
 
   return (
-    <div
-      className={`contentTelemetry ${!requestedData ? 'noData' : ''} ${
-        isLoading ? 'loading' : ''
-      }`}
-    >
+    <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Telemetry ...</Loader>}
-      {!isLoading && !requestedData && (
-        <Message
-          message={{
-            type: 'info',
-            text: 'No telemetry data to display.',
-          }}
-        />
-      )}
+
       {!isLoading && requestedData && (
         <>
-          {/* <div className="newDiv"></div> */}
-          <div className="items">
+          <div className="generalTelemetryItems">
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+            <div>Item</div>
+          </div>
+          <div className="ueTelemetryItems">
             {telemetryStatus.map((m, i) => {
               return (
                 <TelemetryItem
