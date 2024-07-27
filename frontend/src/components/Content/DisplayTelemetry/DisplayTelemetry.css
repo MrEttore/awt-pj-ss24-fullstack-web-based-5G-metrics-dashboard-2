@@ -1,6 +1,8 @@
 @import url('../../../styles/variables.css');
 
 .contentTelemetry {
+  display: flex;
+  gap: 0.2rem;
   height: calc(100vh - 4rem - 0.6rem - 105px - 4.9rem);
   padding: 0.5rem;
   border-radius: 10px;
@@ -9,31 +11,28 @@
   background-color: var(--color-background-500);
 }
 
-.newDiv {
-  min-height: 4rem;
-  border: 2px solid var(--color-background-900);
-  border-radius: 10px;
+/* Added to ensure flex children take equal space */
+.generalDataItems,
+.telemetryItems {
+  flex: 1;
 }
 
-.contentTelemetry.noData {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  border-radius: 10px;
-  background-color: var(--color-background-500);
-}
-
-.items {
+.generalTelemetryItems {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  max-height: 100%;
-
+  flex: 0 40%;
+  grid-template-columns: 1fr;
   gap: 0.5rem;
-
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: var(--color-background-500);
+}
 
+.ueTelemetryItems {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  background-color: var(--color-background-500);
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 10px;
