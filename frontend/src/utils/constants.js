@@ -18,7 +18,7 @@ export const CN5G_MODULES = [
   'oaiExtDnDownlinkInstances',
 ];
 
-export const DASHBOARD_METRICS = [
+export const DASHBOARD_UE_METRICS = [
   'rnti',
   'inSync',
   'dlBytes',
@@ -38,6 +38,15 @@ export const DASHBOARD_METRICS = [
   'cqi',
   'pucchSnr',
   'puschSnr',
+];
+
+export const DASHBOARD_GENERAL_METRICS = [
+  'frame',
+  'slot',
+  'pci',
+  'dlCarrierFreq',
+  'ulCarrierFreq',
+  'avgLdpcIterations',
 ];
 
 // API urls
