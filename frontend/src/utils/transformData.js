@@ -1,4 +1,8 @@
-import { CN5G_MODULES, DASHBOARD_METRICS } from './constants.js';
+import {
+  CN5G_MODULES,
+  DASHBOARD_UE_METRICS,
+  DASHBOARD_GENERAL_METRICS,
+} from './constants.js';
 
 export function transformHealthData(data) {
   const moduleData = {};
@@ -65,9 +69,9 @@ export function aggregateLiveHealthData(existingData, newData) {
   return Object.values(aggregatedData);
 }
 
-export function transformTelemetryData(data) {
+export function transformUeTelemetryData(data) {
   const metricData = {};
-  DASHBOARD_METRICS.forEach((metric) => {
+  DASHBOARD_UE_METRICS.forEach((metric) => {
     metricData[metric] = [];
   });
 
@@ -75,7 +79,7 @@ export function transformTelemetryData(data) {
     const timestamp = record.timestamp;
 
     if (record.ues && record.ues.length > 0 && record.ues[0]) {
-      DASHBOARD_METRICS.forEach((metric) => {
+      DASHBOARD_UE_METRICS.forEach((metric) => {
         if (record.ues[0].hasOwnProperty(metric)) {
           const value = record.ues[0][metric];
           metricData[metric].push({ timestamp, value });
@@ -84,13 +88,16 @@ export function transformTelemetryData(data) {
     }
   });
 
-  const result = DASHBOARD_METRICS.map((metric) => ({
+  const result = DASHBOARD_UE_METRICS.map((metric) => ({
     metricName: metric,
     metricData: metricData[metric],
   }));
 
   return result;
 }
+
+// TODO: continue here ...
+export function transformGeneralTelemetryData(data) {}
 
 export function filterRequestedTelemetryData(data, filters) {
   if (filters.metrics[0].value === 'all') return data;

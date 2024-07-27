@@ -146,7 +146,7 @@ export default function HealthItem({ name, rawData = [] }) {
         pointBorderColor: healthData.map(
           (value) => colorMapping[value] || COLOR_MODULE_UNKNOWN
         ),
-        pointRadius: healthData.length <= 6 ? 4 : 1,
+        pointRadius: healthData.length <= 10 ? 5 : 2.5,
         pointHoverRadius: 7,
       },
     ],

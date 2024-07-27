@@ -5,10 +5,14 @@ import Loader from '../../Loader/Loader';
 import Message from '../../Message/Message';
 import { getGnBTelemetry } from '../../../utils/fetching';
 import {
-  transformTelemetryData,
+  transformUeTelemetryData,
   filterRequestedTelemetryData,
+  transformGeneralTelemetryData,
 } from '../../../utils/transformData';
-import { EMPTY_MESSAGE } from '../../../utils/constants';
+import {
+  EMPTY_MESSAGE,
+  DASHBOARD_GENERAL_METRICS,
+} from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -18,16 +22,15 @@ export default function DisplayTelemetry({
   resetFlag,
   isLiveDataToggled,
 }) {
-  const [telemetryStatus, setTelemetryStatus] = useState([]);
+  const [ueTelemetryStatus, setUeTelemetryStatus] = useState([]);
+  const [generalTelemetryStatus, setGeneralTelemetryStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
-
-  // TODO: add "dlCarrierFreq" and "ulCarrierFreq" from payload
 
   // RESET TELEMETRY STATUS
 
   useEffect(() => {
-    if (resetFlag) setTelemetryStatus([]);
+    if (resetFlag) setUeTelemetryStatus([]);
   }, [resetFlag]);
 
   // SET INITIAL UI MESSAGE
@@ -40,7 +43,8 @@ export default function DisplayTelemetry({
       });
 
       setIsLiveDataLoading(false);
-      setTelemetryStatus([]);
+      setUeTelemetryStatus([]);
+      setGeneralTelemetryStatus([]);
     }
   }, [requestedData, isLiveDataToggled, onMessage]);
 
@@ -62,33 +66,38 @@ export default function DisplayTelemetry({
           device.value
         );
 
-        console.log('data_Telemetry: ', data);
-
         const numDatapoints = data.length;
 
         if (error) throw new Error(error);
 
-        const processedData = transformTelemetryData(data);
+        const ueTelemetryData = transformUeTelemetryData(data);
 
-        console.log('processedData_Telemetry: ', processedData);
+        // const generalTelemetryData = transformGeneralTelemetryData(data);
 
         if (numDatapoints === 0) {
           onMessage({
             type: 'success-queried-data-not-found',
             text: 'No telemetry data for the selected timespan!',
           });
-          setTelemetryStatus(processedData);
+          setUeTelemetryStatus(ueTelemetryData);
           return;
         }
 
-        const filteredTelemetryData = filterRequestedTelemetryData(
-          processedData,
+        const filteredUeTelemetryData = filterRequestedTelemetryData(
+          ueTelemetryData,
           requestedData
         );
 
-        console.log('filteredTelemetryData_Telemetry: ', filteredTelemetryData);
+        console.log('data_Telemetry: ', data);
+        console.log('ueTelemetryData_Telemetry: ', ueTelemetryData);
+        console.log(
+          'filteredTelemetryData_Telemetry: ',
+          filteredUeTelemetryData
+        );
 
-        setTelemetryStatus(filteredTelemetryData);
+        // TODO: update setState
+        setUeTelemetryStatus(filteredUeTelemetryData);
+        setGeneralTelemetryStatus(DASHBOARD_GENERAL_METRICS);
 
         onMessage({
           type: 'success-queried-data-found',
@@ -99,7 +108,7 @@ export default function DisplayTelemetry({
           type: 'error',
           text: error.message,
         });
-        setTelemetryStatus([]);
+        setUeTelemetryStatus([]);
       } finally {
         setIsLoading(false);
       }
@@ -123,43 +132,12 @@ export default function DisplayTelemetry({
       {!isLoading && requestedData && (
         <>
           <div className="generalTelemetryItems">
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
-            <div>Item</div>
+            {generalTelemetryStatus.map((m, i) => {
+              return <TelemetryItem name={m} key={i} />;
+            })}
           </div>
           <div className="ueTelemetryItems">
-            {telemetryStatus.map((m, i) => {
+            {ueTelemetryStatus.map((m, i) => {
               return (
                 <TelemetryItem
                   name={m.metricName}
