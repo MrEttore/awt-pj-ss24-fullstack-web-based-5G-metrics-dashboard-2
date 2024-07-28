@@ -113,7 +113,7 @@ export default function TelemetryItem({ name, rawData = [] }) {
         stepped: false,
         pointBackgroundColor: COLOR_MODULE_ON,
         pointBorderColor: COLOR_MODULE_ON,
-        pointRadius: telemetryData.length <= 50 ? 2 : 2.5,
+        pointRadius: telemetryData.length <= 10 ? 4 : 2.5,
         pointHoverRadius: 5,
       },
     ],
