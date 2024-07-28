@@ -137,10 +137,10 @@ export default function DisplayTelemetry({
         const processedRecentGeneralData =
           transformGeneralTelemetryData(recentData);
 
+        console.log('processedRecentUeData: ', processedRecentUeData);
+
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
-
-        console.log('UseEffect: Fetch recent data!');
       } catch (err) {
         onMessage({
           type: 'error',
