@@ -103,7 +103,7 @@ async function addMessage(timestamp, destination, payload) {
     })
 }
 
-function applyDataReduction(rows, limit=LIMIT) {
+function applyDataReduction(rows, limit = LIMIT) {
     if (rows.length <= limit) {
         return rows;
     }
@@ -111,13 +111,8 @@ function applyDataReduction(rows, limit=LIMIT) {
     const step = Math.ceil(rows.length / limit);
     const reducedRows = [];
 
-    for (let i = 0; i < rows.length; i += step) {
+    for (let i = 0; i < rows.length && reducedRows.length < limit; i += step) {
         reducedRows.push(rows[i]);
-    }
-
-    // Wenn die letzte Zeile nicht im reduzierten Ergebnis ist, fügen wir sie hinzu
-    if (reducedRows[reducedRows.length - 1] !== rows[rows.length - 1]) {
-        reducedRows.push(rows[rows.length - 1]);
     }
 
     return reducedRows;
