@@ -67,15 +67,20 @@ async def log_websocket_frame(event_type, event):
         print(f"Error processing websocket frame: {e}")
 
 
-async def send_data(json_data, url_ending):
+async def send_data(json_data, destination, timestamp, url_ending):
     try:
         url = f"http://backend:3000/api/{url_ending}"
+        msg_obj = {
+            "timestamp": timestamp,
+            "destination": destination,
+            "payload": json_data
+        }
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                url, json=json_data, headers={"Content-Type": "application/json"}
+                url, json=msg_obj, headers={"Content-Type": "application/json"}
             ) as response:
                 response_data = await response.text()  # Optionally process response
-                print(f"Data sent: {json_data}")
+                print(f"Data sent: {msg_obj}")
     except Exception as e:
         print(f"Error sending data: {e}")
 
@@ -86,27 +91,18 @@ async def filter_data(text):
         destination = None
         for line in lines:
             if line.startswith("destination:"):
-                destination = line.split(":", 1)[1].strip()
+                destination = line
                 break
         if destination:
             json_obj = extract_json_from_string(text)
             if json_obj:
-                if "gnb.telemetry" in destination:
-                    js = json.loads(json_obj)
-                    await send_data(js, "gnb/telemetry")
-                elif "gnb.logs" in destination:
-                    js = json.loads(json_obj)
-                    await send_data(js, "gnb/logs")
-                elif "gnb.configuration" in destination:
-                    js = json.loads(json_obj)
-                    await send_data(js, "gnb/configuration")
-                elif "cn5g.telemetry" in destination:
-                    js = json.loads(json_obj)
-                    await send_data(js, "cn5g/telemetry")
-                else:
-                    print("Unknown destination")
+                js = json.loads(json_obj)
+                timestamp = js["timestamp"]
+                print(f"time: {timestamp}")
+                await send_data(js, destination, timestamp, "messages")
     except Exception as e:
         print(f"Error filtering data: {e}")
+        print(destination)
 
 
 def extract_json_from_string(text):
