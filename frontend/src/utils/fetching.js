@@ -51,14 +51,11 @@ export async function getLiveCn5gData() {
 
 export async function getRecentCn5gData() {
   try {
-    const response = await fetch(`${CN5G_URL}`);
+    const response = await fetch(`${CN5G_URL}?limit=10`);
 
     if (!response.ok) throw new Error('Response not ok');
 
-    const data = await response.json();
-
-    // Get the last 6 elements of the data array
-    const recentData = data.slice(-6);
+    const recentData = await response.json();
 
     return { recentData: recentData, error: null };
   } catch (err) {
@@ -143,7 +140,7 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
 
 export async function getRecentGnbTelemetry() {
   try {
-    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=1,204&limit=9`);
+    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=1,204&limit=10`);
 
     if (!response.ok) throw new Error('Response not ok');
 
