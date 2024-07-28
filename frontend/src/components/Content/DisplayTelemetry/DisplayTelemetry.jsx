@@ -2,17 +2,13 @@ import { useState, useEffect } from 'react';
 
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
-import Message from '../../Message/Message';
 import { getGnBTelemetry } from '../../../utils/fetching';
 import {
   transformUeTelemetryData,
   filterRequestedTelemetryData,
   transformGeneralTelemetryData,
 } from '../../../utils/transformData';
-import {
-  EMPTY_MESSAGE,
-  DASHBOARD_GENERAL_METRICS,
-} from '../../../utils/constants';
+import { EMPTY_MESSAGE } from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -72,7 +68,9 @@ export default function DisplayTelemetry({
 
         const ueTelemetryData = transformUeTelemetryData(data);
 
-        // const generalTelemetryData = transformGeneralTelemetryData(data);
+        const generalTelemetryData = transformGeneralTelemetryData(data);
+
+        console.log();
 
         if (numDatapoints === 0) {
           onMessage({
@@ -88,16 +86,11 @@ export default function DisplayTelemetry({
           requestedData
         );
 
-        console.log('data_Telemetry: ', data);
         console.log('ueTelemetryData_Telemetry: ', ueTelemetryData);
-        console.log(
-          'filteredTelemetryData_Telemetry: ',
-          filteredUeTelemetryData
-        );
+        console.log('generalTelemetryData_Telemetry: ', generalTelemetryData);
 
-        // TODO: update setState
         setUeTelemetryStatus(filteredUeTelemetryData);
-        setGeneralTelemetryStatus(DASHBOARD_GENERAL_METRICS);
+        setGeneralTelemetryStatus(generalTelemetryData);
 
         onMessage({
           type: 'success-queried-data-found',
@@ -132,16 +125,22 @@ export default function DisplayTelemetry({
       {!isLoading && requestedData && (
         <>
           <div className="generalTelemetryItems">
-            {generalTelemetryStatus.map((m, i) => {
-              return <TelemetryItem name={m} key={i} />;
+            {generalTelemetryStatus.map((metric, i) => {
+              return (
+                <TelemetryItem
+                  name={metric.metricName}
+                  rawData={metric.metricData}
+                  key={i}
+                />
+              );
             })}
           </div>
           <div className="ueTelemetryItems">
-            {ueTelemetryStatus.map((m, i) => {
+            {ueTelemetryStatus.map((metric, i) => {
               return (
                 <TelemetryItem
-                  name={m.metricName}
-                  rawData={m.metricData}
+                  name={metric.metricName}
+                  rawData={metric.metricData}
                   key={i}
                 />
               );
