@@ -1,4 +1,4 @@
-const model = require('../messages.model');
+const model = require('../model/messages.model');
 
 const logsEntry = {
     timestamp: 1715076982855,

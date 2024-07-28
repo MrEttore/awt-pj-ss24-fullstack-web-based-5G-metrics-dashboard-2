@@ -3,7 +3,7 @@ const {
     INIT,
     INSERT,
     SELECT
-} = require('../sql/gnb.telemetry.sql');
+} = require('../../sql/gnb.telemetry.sql');
 
 const GNB_TELEMETRY_ROW_ID = 'gnbTelemetryRowId'
 
@@ -14,7 +14,7 @@ class GnbTelemetryModel {
     #ueModel;
 
     constructor() {
-        this.#db = require('../database/sqlite3');
+        this.#db = require('../../database/sqlite3');
         this.#ueModel = require('./gnb.telemetryUE.model');
     }
 

@@ -3,7 +3,7 @@ const AbstractController = require('./abstract.controller')
 class GnbLogsController extends AbstractController {
 
     constructor() {
-        super(require('../model/gnbLogs.model'));
+        super(require('../../model/gnbLogs.model'));
     }
 
 }

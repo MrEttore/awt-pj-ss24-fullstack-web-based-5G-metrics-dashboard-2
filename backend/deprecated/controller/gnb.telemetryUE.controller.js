@@ -6,7 +6,7 @@ const AbstractController = require('./abstract.controller');
 class GnbTelemetryController extends AbstractController {
 
     constructor() {
-        super(require('../model/gnb.telemetryUE.model'))
+        super(require('../../model/gnb.telemetryUE.model'))
     }
 
 }
