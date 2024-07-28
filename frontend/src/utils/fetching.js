@@ -116,7 +116,7 @@ export async function getLiveGnbLogs() {
 // TELEMETRY
 
 // TODO: ueId should be an arr of ids ...
-export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
+export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
   if (!timeStart && !timeEnd && !ueId)
     return {
       data: null,
@@ -136,6 +136,23 @@ export async function getGnBTelemetry(timeStart, timeEnd, ueId) {
   } catch (err) {
     return {
       data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
+export async function getRecentGnbTelemetry() {
+  try {
+    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=1,204&limit=9`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const recentData = await response.json();
+
+    return { recentData: recentData, error: null };
+  } catch (err) {
+    return {
+      recentData: [],
       error: `${err.message}. Please check your internet connection and try again`,
     };
   }

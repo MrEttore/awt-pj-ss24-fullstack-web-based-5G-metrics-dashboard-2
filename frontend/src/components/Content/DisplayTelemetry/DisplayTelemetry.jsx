@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
-import { getGnBTelemetry } from '../../../utils/fetching';
+import {
+  getGnbTelemetry,
+  getRecentGnbTelemetry,
+} from '../../../utils/fetching';
 import {
   transformUeTelemetryData,
   filterRequestedTelemetryData,
@@ -56,7 +59,7 @@ export default function DisplayTelemetry({
         const [device] = devices;
 
         // TODO: update api call with arr of ueIds ...
-        const { data, error } = await getGnBTelemetry(
+        const { data, error } = await getGnbTelemetry(
           startTime,
           endTime,
           device.value
@@ -69,8 +72,6 @@ export default function DisplayTelemetry({
         const ueTelemetryData = transformUeTelemetryData(data);
 
         const generalTelemetryData = transformGeneralTelemetryData(data);
-
-        console.log();
 
         if (numDatapoints === 0) {
           onMessage({
@@ -116,13 +117,74 @@ export default function DisplayTelemetry({
   // ...
 
   // FETCH RECENT DATA
-  // ...
+  useEffect(() => {
+    const fetchRecentData = async () => {
+      try {
+        setIsLoading(true);
+
+        const { recentData, error } = await getRecentGnbTelemetry();
+
+        if (error) throw new Error(error);
+
+        const processedRecentUeData = transformUeTelemetryData(recentData);
+        const processedRecentGeneralData =
+          transformGeneralTelemetryData(recentData);
+
+        setUeTelemetryStatus(processedRecentUeData);
+        setGeneralTelemetryStatus(processedRecentGeneralData);
+
+        console.log('UseEffect: Fetch recent data!');
+      } catch (err) {
+        onMessage({
+          type: 'error',
+          text: err.message,
+        });
+
+        // TODO: add display of modules when fetch fails
+        setUeTelemetryStatus([]);
+        setGeneralTelemetryStatus([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (requestedData || isLiveDataToggled) return;
+
+    fetchRecentData();
+  }, [onMessage, requestedData, isLiveDataToggled]);
 
   return (
     <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Telemetry ...</Loader>}
 
-      {!isLoading && requestedData && (
+      {!isLoading && !requestedData && !isLiveDataToggled && (
+        <>
+          <div className="generalTelemetryItems">
+            {generalTelemetryStatus.map((metric, i) => {
+              return (
+                <TelemetryItem
+                  name={metric.metricName}
+                  rawData={metric.metricData}
+                  key={i}
+                />
+              );
+            })}
+          </div>
+          <div className="ueTelemetryItems">
+            {ueTelemetryStatus.map((metric, i) => {
+              return (
+                <TelemetryItem
+                  name={metric.metricName}
+                  rawData={metric.metricData}
+                  key={i}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {!isLoading && (requestedData || isLiveDataToggled) && (
         <>
           <div className="generalTelemetryItems">
             {generalTelemetryStatus.map((metric, i) => {
