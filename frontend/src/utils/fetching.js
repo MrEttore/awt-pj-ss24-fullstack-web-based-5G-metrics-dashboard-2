@@ -93,6 +93,23 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
+export async function getRecentGnbLogs(limit = 10) {
+  try {
+    const response = await fetch(`${GNB_LOGS_URL}?limit=${limit}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const recentData = await response.json();
+
+    return { recentData: recentData, error: null };
+  } catch (err) {
+    return {
+      recentData: [],
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
 export async function getLiveGnbLogs() {
   try {
     const response = await fetch(`${GNB_LOGS_URL}`);
