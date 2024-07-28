@@ -10,6 +10,7 @@ export default function Content({
   onMessage,
   resetFlag,
   isLiveDataToggled,
+  devices,
 }) {
   return (
     <div className="contentContainer">
@@ -27,6 +28,7 @@ export default function Content({
           onMessage={onMessage}
           resetFlag={resetFlag}
           isLiveDataToggled={isLiveDataToggled}
+          devices={devices}
         />
       )}
       {selectedTab === 'logs' && (

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import ControlBar from '../ControlBar/ControlBar.jsx';
 import Content from '../Content/Content.jsx';
@@ -7,28 +7,27 @@ import Forms from '../Forms/Forms.jsx';
 import InformationDisplay from '../InformationDisplay/InformationDisplay.jsx';
 import Filters from '../Filters/Filters.jsx';
 import Messages from '../Messages/Messages.jsx';
-import { EMPTY_MESSAGE } from '../../utils/constants.js';
+import { EMPTY_MESSAGE, DASHBOARD_UE_METRICS } from '../../utils/constants.js';
+import { getGnbUes } from '../../utils/fetching.js';
 
 import './Main.css';
 
 function Main() {
-  // Set state to control the tab selection
   const [selectedTab, setSelectedTab] = useState('healthStatus');
 
-  // Set state to control the data requests
   const [requestedData, setRequestedData] = useState(null);
 
-  // Set state to control the reset flag
   const [resetFlag, setResetFlag] = useState(false);
 
-  // Set state to control live data
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
 
-  // Set state to control info/error messages
   const [message, setMessage] = useState(EMPTY_MESSAGE);
 
-  // Set state to mark an error message
   const [error, setError] = useState(false);
+
+  const [devices, setDevices] = useState([]);
+
+  const [metrics, setMetrics] = useState([]);
 
   function handleSelectedTab(e) {
     setError(false);
@@ -57,6 +56,42 @@ function Main() {
     setMessage(msg);
   }, []);
 
+  // GET LIST OF AVAILABLE DEVICES
+
+  useEffect(() => {
+    const getDevices = async () => {
+      try {
+        const data = await getGnbUes();
+
+        const deviceData = data.map((device) => {
+          return { value: device, label: `UE${device}` };
+        });
+
+        setDevices(deviceData);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    getDevices();
+  }, []);
+
+  // GET LIST OF AVAILABLE METRICS
+
+  useEffect(() => {
+    function getMetrics(metricsArray) {
+      const metrics = metricsArray.map((m) => {
+        return { value: m, label: m };
+      });
+
+      metrics.unshift({ value: 'all', label: 'All metrics' });
+
+      setMetrics(metrics);
+    }
+
+    getMetrics(DASHBOARD_UE_METRICS);
+  }, []);
+
   return (
     <main className="main">
       <ControlBar>
@@ -67,6 +102,8 @@ function Main() {
           onDataReset={handleDataReset}
           isLiveDataToggled={isLiveDataToggled}
           onToggleLiveData={handleLiveDataToggle}
+          devices={devices}
+          metrics={metrics}
         />
       </ControlBar>
 
@@ -81,6 +118,7 @@ function Main() {
         onMessage={handleMessage}
         resetFlag={resetFlag}
         isLiveDataToggled={isLiveDataToggled}
+        devices={devices}
       />
     </main>
   );

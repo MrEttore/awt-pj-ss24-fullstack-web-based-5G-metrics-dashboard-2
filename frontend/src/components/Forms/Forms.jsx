@@ -6,9 +6,6 @@ import TimespanSelector from '../TimespanSelector/TimespanSelector';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
 
-import { DASHBOARD_UE_METRICS } from '../../utils/constants';
-import { getGnbUes } from '../../utils/fetching';
-
 import './Forms.css';
 
 export default function Forms({
@@ -17,6 +14,8 @@ export default function Forms({
   onDataReset,
   isLiveDataToggled,
   onToggleLiveData,
+  devices,
+  metrics,
 }) {
   const [startTime, setStartTime] = useState(null);
 
@@ -25,10 +24,6 @@ export default function Forms({
   const [selectedMetrics, setSelectedMetrics] = useState([]);
 
   const [selectedDevices, setSelectedDevices] = useState([]);
-
-  const [metrics, setMetrics] = useState([]);
-
-  const [devices, setDevices] = useState([]);
 
   function handleResetForm() {
     setStartTime(null);
@@ -87,43 +82,8 @@ export default function Forms({
     handleResetForm();
   }
 
-  // GET LIST OF AVAILABLE DEVICES
-
-  useEffect(() => {
-    const getDevices = async () => {
-      try {
-        const data = await getGnbUes();
-
-        const deviceData = data.map((device) => {
-          return { value: device, label: `UE${device}` };
-        });
-
-        setDevices(deviceData);
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-
-    getDevices();
-  }, []);
-
-  // GET LIST OF AVAILABLE METRICS
-
-  useEffect(() => {
-    function getMetrics(metricsArray) {
-      const metrics = metricsArray.map((m) => {
-        return { value: m, label: m };
-      });
-
-      metrics.unshift({ value: 'all', label: 'All metrics' });
-
-      setMetrics(metrics);
-    }
-
-    getMetrics(DASHBOARD_UE_METRICS);
-  }, []);
-
   // CLEAR INPUT FIELDS WHEN LIVE DATA IS ON
+
   useEffect(() => {
     if (isLiveDataToggled) handleResetForm();
   }, [isLiveDataToggled]);
