@@ -96,8 +96,29 @@ export function transformUeTelemetryData(data) {
   return result;
 }
 
-// TODO: continue here ...
-export function transformGeneralTelemetryData(data) {}
+export function transformGeneralTelemetryData(data) {
+  const metricData = {};
+  DASHBOARD_GENERAL_METRICS.forEach((metric) => {
+    metricData[metric] = [];
+  });
+
+  data.forEach((record) => {
+    const timestamp = record.timestamp;
+
+    DASHBOARD_GENERAL_METRICS.forEach((metric) => {
+      if (record.hasOwnProperty(metric)) {
+        const value = record[metric];
+        metricData[metric].push({ timestamp, value });
+      }
+    });
+  });
+  const result = DASHBOARD_GENERAL_METRICS.map((metric) => ({
+    metricName: metric,
+    metricData: metricData[metric],
+  }));
+
+  return result;
+}
 
 export function filterRequestedTelemetryData(data, filters) {
   if (filters.metrics[0].value === 'all') return data;
