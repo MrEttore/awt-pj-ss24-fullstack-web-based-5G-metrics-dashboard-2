@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import TelemetryItem from '../../TelemetryItem/TelemetryItem';
 import Loader from '../../Loader/Loader';
@@ -20,11 +20,17 @@ export default function DisplayTelemetry({
   onMessage,
   resetFlag,
   isLiveDataToggled,
+  devices,
 }) {
   const [ueTelemetryStatus, setUeTelemetryStatus] = useState([]);
+
   const [generalTelemetryStatus, setGeneralTelemetryStatus] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
+
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
+
+  const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
   // RESET TELEMETRY STATUS
 
@@ -32,7 +38,7 @@ export default function DisplayTelemetry({
     if (resetFlag) setUeTelemetryStatus([]);
   }, [resetFlag]);
 
-  // SET INITIAL UI MESSAGE
+  // SET INITIAL STATE
 
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
@@ -117,12 +123,13 @@ export default function DisplayTelemetry({
   // ...
 
   // FETCH RECENT DATA
+
   useEffect(() => {
     const fetchRecentData = async () => {
       try {
         setIsLoading(true);
 
-        const { recentData, error } = await getRecentGnbTelemetry();
+        const { recentData, error } = await getRecentGnbTelemetry(ues);
 
         if (error) throw new Error(error);
 
@@ -130,10 +137,10 @@ export default function DisplayTelemetry({
         const processedRecentGeneralData =
           transformGeneralTelemetryData(recentData);
 
+        console.log('processedRecentUeData: ', processedRecentUeData);
+
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
-
-        console.log('UseEffect: Fetch recent data!');
       } catch (err) {
         onMessage({
           type: 'error',
@@ -151,7 +158,7 @@ export default function DisplayTelemetry({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [onMessage, requestedData, isLiveDataToggled]);
+  }, [ues, onMessage, requestedData, isLiveDataToggled]);
 
   return (
     <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>

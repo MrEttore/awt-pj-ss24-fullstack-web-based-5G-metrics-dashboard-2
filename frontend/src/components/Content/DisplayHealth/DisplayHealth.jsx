@@ -22,7 +22,9 @@ export default function DisplayHealth({
   isLiveDataToggled,
 }) {
   const [healthStatus, setHealthStatus] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
+
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
   // RESET HEALTH STATUS
@@ -31,7 +33,7 @@ export default function DisplayHealth({
     if (resetFlag) setHealthStatus([]);
   }, [resetFlag]);
 
-  // SET INITIAL UI MESSAGE
+  // SET INITIAL STATE
 
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
