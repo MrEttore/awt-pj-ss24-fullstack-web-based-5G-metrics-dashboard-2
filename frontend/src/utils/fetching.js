@@ -138,9 +138,13 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
   }
 }
 
-export async function getRecentGnbTelemetry() {
+export async function getRecentGnbTelemetry(ues, limit = 10) {
   try {
-    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=1,204&limit=10`);
+    const uesStr = ues.join(',');
+
+    const response = await fetch(
+      `${GNB_TELEMETRY_URL}?ueIds=${uesStr}&limit=${limit}`
+    );
 
     if (!response.ok) throw new Error('Response not ok');
 
