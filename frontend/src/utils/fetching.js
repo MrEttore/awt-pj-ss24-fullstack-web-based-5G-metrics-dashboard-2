@@ -129,17 +129,18 @@ export async function getLiveGnbLogs() {
 
 // TELEMETRY
 
-// TODO: ueId should be an arr of ids ...
-export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
-  if (!timeStart && !timeEnd && !ueId)
+export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
+  if (!timeStart && !timeEnd && !ueIds)
     return {
       data: null,
       error: new Error('Select a valid start and endtime for the request!'),
     };
 
   try {
+    const strUeIds = ueIds.join();
+
     const response = await fetch(
-      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${ueId.toString()}`
+      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${strUeIds}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
