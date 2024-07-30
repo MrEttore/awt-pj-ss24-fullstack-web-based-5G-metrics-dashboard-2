@@ -8,8 +8,8 @@ import {
 } from '../../../utils/fetching';
 import {
   transformUeTelemetryData,
-  filterRequestedTelemetryData,
   transformGeneralTelemetryData,
+  filterRequestedTelemetryData,
 } from '../../../utils/transformData';
 import { EMPTY_MESSAGE } from '../../../utils/constants';
 
@@ -62,18 +62,20 @@ export default function DisplayTelemetry({
         onMessage(EMPTY_MESSAGE);
 
         const { startTime, endTime, devices } = requestedData;
-        const [device] = devices;
 
-        // TODO: update api call with arr of ueIds ...
+        const ueIds = devices.map((device) => device.value);
+
         const { data, error } = await getGnbTelemetry(
           startTime,
           endTime,
-          device.value
+          ueIds
         );
 
-        const numDatapoints = data.length;
-
         if (error) throw new Error(error);
+
+        console.log('data: ', data);
+
+        const numDatapoints = data.length;
 
         const ueTelemetryData = transformUeTelemetryData(data);
 
@@ -93,8 +95,7 @@ export default function DisplayTelemetry({
           requestedData
         );
 
-        console.log('ueTelemetryData_Telemetry: ', ueTelemetryData);
-        console.log('generalTelemetryData_Telemetry: ', generalTelemetryData);
+        console.log('filteredUeTelemetryData: ', filteredUeTelemetryData);
 
         setUeTelemetryStatus(filteredUeTelemetryData);
         setGeneralTelemetryStatus(generalTelemetryData);
@@ -137,7 +138,7 @@ export default function DisplayTelemetry({
         const processedRecentGeneralData =
           transformGeneralTelemetryData(recentData);
 
-        console.log('processedRecentUeData: ', processedRecentUeData);
+        // console.log('processedRecentUeData: ', processedRecentUeData);
 
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
