@@ -40,7 +40,6 @@ export default function Forms({
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
-      isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
@@ -56,7 +55,6 @@ export default function Forms({
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
-      isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
@@ -74,7 +72,6 @@ export default function Forms({
       endTime: endTime.getTime(),
       devices: selectedDevices,
       metrics: selectedMetrics,
-      isLiveDataOn: isLiveDataToggled,
     };
 
     onDataRequest(requestedData);
