@@ -1,15 +1,12 @@
 import { Line } from 'react-chartjs-2';
-
 import './TelemetryItem.css';
 import {
   COLOR_LABEL_TEXT,
   COLOR_LABEL_TEXT_NO_DATA,
   COLOR_AXIS_BORDER,
-  COLOR_DATASET_LINE,
   COLOR_GRAPH_GRID,
-  COLOR_MODULE_ON,
+  DATASET_COLORS,
 } from '../../styles/graphColors';
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,7 +18,6 @@ import {
   Legend,
 } from 'chart.js';
 
-// Register Chart.js components and scales
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,10 +29,56 @@ ChartJS.register(
 );
 
 export default function TelemetryItem({ name, rawData = [] }) {
-  const uniqueLablesY = Array.from(new Set(rawData.map((dp) => dp.value)));
-  const allValuesAreStrings = rawData.every(
-    (dp) => typeof dp.value === 'string'
+  const allValues = rawData.flatMap((dp) =>
+    dp.data.map((entry) => entry.value)
   );
+  const uniqueLabelsY = Array.from(new Set(allValues));
+
+  const allValuesAreStrings = allValues.every(
+    (value) => typeof value === 'string'
+  );
+
+  const allTimestamps = rawData.flatMap((dp) =>
+    dp.data.map((entry) => new Date(entry.timestamp).toLocaleString())
+  );
+
+  const uniqueTimestamps = Array.from(new Set(allTimestamps));
+
+  const pointRadiusMapping = (dataPoints) => {
+    if (dataPoints <= 10) {
+      return 3.5;
+    } else if (dataPoints <= 50) {
+      return 2;
+    } else if (dataPoints <= 75) {
+      return 1.8;
+    } else if (dataPoints <= 100) {
+      return 1.5;
+    } else {
+      return 0.5;
+    }
+  };
+
+  const datasets = rawData.map((ue, index) => {
+    const { ueId, data } = ue;
+
+    const telemetryData = data.map((entry) => entry.value);
+
+    const color = DATASET_COLORS[index % DATASET_COLORS.length];
+
+    return {
+      label: `UE ${ueId}`,
+      data: telemetryData,
+      borderColor: color,
+      backgroundColor: color + '66',
+      borderWidth: 2,
+      pointBackgroundColor: color,
+      pointBorderColor: color,
+      pointRadius: pointRadiusMapping(telemetryData.length),
+      pointHoverRadius: 6,
+      borderDash: index % 2 === 0 ? [5, 5] : [],
+      fill: false,
+    };
+  });
 
   const options = {
     responsive: true,
@@ -48,9 +90,28 @@ export default function TelemetryItem({ name, rawData = [] }) {
         color:
           rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
       },
-      // TODO: legend needed?
       legend: {
-        display: false,
+        display: true,
+        position: 'top',
+        align: 'center',
+        labels: {
+          color:
+            rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
+          boxWidth: 20,
+        },
+        onHover: (event) => {
+          event.native.target.style.cursor = 'pointer';
+        },
+        onLeave: (event) => {
+          event.native.target.style.cursor = 'default';
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return `Value: ${tooltipItem.raw}`;
+          },
+        },
       },
     },
     scales: {
@@ -63,6 +124,7 @@ export default function TelemetryItem({ name, rawData = [] }) {
         ticks: {
           color:
             rawData.length !== 0 ? COLOR_LABEL_TEXT : COLOR_LABEL_TEXT_NO_DATA,
+          autoSkip: true,
         },
         border: {
           color: COLOR_AXIS_BORDER,
@@ -77,7 +139,7 @@ export default function TelemetryItem({ name, rawData = [] }) {
       y: {
         display: true,
         type: allValuesAreStrings ? 'category' : 'linear',
-        labels: allValuesAreStrings ? uniqueLablesY : undefined,
+        labels: allValuesAreStrings ? uniqueLabelsY : undefined,
         position: 'left',
         ticks: {
           color:
@@ -91,30 +153,9 @@ export default function TelemetryItem({ name, rawData = [] }) {
     },
   };
 
-  const labelsX = rawData.map((dp) => {
-    const date = new Date(dp.timestamp);
-    const dateString = date.toLocaleString();
-
-    return dateString;
-  });
-
-  const telemetryData = rawData.map((dp) => dp.value);
-
   const data = {
-    labels: labelsX,
-    datasets: [
-      {
-        label: name,
-        data: telemetryData,
-        borderColor: COLOR_DATASET_LINE,
-        fill: false,
-        stepped: false,
-        pointBackgroundColor: COLOR_MODULE_ON,
-        pointBorderColor: COLOR_MODULE_ON,
-        pointRadius: telemetryData.length <= 10 ? 4 : 2.5,
-        pointHoverRadius: 5,
-      },
-    ],
+    labels: uniqueTimestamps,
+    datasets: datasets,
   };
 
   return (
