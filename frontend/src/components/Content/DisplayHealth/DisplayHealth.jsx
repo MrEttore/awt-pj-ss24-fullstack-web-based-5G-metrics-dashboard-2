@@ -76,8 +76,6 @@ export default function DisplayHealth({
 
         setHealthStatus(processedData);
 
-        console.log('UseEffect: Fetch queried data!');
-
         onMessage({
           type: 'success-queried-data-found',
           text: `Successfully returned ${numDatapoints} datapoints!`,
@@ -153,8 +151,6 @@ export default function DisplayHealth({
         const processedRecentData = transformHealthData(recentData);
 
         setHealthStatus(processedRecentData);
-
-        console.log('UseEffect: Fetch recent data!');
       } catch (err) {
         onMessage({
           type: 'error',
