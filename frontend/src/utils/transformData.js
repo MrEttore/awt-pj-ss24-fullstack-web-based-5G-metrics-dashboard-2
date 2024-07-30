@@ -69,7 +69,8 @@ export function aggregateLiveHealthData(existingData, newData) {
   return Object.values(aggregatedData);
 }
 
-export function transformUeTelemetryData(data) {
+// TODO: delete
+export function transformUeTelemetryData_old(data) {
   const metricData = {};
   DASHBOARD_UE_METRICS.forEach((metric) => {
     metricData[metric] = [];
@@ -96,7 +97,8 @@ export function transformUeTelemetryData(data) {
   return result;
 }
 
-export function transformGeneralTelemetryData(data) {
+// TODO: delete
+export function transformGeneralTelemetryData_old(data) {
   const metricData = {};
   DASHBOARD_GENERAL_METRICS.forEach((metric) => {
     metricData[metric] = [];
@@ -116,6 +118,86 @@ export function transformGeneralTelemetryData(data) {
     metricName: metric,
     metricData: metricData[metric],
   }));
+
+  return result;
+}
+
+export function transformUeTelemetryData(data) {
+  const metricData = {};
+
+  DASHBOARD_UE_METRICS.forEach((metric) => {
+    metricData[metric] = {};
+  });
+
+  data.forEach((record) => {
+    const timestamp = record.timestamp;
+
+    record.ues.forEach((ue) => {
+      const ueId = ue.ueId;
+
+      DASHBOARD_UE_METRICS.forEach((metric) => {
+        if (ue.hasOwnProperty(metric)) {
+          const value = ue[metric];
+          if (!metricData[metric][ueId]) {
+            metricData[metric][ueId] = [];
+          }
+          metricData[metric][ueId].push({ timestamp, value });
+        }
+      });
+    });
+  });
+
+  const result = DASHBOARD_UE_METRICS.map((metric) => {
+    const ueData = Object.keys(metricData[metric]).map((ueId) => ({
+      ueId: Number(ueId),
+      data: metricData[metric][ueId],
+    }));
+
+    return {
+      metricName: metric,
+      metricData: ueData,
+    };
+  });
+
+  return result;
+}
+
+export function transformGeneralTelemetryData(data) {
+  const metricData = {};
+
+  DASHBOARD_GENERAL_METRICS.forEach((metric) => {
+    metricData[metric] = {};
+  });
+
+  data.forEach((record) => {
+    const timestamp = record.timestamp;
+
+    record.ues.forEach((ue) => {
+      const ueId = ue.ueId;
+
+      DASHBOARD_GENERAL_METRICS.forEach((metric) => {
+        if (ue.hasOwnProperty(metric)) {
+          const value = ue[metric];
+          if (!metricData[metric][ueId]) {
+            metricData[metric][ueId] = [];
+          }
+          metricData[metric][ueId].push({ timestamp, value });
+        }
+      });
+    });
+  });
+
+  const result = DASHBOARD_GENERAL_METRICS.map((metric) => {
+    const ueData = Object.keys(metricData[metric]).map((ueId) => ({
+      ueId: Number(ueId),
+      data: metricData[metric][ueId],
+    }));
+
+    return {
+      metricName: metric,
+      metricData: ueData,
+    };
+  });
 
   return result;
 }
