@@ -129,7 +129,7 @@ export default function Forms({
                 Array.isArray(selected) ? selected : [selected]
               )
             }
-            isMulti={false}
+            isMulti={true}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
           />
