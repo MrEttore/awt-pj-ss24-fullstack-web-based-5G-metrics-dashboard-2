@@ -1,11 +1,12 @@
 const db = require("../database/sqlite3");
 const queries = require('../sql/messages.sql');
 
-module.exports.topics = {
-    TELEMETRY: 'gnb.telemetry',
+module.exports.topics = Object.freeze({
+    GNB_TELEMETRY: 'gnb.telemetry',
     HEALTH: 'cn5g.telemetry',
-    LOGS: 'gnb.logs'
-}
+    LOGS: 'gnb.logs',
+    TELEMETRY: 'telemetry'
+})
 
 const MIN_TIME = 0
 const MAX_TIME = Infinity
@@ -84,7 +85,6 @@ async function addUe(timestamp, ueId) {
 
 async function addMessage(timestamp, destination, payload) {
     return new Promise((resolve, reject) => {
-
         // verify params
         try {
             JSON.parse(payload)
@@ -124,17 +124,14 @@ function applyDataReduction(rows, limit = LIMIT) {
  */
 module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_TIME, limit = LIMIT) {
     return new Promise((resolve, reject) => {
-        if (topic != this.topics.HEALTH
-            && topic != this.topics.TELEMETRY
-            && topic != this.topics.LOGS
-        ) {
+        if (!Object.values(this.topics).includes(topic)) {
             return reject('Invalid topic')
         }
         if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
             return reject('Invalid time interval')
         }
 
-        db.all(queries.GET, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
+        db.all(queries.GET, [timeStart, timeEnd, topic], (err, rows) => {
             if (err)
                 return reject(err)
             return resolve(
@@ -149,7 +146,7 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
 
 module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds = []) {
     // Abrufen aller Telemetriedatensätze innerhalb des angegebenen Zeitintervalls
-    let rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd, Infinity);
+    let rows = await this.get(this.topics.GNB_TELEMETRY, timeStart, timeEnd, Infinity);
 
     // Iteriere über jede Zeile und filtere das 'ues' Feld basierend auf 'ueIds'
     for (let row of rows) {
@@ -216,7 +213,7 @@ module.exports.getLatestTimestamp = async function (topic) {
 
         // validate parameters
         if (topic != this.topics.HEALTH
-            && topic != this.topics.TELEMETRY
+            && topic != this.topics.GNB_TELEMETRY
             && topic != this.topics.LOGS
         ) {
             return reject('Invalid topic')

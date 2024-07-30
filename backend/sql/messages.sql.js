@@ -7,7 +7,9 @@ module.exports = {
 
     GET: `SELECT payload
         FROM Messages
-        WHERE destination LIKE ? AND ? <= timestamp AND timestamp <= ?
+        WHERE ? <= timestamp 
+        AND timestamp <= ?
+        AND destination = ?
         ORDER BY timestamp ASC
     `,
     

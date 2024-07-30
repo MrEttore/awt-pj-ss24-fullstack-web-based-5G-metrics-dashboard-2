@@ -6,44 +6,42 @@ const controller = require('../controller/messages.controller');
  * @route POST /api/messages
  * @description Add a new message to the database.
  */
-router.post('/messages', controller.add);
+router.post('/', controller.add);
 
 /**
  * @route GET /api/messages
  * @description Get messages from the database based on topic and time interval.
  */
-router.get('/messages', controller.get);
+router.get('/', controller.get);
 
 /**
- * @route GET /api/logs
+ * @route GET /api/messages/logs
  * @description Get log messages from the database within a specified time interval.
  */
-router.get('/gnb/logs', controller.getLogs);
+router.get('/logs', controller.getGnbLogs);
 
 /**
- * @route GET /api/health
+ * @route GET /api/messages/health
  * @description Get health data from the database within a specified time interval.
  */
-router.get('/cn5g/telemetry', controller.getHealth);
+router.get('/health', controller.getHealth);
 
 /**
- * @route GET /api/telemetry
+ * @route GET /api/messages/gnbTelemetry
  * @description Get telemetry data from the database and filter by UE IDs.
  */
-router.get('/gnb/telemetry', controller.getTelemetry);
+router.get('/gnbTelemetry', controller.getGnbTelemetry);
 
 /**
- * @route GET /api/ues
+ * @route GET /api/messages/gnbTelemetry/ues
  * @description Get a list of unique UE IDs from telemetry data within a specified time interval.
  */
-router.get('/ues', controller.getUEs);
+router.get('/gnbTelemetry/ues', controller.getUEs);
 
-router.post('/gnb/telemetry', controller.addTelemetry);
-
-router.post('/gnb/logs', controller.addLogs);
-
-router.post('/cn5g/telemetry', controller.addHealth);
-
+/**
+ * @route GET /api/messages/latestTimestamp
+ * @description Get the latest timestamp of a given topic.
+ */
 router.get('/latestTimestamp', controller.getLatestTimestamp);
 
 module.exports = router;
