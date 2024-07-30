@@ -2,6 +2,7 @@ import {
   CN5G_URL,
   GNB_LOGS_URL,
   GNB_TELEMETRY_URL,
+  TELEMETRY_BASE_URL,
   UES_URL,
 } from './constants.js';
 
@@ -16,7 +17,7 @@ export async function getCn5gData(timeStart, timeEnd) {
 
   try {
     const response = await fetch(
-      `${CN5G_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      `${CN5G_URL}&timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -51,7 +52,7 @@ export async function getLiveCn5gData() {
 
 export async function getRecentCn5gData() {
   try {
-    const response = await fetch(`${CN5G_URL}?limit=10`);
+    const response = await fetch(`${CN5G_URL}&limit=10`);
 
     if (!response.ok) throw new Error('Response not ok');
 
@@ -77,7 +78,7 @@ export async function getGnbLogs(timeStart, timeEnd) {
 
   try {
     const response = await fetch(
-      `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      `${GNB_LOGS_URL}&timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -93,9 +94,35 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
+export async function getTelemetry(timeStart, timeEnd) {
+  if (!timeStart && !timeEnd)
+    return {
+      data: null,
+      error: new Error('Select a valid start and endtime for the request!'),
+    };
+
+  try {
+    const response = await fetch(
+      `${TELEMETRY_BASE_URL}&timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+    );
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    return { data: data, error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
+
 export async function getRecentGnbLogs(limit = 10) {
   try {
-    const response = await fetch(`${GNB_LOGS_URL}?limit=${limit}`);
+    const response = await fetch(`${GNB_LOGS_URL}&limit=${limit}`);
 
     if (!response.ok) throw new Error('Response not ok');
 

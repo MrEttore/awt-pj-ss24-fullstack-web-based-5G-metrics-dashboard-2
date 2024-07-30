@@ -51,13 +51,15 @@ export const DASHBOARD_GENERAL_METRICS = [
 
 // API urls
 
-export const CN5G_URL = 'http://localhost:5173/api/cn5g/telemetry';
+export const CN5G_URL = 'http://localhost:5173/api/messages?topic=health';
 
-export const GNB_LOGS_URL = 'http://localhost:5173/api/gnb/logs';
+export const GNB_LOGS_URL = 'http://localhost:5173/api/messages?topic=logs';
 
-export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
+export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/messages/gnbTelemetry';
 
-export const UES_URL = 'http://localhost:5173/api/ues';
+export const UES_URL = 'http://localhost:5173/api/messages/gnbTelemetry/ues';
+
+export const TELEMETRY_BASE_URL = 'http://localhost:5173/api/messages?topic=telemetry'
 
 // Warning i.e., error messages
 
