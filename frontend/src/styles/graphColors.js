@@ -10,3 +10,10 @@ export const COLOR_MODULE_NOT_IMPLEMENTED = ' #adb5bd';
 export const COLOR_MODULE_OFF = '#f44336';
 export const COLOR_MODULE_UNKNOWN = ' #adb5bd';
 export const COLOR_GRAPH_GRID = 'rgb(245, 245, 245, 0.1)';
+export const DATASET_COLORS = [
+  '#7950f2',
+  '#00FF40',
+  '#FF69B4',
+  '#F1C40F',
+  '#9B59B6',
+];
