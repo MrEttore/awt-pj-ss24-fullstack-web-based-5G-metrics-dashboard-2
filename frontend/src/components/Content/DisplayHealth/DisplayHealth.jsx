@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import HealthItem from '../../HealthItem/HealthItem';
 import Loader from '../../Loader/Loader';
 import {
-  transformHealthData,
+  getHealthData,
   aggregateLiveHealthData,
-} from '../../../utils/transformData';
+} from '../../../utils/transform-data';
 import {
   getCn5gData,
   getLiveCn5gData,
@@ -63,7 +63,7 @@ export default function DisplayHealth({
 
         if (error) throw new Error(error);
 
-        const processedData = transformHealthData(data);
+        const processedData = getHealthData(data);
 
         if (numDatapoints === 0) {
           onMessage({
@@ -105,7 +105,7 @@ export default function DisplayHealth({
 
         const liveData = await getLiveCn5gData();
 
-        const processedLiveData = transformHealthData(liveData);
+        const processedLiveData = getHealthData(liveData);
 
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
@@ -148,7 +148,7 @@ export default function DisplayHealth({
 
         if (error) throw new Error(error);
 
-        const processedRecentData = transformHealthData(recentData);
+        const processedRecentData = getHealthData(recentData);
 
         setHealthStatus(processedRecentData);
       } catch (err) {
