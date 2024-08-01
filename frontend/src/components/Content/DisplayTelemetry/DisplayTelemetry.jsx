@@ -1,16 +1,17 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import TelemetryItem from '../../TelemetryItem/TelemetryItem';
+import UeTelemetryItem from '../../UeTelemetryItem/UeTelemetryItem';
+import GeneralTelemetryItem from '../../GeneralTelemetryItem/GeneralTelemetryItem';
 import Loader from '../../Loader/Loader';
 import {
   getGnbTelemetry,
   getRecentGnbTelemetry,
 } from '../../../utils/fetching';
 import {
-  transformUeTelemetryData,
-  transformGeneralTelemetryData,
-  filterRequestedTelemetryData,
-} from '../../../utils/transformData';
+  getUeTelemetryData,
+  getGeneralTelemetryData,
+  filterTelemetryData,
+} from '../../../utils/transform-data';
 import { EMPTY_MESSAGE } from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
@@ -73,13 +74,11 @@ export default function DisplayTelemetry({
 
         if (error) throw new Error(error);
 
-        console.log('data: ', data);
-
         const numDatapoints = data.length;
 
-        const ueTelemetryData = transformUeTelemetryData(data);
+        const ueTelemetryData = getUeTelemetryData(data);
 
-        const generalTelemetryData = transformGeneralTelemetryData(data);
+        const generalTelemetryData = getGeneralTelemetryData(data);
 
         if (numDatapoints === 0) {
           onMessage({
@@ -90,12 +89,10 @@ export default function DisplayTelemetry({
           return;
         }
 
-        const filteredUeTelemetryData = filterRequestedTelemetryData(
+        const filteredUeTelemetryData = filterTelemetryData(
           ueTelemetryData,
           requestedData
         );
-
-        console.log('filteredUeTelemetryData: ', filteredUeTelemetryData);
 
         setUeTelemetryStatus(filteredUeTelemetryData);
         setGeneralTelemetryStatus(generalTelemetryData);
@@ -134,11 +131,8 @@ export default function DisplayTelemetry({
 
         if (error) throw new Error(error);
 
-        const processedRecentUeData = transformUeTelemetryData(recentData);
-        const processedRecentGeneralData =
-          transformGeneralTelemetryData(recentData);
-
-        // console.log('processedRecentUeData: ', processedRecentUeData);
+        const processedRecentUeData = getUeTelemetryData(recentData);
+        const processedRecentGeneralData = getGeneralTelemetryData(recentData);
 
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
@@ -170,7 +164,7 @@ export default function DisplayTelemetry({
           <div className="generalTelemetryItems">
             {generalTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <GeneralTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -181,7 +175,7 @@ export default function DisplayTelemetry({
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <UeTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -197,7 +191,7 @@ export default function DisplayTelemetry({
           <div className="generalTelemetryItems">
             {generalTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <GeneralTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -208,7 +202,7 @@ export default function DisplayTelemetry({
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <UeTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
