@@ -12,7 +12,11 @@ import {
   getGeneralTelemetryData,
   filterTelemetryData,
 } from '../../../utils/transform-data';
-import { EMPTY_MESSAGE } from '../../../utils/constants';
+import {
+  EMPTY_MESSAGE,
+  EMPTY_UE_TELEMETRY_STATUS,
+  EMPTY_GENERAL_TELEMETRY_STATUS,
+} from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -106,7 +110,9 @@ export default function DisplayTelemetry({
           type: 'error',
           text: error.message,
         });
-        setUeTelemetryStatus([]);
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
       } finally {
         setIsLoading(false);
       }
@@ -142,9 +148,8 @@ export default function DisplayTelemetry({
           text: err.message,
         });
 
-        // TODO: add display of modules when fetch fails
-        setUeTelemetryStatus([]);
-        setGeneralTelemetryStatus([]);
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
       } finally {
         setIsLoading(false);
       }

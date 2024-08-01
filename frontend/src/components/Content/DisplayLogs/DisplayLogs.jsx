@@ -53,9 +53,9 @@ export default function DisplayLogs({
 
         const { data, error } = await getGnbLogs(startTime, endTime);
 
-        const numDatapoints = data.length;
-
         if (error) throw new Error(error);
+
+        const numDatapoints = data.length;
 
         if (numDatapoints === 0) {
           onMessage({

@@ -11,7 +11,7 @@ import {
   getLiveCn5gData,
   getRecentCn5gData,
 } from '../../../utils/fetching';
-import { EMPTY_MESSAGE } from '../../../utils/constants';
+import { EMPTY_MESSAGE, EMPTY_HEALTH_STATUS } from '../../../utils/constants';
 
 import './DisplayHealth.css';
 
@@ -59,9 +59,9 @@ export default function DisplayHealth({
 
         const { data, error } = await getCn5gData(startTime, endTime);
 
-        const numDatapoints = data.length;
-
         if (error) throw new Error(error);
+
+        const numDatapoints = data.length;
 
         const processedData = getHealthData(data);
 
@@ -85,7 +85,8 @@ export default function DisplayHealth({
           type: 'error',
           text: err.message,
         });
-        setHealthStatus([]);
+
+        setHealthStatus(EMPTY_HEALTH_STATUS);
       } finally {
         setIsLoading(false);
       }
@@ -103,9 +104,11 @@ export default function DisplayHealth({
       try {
         setIsLiveDataLoading(true);
 
-        const liveData = await getLiveCn5gData();
+        const { data, error } = await getLiveCn5gData();
 
-        const processedLiveData = getHealthData(liveData);
+        if (error) throw new Error(error);
+
+        const processedLiveData = getHealthData(data);
 
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
@@ -113,8 +116,6 @@ export default function DisplayHealth({
         );
 
         setHealthStatus(aggregatedLiveData);
-
-        console.log('UseEffect: Fetch live data!');
 
         onMessage({
           type: 'success-live-data',
@@ -125,6 +126,8 @@ export default function DisplayHealth({
           type: 'error',
           text: 'Live data is not available!',
         });
+
+        setHealthStatus(EMPTY_HEALTH_STATUS);
       }
     };
 
@@ -157,8 +160,7 @@ export default function DisplayHealth({
           text: err.message,
         });
 
-        // TODO: add display of modules when fetch fails
-        setHealthStatus([]);
+        setHealthStatus(EMPTY_HEALTH_STATUS);
       } finally {
         setIsLoading(false);
       }

@@ -42,10 +42,12 @@ export async function getLiveCn5gData() {
 
     const mostRecentDatapoint = data[data.length - 1];
 
-    return mostRecentDatapoint ? [mostRecentDatapoint] : [];
+    return { data: [mostRecentDatapoint], error: null };
   } catch (err) {
-    console.error(err);
-    return [];
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
   }
 }
 
