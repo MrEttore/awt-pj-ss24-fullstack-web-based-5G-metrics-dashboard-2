@@ -5,7 +5,7 @@ import {
   COLOR_AXIS_BORDER,
   COLOR_GRAPH_GRID,
   DATASET_COLORS,
-} from '../../styles/graphColors';
+} from '../../styles/graph-colors';
 import './UeTelemetryItem.css';
 import {
   Chart as ChartJS,

@@ -6,7 +6,7 @@ import {
   COLOR_DATASET_LINE,
   COLOR_GRAPH_GRID,
   COLOR_MODULE_ON,
-} from '../../styles/graphColors';
+} from '../../styles/graph-colors';
 import './GeneralTelemetryItem.css';
 import {
   Chart as ChartJS,
