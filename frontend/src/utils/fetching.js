@@ -43,10 +43,12 @@ export async function getLiveCn5gData() {
 
     const mostRecentDatapoint = data[data.length - 1];
 
-    return mostRecentDatapoint ? [mostRecentDatapoint] : [];
+    return { data: [mostRecentDatapoint], error: null };
   } catch (err) {
-    console.error(err);
-    return [];
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
   }
 }
 
@@ -156,17 +158,18 @@ export async function getLiveGnbLogs() {
 
 // TELEMETRY
 
-// TODO: ueId should be an arr of ids ...
-export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
-  if (!timeStart && !timeEnd && !ueId)
+export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
+  if (!timeStart && !timeEnd && !ueIds)
     return {
       data: null,
       error: new Error('Select a valid start and endtime for the request!'),
     };
 
   try {
+    const strUeIds = ueIds.join();
+
     const response = await fetch(
-      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${ueId.toString()}`
+      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${strUeIds}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -174,6 +177,27 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueId) {
     const data = await response.json();
 
     return { data: data, error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
+export async function getLiveGnbTelemetry(ues) {
+  try {
+    const uesStr = ues.join(',');
+
+    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=${uesStr}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    const mostRecentDatapoint = data[data.length - 1];
+
+    return { data: [mostRecentDatapoint], error: null };
   } catch (err) {
     return {
       data: null,

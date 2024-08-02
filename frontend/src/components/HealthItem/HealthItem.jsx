@@ -12,7 +12,7 @@ import {
   COLOR_AXIS_BORDER,
   COLOR_DATASET_LINE,
   COLOR_GRAPH_GRID,
-} from '../../styles/graphColors';
+} from '../../styles/graph-colors';
 
 import {
   Chart as ChartJS,
