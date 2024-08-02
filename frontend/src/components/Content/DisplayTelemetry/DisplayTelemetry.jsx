@@ -1,17 +1,25 @@
 import { useState, useEffect, useMemo } from 'react';
 
-import TelemetryItem from '../../TelemetryItem/TelemetryItem';
+import UeTelemetryItem from '../../UeTelemetryItem/UeTelemetryItem';
+import GeneralTelemetryItem from '../../GeneralTelemetryItem/GeneralTelemetryItem';
 import Loader from '../../Loader/Loader';
 import {
   getGnbTelemetry,
   getRecentGnbTelemetry,
+  getLiveGnbTelemetry,
 } from '../../../utils/fetching';
 import {
-  transformUeTelemetryData,
-  filterRequestedTelemetryData,
-  transformGeneralTelemetryData,
-} from '../../../utils/transformData';
-import { EMPTY_MESSAGE } from '../../../utils/constants';
+  getUeTelemetryData,
+  getGeneralTelemetryData,
+  aggregateLiveUeTelemetryData,
+  aggregateLiveGeneralTelemetryData,
+  filterTelemetryData,
+} from '../../../utils/transform-data';
+import {
+  EMPTY_MESSAGE,
+  EMPTY_UE_TELEMETRY_STATUS,
+  EMPTY_GENERAL_TELEMETRY_STATUS,
+} from '../../../utils/constants';
 
 import './DisplayTelemetry.css';
 
@@ -62,22 +70,22 @@ export default function DisplayTelemetry({
         onMessage(EMPTY_MESSAGE);
 
         const { startTime, endTime, devices } = requestedData;
-        const [device] = devices;
 
-        // TODO: update api call with arr of ueIds ...
+        const ueIds = devices.map((device) => device.value);
+
         const { data, error } = await getGnbTelemetry(
           startTime,
           endTime,
-          device.value
+          ueIds
         );
-
-        const numDatapoints = data.length;
 
         if (error) throw new Error(error);
 
-        const ueTelemetryData = transformUeTelemetryData(data);
+        const numDatapoints = data.length;
 
-        const generalTelemetryData = transformGeneralTelemetryData(data);
+        const ueTelemetryData = getUeTelemetryData(data);
+
+        const generalTelemetryData = getGeneralTelemetryData(data);
 
         if (numDatapoints === 0) {
           onMessage({
@@ -88,13 +96,10 @@ export default function DisplayTelemetry({
           return;
         }
 
-        const filteredUeTelemetryData = filterRequestedTelemetryData(
+        const filteredUeTelemetryData = filterTelemetryData(
           ueTelemetryData,
           requestedData
         );
-
-        console.log('ueTelemetryData_Telemetry: ', ueTelemetryData);
-        console.log('generalTelemetryData_Telemetry: ', generalTelemetryData);
 
         setUeTelemetryStatus(filteredUeTelemetryData);
         setGeneralTelemetryStatus(generalTelemetryData);
@@ -108,7 +113,9 @@ export default function DisplayTelemetry({
           type: 'error',
           text: error.message,
         });
-        setUeTelemetryStatus([]);
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
       } finally {
         setIsLoading(false);
       }
@@ -120,7 +127,74 @@ export default function DisplayTelemetry({
   }, [requestedData, onMessage]);
 
   // FETCH LIVE DATA
-  // ...
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        setIsLiveDataLoading(true);
+
+        const { data, error } = await getLiveGnbTelemetry(ues);
+
+        if (error) throw new Error(error);
+
+        console.log('data: ', data);
+
+        const ueLiveData = getUeTelemetryData(data);
+        const generalLiveData = getGeneralTelemetryData(data);
+
+        console.log('ueLiveData: ', ueLiveData);
+        console.log('generalLiveData: ', generalLiveData);
+
+        // FIXME: data aggregation in status
+
+        const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
+          ueTelemetryStatus,
+          ueLiveData
+        );
+
+        console.log('aggregatedUeLiveData: ', aggregatedUeLiveData);
+
+        // const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
+        //   generalTelemetryStatus,
+        //   generalLiveData
+        // );
+
+        // setUeTelemetryStatus(aggregatedUeLiveData);
+        // setGeneralTelemetryStatus(aggregatedGeneralLiveData);
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+
+        onMessage({
+          type: 'success-live-data',
+          text: 'Live data is on!',
+        });
+      } catch (err) {
+        onMessage({
+          type: 'error',
+          text: `${err}`,
+        });
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+      }
+    };
+
+    if (!isLiveDataToggled) return;
+
+    if (!isLiveDataLoading)
+      onMessage({ type: 'info', text: 'Activating live data ...' });
+
+    const intervalId = setInterval(fetchLiveData, 3000);
+    return () => clearInterval(intervalId);
+  }, [
+    ues,
+    isLiveDataToggled,
+    onMessage,
+    ueTelemetryStatus,
+    generalTelemetryStatus,
+    isLiveDataLoading,
+  ]);
 
   // FETCH RECENT DATA
 
@@ -133,11 +207,8 @@ export default function DisplayTelemetry({
 
         if (error) throw new Error(error);
 
-        const processedRecentUeData = transformUeTelemetryData(recentData);
-        const processedRecentGeneralData =
-          transformGeneralTelemetryData(recentData);
-
-        console.log('processedRecentUeData: ', processedRecentUeData);
+        const processedRecentUeData = getUeTelemetryData(recentData);
+        const processedRecentGeneralData = getGeneralTelemetryData(recentData);
 
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
@@ -147,9 +218,8 @@ export default function DisplayTelemetry({
           text: err.message,
         });
 
-        // TODO: add display of modules when fetch fails
-        setUeTelemetryStatus([]);
-        setGeneralTelemetryStatus([]);
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
       } finally {
         setIsLoading(false);
       }
@@ -169,7 +239,7 @@ export default function DisplayTelemetry({
           <div className="generalTelemetryItems">
             {generalTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <GeneralTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -180,7 +250,7 @@ export default function DisplayTelemetry({
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <UeTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -196,7 +266,7 @@ export default function DisplayTelemetry({
           <div className="generalTelemetryItems">
             {generalTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <GeneralTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
@@ -207,7 +277,7 @@ export default function DisplayTelemetry({
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
               return (
-                <TelemetryItem
+                <UeTelemetryItem
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}

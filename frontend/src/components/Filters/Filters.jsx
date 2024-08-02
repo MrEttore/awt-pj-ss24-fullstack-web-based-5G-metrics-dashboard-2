@@ -5,7 +5,7 @@ export default function Filters({ filters, isThereError }) {
 
   if (isThereError) return <div className="filters"></div>;
 
-  const { startTime, endTime, devices, metrics, isLiveDataOn } = filters;
+  const { startTime, endTime, devices, metrics } = filters;
 
   const startTimeString = new Date(startTime).toLocaleString();
   const startEndString = new Date(endTime).toLocaleString();
@@ -44,13 +44,6 @@ export default function Filters({ filters, isThereError }) {
               <span>{d.label}</span>
             </p>
           ))}
-        </div>
-      )}
-      {'isLiveDataOn' in filters && (
-        <div className="liveDataFilter">
-          <p>
-            Live data: <span>{isLiveDataOn ? 'on' : 'off'}</span>
-          </p>
         </div>
       )}
     </div>

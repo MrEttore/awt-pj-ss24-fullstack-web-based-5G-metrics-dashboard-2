@@ -2,7 +2,7 @@
 
 .infoContainer {
   display: grid;
-  grid-template-columns: 1fr 42%;
+  grid-template-columns: 1fr 40%;
   align-items: center;
   height: 4rem;
   margin-top: 0.3rem;
