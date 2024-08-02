@@ -69,7 +69,7 @@ async def log_websocket_frame(event_type, event):
 
 async def send_data(json_data, destination, timestamp, url_ending):
     try:
-        url = f"http://backend:3000/api/{url_ending}"
+        url = f"http://nginx:80/api/{url_ending}"
         msg_obj = {
             "timestamp": timestamp,
             "destination": destination,
