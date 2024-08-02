@@ -51,9 +51,9 @@ export async function getLiveCn5gData() {
   }
 }
 
-export async function getRecentCn5gData() {
+export async function getRecentCn5gData(limit = 30) {
   try {
-    const response = await fetch(`${CN5G_URL}?limit=10`);
+    const response = await fetch(`${CN5G_URL}?limit=${limit}`);
 
     if (!response.ok) throw new Error('Response not ok');
 
@@ -95,7 +95,7 @@ export async function getGnbLogs(timeStart, timeEnd) {
   }
 }
 
-export async function getRecentGnbLogs(limit = 10) {
+export async function getRecentGnbLogs(limit = 30) {
   try {
     const response = await fetch(`${GNB_LOGS_URL}?limit=${limit}`);
 
@@ -179,7 +179,7 @@ export async function getLiveGnbTelemetry(ues) {
   }
 }
 
-export async function getRecentGnbTelemetry(ues, limit = 10) {
+export async function getRecentGnbTelemetry(ues, limit = 30) {
   try {
     const uesStr = ues.join(',');
 
