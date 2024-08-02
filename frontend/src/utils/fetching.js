@@ -158,6 +158,27 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
   }
 }
 
+export async function getLiveGnbTelemetry(ues) {
+  try {
+    const uesStr = ues.join(',');
+
+    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=${uesStr}`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    const mostRecentDatapoint = data[data.length - 1];
+
+    return { data: [mostRecentDatapoint], error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
 export async function getRecentGnbTelemetry(ues, limit = 10) {
   try {
     const uesStr = ues.join(',');
