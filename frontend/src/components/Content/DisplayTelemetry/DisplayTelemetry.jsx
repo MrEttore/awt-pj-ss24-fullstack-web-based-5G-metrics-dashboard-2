@@ -6,10 +6,13 @@ import Loader from '../../Loader/Loader';
 import {
   getGnbTelemetry,
   getRecentGnbTelemetry,
+  getLiveGnbTelemetry,
 } from '../../../utils/fetching';
 import {
   getUeTelemetryData,
   getGeneralTelemetryData,
+  aggregateLiveUeTelemetryData,
+  aggregateLiveGeneralTelemetryData,
   filterTelemetryData,
 } from '../../../utils/transform-data';
 import {
@@ -124,7 +127,74 @@ export default function DisplayTelemetry({
   }, [requestedData, onMessage]);
 
   // FETCH LIVE DATA
-  // ...
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        setIsLiveDataLoading(true);
+
+        const { data, error } = await getLiveGnbTelemetry(ues);
+
+        if (error) throw new Error(error);
+
+        console.log('data: ', data);
+
+        const ueLiveData = getUeTelemetryData(data);
+        const generalLiveData = getGeneralTelemetryData(data);
+
+        console.log('ueLiveData: ', ueLiveData);
+        console.log('generalLiveData: ', generalLiveData);
+
+        // FIXME: data aggregation in status
+
+        const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
+          ueTelemetryStatus,
+          ueLiveData
+        );
+
+        console.log('aggregatedUeLiveData: ', aggregatedUeLiveData);
+
+        // const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
+        //   generalTelemetryStatus,
+        //   generalLiveData
+        // );
+
+        // setUeTelemetryStatus(aggregatedUeLiveData);
+        // setGeneralTelemetryStatus(aggregatedGeneralLiveData);
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+
+        onMessage({
+          type: 'success-live-data',
+          text: 'Live data is on!',
+        });
+      } catch (err) {
+        onMessage({
+          type: 'error',
+          text: `${err}`,
+        });
+
+        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+      }
+    };
+
+    if (!isLiveDataToggled) return;
+
+    if (!isLiveDataLoading)
+      onMessage({ type: 'info', text: 'Activating live data ...' });
+
+    const intervalId = setInterval(fetchLiveData, 3000);
+    return () => clearInterval(intervalId);
+  }, [
+    ues,
+    isLiveDataToggled,
+    onMessage,
+    ueTelemetryStatus,
+    generalTelemetryStatus,
+    isLiveDataLoading,
+  ]);
 
   // FETCH RECENT DATA
 
