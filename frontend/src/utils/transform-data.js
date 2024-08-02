@@ -133,6 +133,11 @@ export function getGeneralTelemetryData(data) {
   return result;
 }
 
+// TODO: add aggregation for telemetry data
+export function aggregateLiveUeTelemetryData(existingData, newData) {}
+
+export function aggregateLiveGeneralTelemetryData(existingData, newData) {}
+
 export function filterTelemetryData(data, filters) {
   if (filters.metrics[0].value === 'all') return data;
 
