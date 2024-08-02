@@ -60,9 +60,15 @@ export function aggregateLiveHealthData(existingData, newData) {
     }
     aggregatedData[moduleName].moduleData.push(...module.moduleData);
 
-    if (aggregatedData[moduleName].moduleData.length > 6) {
-      aggregatedData[moduleName].moduleData =
-        aggregatedData[moduleName].moduleData.slice(-6);
+    console.log('aggregatedData', aggregatedData);
+    console.log('aggregatedData[moduleName]', aggregatedData[moduleName]);
+    console.log(
+      'aggregatedData[moduleName].moduleData',
+      aggregatedData[moduleName].moduleData
+    );
+
+    if (aggregatedData[moduleName].moduleData.length > 30) {
+      aggregatedData[moduleName].moduleData.shift();
     }
   });
 
