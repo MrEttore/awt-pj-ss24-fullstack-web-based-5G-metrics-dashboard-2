@@ -17,6 +17,8 @@ services:
     image: backend:latest
     container_name: backend
     restart: always
+    volumes:
+      - ./backend/database.db:/usr/src/app/database.db
     ports:
       - "3000:3000"
     networks:
