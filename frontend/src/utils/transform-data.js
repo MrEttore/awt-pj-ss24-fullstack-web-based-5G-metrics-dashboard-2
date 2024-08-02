@@ -68,7 +68,7 @@ export function aggregateLiveHealthData(existingData, newData) {
     );
 
     if (aggregatedData[moduleName].moduleData.length > 30) {
-      aggregatedData[moduleName].moduleData.shift();
+      aggregatedData[moduleName].moduleData.shift(); // this works
     }
   });
 
