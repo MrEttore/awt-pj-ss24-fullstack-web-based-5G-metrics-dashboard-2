@@ -32,6 +32,7 @@ export async function getCn5gData(timeStart, timeEnd) {
   }
 }
 
+// TODO: new endpoint needed!
 export async function getLiveCn5gData() {
   try {
     const response = await fetch(`${CN5G_URL}`);
@@ -112,6 +113,7 @@ export async function getRecentGnbLogs(limit = 30) {
   }
 }
 
+// TODO: new endpoint needed!
 export async function getLiveGnbLogs() {
   try {
     const response = await fetch(`${GNB_LOGS_URL}`);
@@ -158,6 +160,7 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
   }
 }
 
+// TODO: new endpoint needed!
 export async function getLiveGnbTelemetry(ues) {
   try {
     const uesStr = ues.join(',');
