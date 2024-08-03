@@ -106,22 +106,16 @@ export default function DisplayHealth({
 
         const { data, error } = await getLiveCn5gData();
 
-        // console.log('data: ', data);
-
         if (error) throw new Error(error);
 
         const processedLiveData = getHealthData(data);
 
-        console.log('processedLiveData: ', processedLiveData);
-
-        // FIXME: data aggregation in status
+        // TODO: test live data feature
 
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
           processedLiveData
         );
-
-        console.log('aggregatedLiveData: ', aggregatedLiveData);
 
         setHealthStatus(aggregatedLiveData);
 
