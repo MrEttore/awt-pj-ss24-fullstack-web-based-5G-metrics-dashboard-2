@@ -40,41 +40,6 @@ export function getHealthData(data) {
   return result;
 }
 
-export function aggregateLiveHealthData(existingData, newData) {
-  const aggregatedData = {};
-
-  existingData.forEach((module) => {
-    aggregatedData[module.moduleName] = {
-      moduleName: module.moduleName,
-      moduleData: [...module.moduleData],
-    };
-  });
-
-  newData.forEach((module) => {
-    const moduleName = module.moduleName;
-    if (!aggregatedData[moduleName]) {
-      aggregatedData[moduleName] = {
-        moduleName: moduleName,
-        moduleData: [],
-      };
-    }
-    aggregatedData[moduleName].moduleData.push(...module.moduleData);
-
-    console.log('aggregatedData', aggregatedData);
-    console.log('aggregatedData[moduleName]', aggregatedData[moduleName]);
-    console.log(
-      'aggregatedData[moduleName].moduleData',
-      aggregatedData[moduleName].moduleData
-    );
-
-    if (aggregatedData[moduleName].moduleData.length > 30) {
-      aggregatedData[moduleName].moduleData.shift(); // this works
-    }
-  });
-
-  return Object.values(aggregatedData);
-}
-
 export function getUeTelemetryData(data) {
   const metricData = {};
 
@@ -139,10 +104,93 @@ export function getGeneralTelemetryData(data) {
   return result;
 }
 
-// TODO: add aggregation for telemetry data
-export function aggregateLiveUeTelemetryData(existingData, newData) {}
+export function aggregateLiveHealthData(currentState, newData) {
+  const aggregatedData = {};
 
-export function aggregateLiveGeneralTelemetryData(existingData, newData) {}
+  currentState.forEach((module) => {
+    aggregatedData[module.moduleName] = {
+      moduleName: module.moduleName,
+      moduleData: [...module.moduleData],
+    };
+  });
+
+  newData.forEach((module) => {
+    const moduleName = module.moduleName;
+
+    if (!aggregatedData[moduleName]) {
+      aggregatedData[moduleName] = {
+        moduleName: moduleName,
+        moduleData: [],
+      };
+    }
+
+    aggregatedData[moduleName].moduleData.push(...module.moduleData);
+
+    // if (aggregatedData[moduleName].moduleData.length > 30) {
+    //   aggregatedData[moduleName].moduleData.shift(); // this works
+    // }
+  });
+
+  return Object.values(aggregatedData);
+}
+
+export function aggregateLiveUeTelemetryData(currentState, newData) {
+  const aggregatedData = {};
+
+  currentState.forEach((metric) => {
+    aggregatedData[metric.metricName] = {
+      metricName: metric.metricName,
+      metricData: [...metric.metricData],
+    };
+  });
+
+  newData.forEach((metric) => {
+    const metricName = metric.metricName;
+
+    metric.metricData.forEach((ue) => {
+      const ueIdNewData = ue.ueId;
+      const newDataArr = ue.data;
+
+      for (const ueInCurrentState of aggregatedData[metricName].metricData) {
+        if (ueInCurrentState.ueId === ueIdNewData) {
+          ueInCurrentState.data.push(...newDataArr);
+
+          // console.log(
+          //   `New status ${aggregatedData[metricName].metricName}: for ueId "${ueInCurrentState.ueId}" data arr is now ${ueInCurrentState.data.length} long.`
+          // );
+        }
+      }
+    });
+  });
+
+  return Object.values(aggregatedData);
+}
+
+export function aggregateLiveGeneralTelemetryData(currentState, newData) {
+  const aggregatedData = {};
+
+  currentState.forEach((metric) => {
+    aggregatedData[metric.metricName] = {
+      metricName: metric.metricName,
+      metricData: [...metric.metricData],
+    };
+  });
+
+  newData.forEach((metric) => {
+    const metricName = metric.metricName;
+
+    if (!aggregatedData[metricName]) {
+      aggregatedData[metricName] = {
+        metricName: metricName,
+        metricData: [],
+      };
+    }
+
+    aggregatedData[metricName].metricData.push(...metric.metricData);
+  });
+
+  return Object.values(aggregatedData);
+}
 
 export function filterTelemetryData(data, filters) {
   if (filters.metrics[0].value === 'all') return data;
