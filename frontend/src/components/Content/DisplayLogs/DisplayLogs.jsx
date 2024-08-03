@@ -142,8 +142,6 @@ export default function DisplayLogs({
         if (error) throw new Error(error);
 
         setLogsStatus(recentData);
-
-        console.log('UseEffect: Fetch recent data!');
       } catch (err) {
         onMessage({
           type: 'error',
