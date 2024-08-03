@@ -137,33 +137,23 @@ export default function DisplayTelemetry({
 
         if (error) throw new Error(error);
 
-        console.log('data: ', data);
-
         const ueLiveData = getUeTelemetryData(data);
         const generalLiveData = getGeneralTelemetryData(data);
 
-        console.log('ueLiveData: ', ueLiveData);
-        console.log('generalLiveData: ', generalLiveData);
-
-        // FIXME: data aggregation in status
+        // TODO: test live data feature
 
         const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
           ueTelemetryStatus,
           ueLiveData
         );
 
-        console.log('aggregatedUeLiveData: ', aggregatedUeLiveData);
+        const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
+          generalTelemetryStatus,
+          generalLiveData
+        );
 
-        // const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
-        //   generalTelemetryStatus,
-        //   generalLiveData
-        // );
-
-        // setUeTelemetryStatus(aggregatedUeLiveData);
-        // setGeneralTelemetryStatus(aggregatedGeneralLiveData);
-
-        setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
-        setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+        setUeTelemetryStatus(aggregatedUeLiveData);
+        setGeneralTelemetryStatus(aggregatedGeneralLiveData);
 
         onMessage({
           type: 'success-live-data',

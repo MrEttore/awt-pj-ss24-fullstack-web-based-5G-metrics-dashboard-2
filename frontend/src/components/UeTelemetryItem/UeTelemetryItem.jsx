@@ -47,9 +47,11 @@ export default function UeTelemetryItem({ name, rawData = [] }) {
     dp.data.map((entry) => entry.timestamp)
   );
 
-  const uniqueTimestamps = Array.from(new Set(allTimestamps));
+  // !!! Take out uniqueTimestamps to test live telemetry data
 
-  const uniqueTimestampsStrings = uniqueTimestamps.map((timestamp) =>
+  // const uniqueTimestamps = Array.from(new Set(allTimestamps));
+
+  const uniqueTimestampsStrings = allTimestamps.map((timestamp) =>
     new Date(timestamp).toLocaleString()
   );
 
@@ -66,7 +68,7 @@ export default function UeTelemetryItem({ name, rawData = [] }) {
   const datasets = rawData.map((ue, index) => {
     const { ueId, data } = ue;
 
-    const telemetryData = uniqueTimestamps.map((timestamp) => {
+    const telemetryData = allTimestamps.map((timestamp) => {
       const entry = data.find((entry) => entry.timestamp === timestamp);
       return entry ? entry.value : null;
     });
