@@ -21,12 +21,6 @@ export default function DisplayLogs({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // RESET HEALTH STATUS
-
-  useEffect(() => {
-    if (resetFlag) setLogsStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -157,7 +151,7 @@ export default function DisplayLogs({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [onMessage, requestedData, isLiveDataToggled]);
+  }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>

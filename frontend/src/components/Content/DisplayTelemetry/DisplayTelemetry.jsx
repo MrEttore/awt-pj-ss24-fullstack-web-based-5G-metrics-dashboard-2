@@ -40,12 +40,6 @@ export default function DisplayTelemetry({
 
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
-  // RESET TELEMETRY STATUS
-
-  useEffect(() => {
-    if (resetFlag) setUeTelemetryStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -218,7 +212,7 @@ export default function DisplayTelemetry({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [ues, onMessage, requestedData, isLiveDataToggled]);
+  }, [ues, onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>

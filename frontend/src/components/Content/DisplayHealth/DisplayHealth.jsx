@@ -27,12 +27,6 @@ export default function DisplayHealth({
 
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // RESET HEALTH STATUS
-
-  useEffect(() => {
-    if (resetFlag) setHealthStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -171,7 +165,7 @@ export default function DisplayHealth({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [onMessage, requestedData, isLiveDataToggled]);
+  }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentHealth  ${isLoading ? 'loading' : ''}`}>
