@@ -40,12 +40,6 @@ export default function DisplayTelemetry({
 
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
-  // RESET TELEMETRY STATUS
-
-  useEffect(() => {
-    if (resetFlag) setUeTelemetryStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -69,14 +63,15 @@ export default function DisplayTelemetry({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime, devices } = requestedData;
+        const { startTime, endTime, devices, limitDatapoints } = requestedData;
 
         const ueIds = devices.map((device) => device.value);
 
         const { data, error } = await getGnbTelemetry(
           startTime,
           endTime,
-          ueIds
+          ueIds,
+          limitDatapoints
         );
 
         if (error) throw new Error(error);
@@ -90,7 +85,7 @@ export default function DisplayTelemetry({
         if (numDatapoints === 0) {
           onMessage({
             type: 'success-queried-data-not-found',
-            text: 'No telemetry data for the selected timespan!',
+            text: 'No telemetry data for the selected filters!',
           });
           setUeTelemetryStatus(ueTelemetryData);
           return;
@@ -218,7 +213,7 @@ export default function DisplayTelemetry({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [ues, onMessage, requestedData, isLiveDataToggled]);
+  }, [ues, onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>

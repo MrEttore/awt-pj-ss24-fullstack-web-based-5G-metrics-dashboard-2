@@ -5,12 +5,22 @@
 .timeSpanContainer {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
+  padding-right: 0.5rem;
+  border-right: solid rgb(8, 15, 37, 0.2) 2px;
+  height: 5.4rem;
 }
 
 label.inactive {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.timeSpanContainer label {
+  margin-left: 0.5rem;
+  margin-top: -4.2rem;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .inputContainer {
@@ -674,7 +684,7 @@ h2.react-datepicker__current-month {
 }
 
 .react-datepicker__input-container input {
-  width: 12rem;
+  width: 10rem;
   height: 2rem;
   padding: 8px;
   border: solid 2px var(--color-background-900);

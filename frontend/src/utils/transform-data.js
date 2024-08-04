@@ -126,9 +126,8 @@ export function aggregateLiveHealthData(currentState, newData) {
 
     aggregatedData[moduleName].moduleData.push(...module.moduleData);
 
-    // if (aggregatedData[moduleName].moduleData.length > 30) {
-    //   aggregatedData[moduleName].moduleData.shift(); // this works
-    // }
+    if (aggregatedData[moduleName].moduleData.length > 30)
+      aggregatedData[moduleName].moduleData.shift();
   });
 
   return Object.values(aggregatedData);
@@ -155,9 +154,8 @@ export function aggregateLiveUeTelemetryData(currentState, newData) {
         if (ueInCurrentState.ueId === ueIdNewData) {
           ueInCurrentState.data.push(...newDataArr);
 
-          // console.log(
-          //   `New status ${aggregatedData[metricName].metricName}: for ueId "${ueInCurrentState.ueId}" data arr is now ${ueInCurrentState.data.length} long.`
-          // );
+          if (ueInCurrentState.data.length > 10)
+            ueInCurrentState.data = ueInCurrentState.data.slice(-10);
         }
       }
     });
@@ -187,6 +185,9 @@ export function aggregateLiveGeneralTelemetryData(currentState, newData) {
     }
 
     aggregatedData[metricName].metricData.push(...metric.metricData);
+
+    if (aggregatedData[metricName].metricData.length > 30)
+      aggregatedData[metricName].metricData.shift();
   });
 
   return Object.values(aggregatedData);

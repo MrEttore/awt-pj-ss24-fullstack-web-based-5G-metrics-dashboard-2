@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import './TimespanSelector.css';
 
 export default function TimespanSelector({
-  label = 'timespan',
+  label = 'time',
   startTime,
   endTime,
   onInputStartTime,

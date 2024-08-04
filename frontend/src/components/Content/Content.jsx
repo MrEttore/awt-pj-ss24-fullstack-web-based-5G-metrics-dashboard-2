@@ -1,6 +1,7 @@
 import DisplayHealth from './DisplayHealth/DisplayHealth.jsx';
 import DisplayLogs from './DisplayLogs/DisplayLogs.jsx';
 import DisplayTelemetry from './DisplayTelemetry/DisplayTelemetry.jsx';
+import LabelsTelemetryData from '../LabelsTelemetryData/LabelsTelemetryData.jsx';
 
 import './Content.css';
 
@@ -23,13 +24,16 @@ export default function Content({
         />
       )}
       {selectedTab === 'telemetry' && (
-        <DisplayTelemetry
-          requestedData={requestedData}
-          onMessage={onMessage}
-          resetFlag={resetFlag}
-          isLiveDataToggled={isLiveDataToggled}
-          devices={devices}
-        />
+        <>
+          <LabelsTelemetryData />
+          <DisplayTelemetry
+            requestedData={requestedData}
+            onMessage={onMessage}
+            resetFlag={resetFlag}
+            isLiveDataToggled={isLiveDataToggled}
+            devices={devices}
+          />
+        </>
       )}
       {selectedTab === 'logs' && (
         <DisplayLogs
