@@ -1,11 +1,9 @@
 import './Filters.css';
 
 export default function Filters({ filters, isThereError }) {
-  if (!filters) return <div className="filters"></div>;
+  if (!filters || isThereError) return <div className="filters"></div>;
 
-  if (isThereError) return <div className="filters"></div>;
-
-  const { startTime, endTime, devices, metrics } = filters;
+  const { startTime, endTime, devices, metrics, limitDatapoints } = filters;
 
   const startTimeString = new Date(startTime).toLocaleString();
   const startEndString = new Date(endTime).toLocaleString();
@@ -19,6 +17,7 @@ export default function Filters({ filters, isThereError }) {
           </p>
         </div>
       )}
+
       {'endTime' in filters && (
         <div className="endTimeFilter">
           <p>
@@ -26,6 +25,7 @@ export default function Filters({ filters, isThereError }) {
           </p>
         </div>
       )}
+
       {'devices' in filters && (
         <div className="devicesFilter">
           <p>Devices: </p>
@@ -36,6 +36,7 @@ export default function Filters({ filters, isThereError }) {
           ))}
         </div>
       )}
+
       {'metrics' in filters && (
         <div className="metricsFilter">
           <p>Metrics: </p>
@@ -44,6 +45,14 @@ export default function Filters({ filters, isThereError }) {
               <span>{d.label}</span>
             </p>
           ))}
+        </div>
+      )}
+
+      {'limitDatapoints' in filters && (
+        <div className="limitFilter">
+          <p>
+            Max datapoints: <span>{limitDatapoints}</span>
+          </p>
         </div>
       )}
     </div>
