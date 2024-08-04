@@ -7,8 +7,8 @@ import {
 
 // CN5G
 
-export async function getCn5gData(timeStart, timeEnd) {
-  if (!timeStart && !timeEnd)
+export async function getCn5gData(timeStart, timeEnd, limit) {
+  if (!timeStart && !timeEnd && !limit)
     return {
       data: null,
       error: new Error('Select a valid start and endtime for the request!'),
@@ -16,7 +16,7 @@ export async function getCn5gData(timeStart, timeEnd) {
 
   try {
     const response = await fetch(
-      `${CN5G_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      `${CN5G_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&limit=${limit}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -71,7 +71,7 @@ export async function getRecentCn5gData(limit = 30) {
 
 // LOGS
 
-export async function getGnbLogs(timeStart, timeEnd) {
+export async function getGnbLogs(timeStart, timeEnd, limit) {
   if (!timeStart && !timeEnd)
     return {
       data: null,
@@ -80,7 +80,7 @@ export async function getGnbLogs(timeStart, timeEnd) {
 
   try {
     const response = await fetch(
-      `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}`
+      `${GNB_LOGS_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&limit=${limit}`
     );
 
     if (!response.ok) throw new Error('Response not ok');
@@ -133,7 +133,7 @@ export async function getLiveGnbLogs() {
 
 // TELEMETRY
 
-export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
+export async function getGnbTelemetry(timeStart, timeEnd, ueIds, limit) {
   if (!timeStart && !timeEnd && !ueIds)
     return {
       data: null,
@@ -144,7 +144,7 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueIds) {
     const strUeIds = ueIds.join();
 
     const response = await fetch(
-      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${strUeIds}`
+      `${GNB_TELEMETRY_URL}?timeStart=${timeStart.toString()}&timeEnd=${timeEnd.toString()}&ueIds=${strUeIds}&limit=${limit}`
     );
 
     if (!response.ok) throw new Error('Response not ok');

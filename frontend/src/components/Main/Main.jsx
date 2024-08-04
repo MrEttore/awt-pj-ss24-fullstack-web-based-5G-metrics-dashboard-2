@@ -85,7 +85,7 @@ function Main() {
         return { value: m, label: m };
       });
 
-      metrics.unshift({ value: 'all', label: 'All metrics' });
+      metrics.unshift({ value: 'all', label: 'All' });
 
       setMetrics(metrics);
     }

@@ -49,9 +49,13 @@ export default function DisplayHealth({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime } = requestedData;
+        const { startTime, endTime, limitDatapoints } = requestedData;
 
-        const { data, error } = await getCn5gData(startTime, endTime);
+        const { data, error } = await getCn5gData(
+          startTime,
+          endTime,
+          limitDatapoints
+        );
 
         if (error) throw new Error(error);
 

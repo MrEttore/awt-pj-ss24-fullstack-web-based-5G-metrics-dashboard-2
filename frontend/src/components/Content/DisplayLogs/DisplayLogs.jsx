@@ -43,9 +43,13 @@ export default function DisplayLogs({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime } = requestedData;
+        const { startTime, endTime, limitDatapoints } = requestedData;
 
-        const { data, error } = await getGnbLogs(startTime, endTime);
+        const { data, error } = await getGnbLogs(
+          startTime,
+          endTime,
+          limitDatapoints
+        );
 
         if (error) throw new Error(error);
 

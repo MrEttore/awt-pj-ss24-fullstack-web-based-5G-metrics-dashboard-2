@@ -63,14 +63,15 @@ export default function DisplayTelemetry({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime, devices } = requestedData;
+        const { startTime, endTime, devices, limitDatapoints } = requestedData;
 
         const ueIds = devices.map((device) => device.value);
 
         const { data, error } = await getGnbTelemetry(
           startTime,
           endTime,
-          ueIds
+          ueIds,
+          limitDatapoints
         );
 
         if (error) throw new Error(error);

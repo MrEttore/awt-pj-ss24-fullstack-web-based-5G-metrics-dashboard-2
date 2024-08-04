@@ -218,6 +218,14 @@ export const EMPTY_HEALTH_STATUS = [
   },
 ];
 
+export const LIMITS = [
+  { label: 10, value: 10 },
+  { label: 25, value: 25 },
+  { label: 50, value: 50 },
+  { label: 75, value: 75 },
+  { label: 100, value: 100 },
+];
+
 // API urls
 
 export const CN5G_URL = 'http://localhost:5173/api/cn5g/telemetry';
