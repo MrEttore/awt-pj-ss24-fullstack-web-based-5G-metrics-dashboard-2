@@ -85,7 +85,7 @@ export default function DisplayTelemetry({
         if (numDatapoints === 0) {
           onMessage({
             type: 'success-queried-data-not-found',
-            text: 'No telemetry data for the selected timespan!',
+            text: 'No telemetry data for the selected filters!',
           });
           setUeTelemetryStatus(ueTelemetryData);
           return;
