@@ -3,7 +3,12 @@
 .toggleSwitchContainer {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+}
+.toggleSwitchLabel {
+  margin-left: 0.5rem;
+  margin-top: -4.2rem;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .toggleInput {
