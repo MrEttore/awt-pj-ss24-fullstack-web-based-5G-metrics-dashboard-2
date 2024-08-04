@@ -21,12 +21,6 @@ export default function DisplayLogs({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // RESET HEALTH STATUS
-
-  useEffect(() => {
-    if (resetFlag) setLogsStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -49,9 +43,13 @@ export default function DisplayLogs({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime } = requestedData;
+        const { startTime, endTime, limitDatapoints } = requestedData;
 
-        const { data, error } = await getGnbLogs(startTime, endTime);
+        const { data, error } = await getGnbLogs(
+          startTime,
+          endTime,
+          limitDatapoints
+        );
 
         if (error) throw new Error(error);
 
@@ -157,7 +155,7 @@ export default function DisplayLogs({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [onMessage, requestedData, isLiveDataToggled]);
+  }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>

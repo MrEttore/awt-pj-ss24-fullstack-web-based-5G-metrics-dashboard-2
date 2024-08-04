@@ -3,7 +3,15 @@
 .toggleSwitchContainer {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  padding-right: 0.8rem;
+  border-right: solid rgb(8, 15, 37, 0.2) 2px;
+  height: 5.4rem;
+}
+.toggleSwitchLabel {
+  margin-left: 0.5rem;
+  margin-top: -4.2rem;
+  font-size: 0.8rem;
+  font-weight: bold;
 }
 
 .toggleInput {
@@ -13,6 +21,7 @@
 .toggleBtn {
   display: flex;
   align-items: center;
+  margin-top: 1rem;
 }
 
 .toggleLabel {

@@ -5,6 +5,7 @@ import ToggleLiveDataSwitch from '../ToggleLiveDataSwitch/ToggleLiveDataSwitch';
 import TimespanSelector from '../TimespanSelector/TimespanSelector';
 import FormControlButtons from '../FormControlButtons/FormControlButtons';
 import DropDown from '../DropDown/DropDown';
+import { LIMITS } from '../../utils/constants';
 
 import './Forms.css';
 
@@ -25,11 +26,14 @@ export default function Forms({
 
   const [selectedDevices, setSelectedDevices] = useState([]);
 
+  const [selectedLimit, setSelectedLimit] = useState(null);
+
   function handleResetForm() {
     setStartTime(null);
     setEndTime(null);
     setSelectedMetrics([]);
     setSelectedDevices([]);
+    setSelectedLimit(null);
   }
 
   function handleSubmitHealth(e) {
@@ -37,9 +41,12 @@ export default function Forms({
 
     if (!startTime && !endTime) return;
 
+    const { value: limit } = selectedLimit;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
+      limitDatapoints: limit,
     };
 
     onDataRequest(requestedData);
@@ -52,9 +59,12 @@ export default function Forms({
 
     if (!startTime && !endTime) return;
 
+    const { value: limit } = selectedLimit;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
+      limitDatapoints: limit,
     };
 
     onDataRequest(requestedData);
@@ -67,11 +77,14 @@ export default function Forms({
 
     if (!startTime && !endTime) return;
 
+    const { value: limit } = selectedLimit;
+
     const requestedData = {
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
       devices: selectedDevices,
       metrics: selectedMetrics,
+      limitDatapoints: limit,
     };
 
     onDataRequest(requestedData);
@@ -99,6 +112,17 @@ export default function Forms({
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
             isLiveDataOn={isLiveDataToggled}
+          />
+
+          <DropDown
+            name="limit"
+            label="limit"
+            options={LIMITS}
+            selectedOptions={selectedLimit}
+            onSelectOption={setSelectedLimit}
+            isMulti={false}
+            isLiveDataOn={isLiveDataToggled}
+            isActive={true}
           />
 
           <ToggleLiveDataSwitch
@@ -150,6 +174,17 @@ export default function Forms({
             isLiveDataOn={isLiveDataToggled}
           />
 
+          <DropDown
+            name="limit"
+            label="limit"
+            options={LIMITS}
+            selectedOptions={selectedLimit}
+            onSelectOption={setSelectedLimit}
+            isMulti={false}
+            isLiveDataOn={isLiveDataToggled}
+            isActive={true}
+          />
+
           <ToggleLiveDataSwitch
             label="Live data"
             isToggled={isLiveDataToggled}
@@ -175,6 +210,17 @@ export default function Forms({
             onInputStartTime={setStartTime}
             onInputEndTime={setEndTime}
             isLiveDataOn={isLiveDataToggled}
+          />
+
+          <DropDown
+            name="limit"
+            label="limit"
+            options={LIMITS}
+            selectedOptions={selectedLimit}
+            onSelectOption={setSelectedLimit}
+            isMulti={false}
+            isLiveDataOn={isLiveDataToggled}
+            isActive={true}
           />
 
           <ToggleLiveDataSwitch

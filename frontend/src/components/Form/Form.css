@@ -5,7 +5,7 @@
 .telemetryForm {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.5rem;
   border-radius: 0.5rem;
   color: var(--color-text);
   text-transform: uppercase;

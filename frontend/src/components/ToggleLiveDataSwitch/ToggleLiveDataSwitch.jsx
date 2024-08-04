@@ -3,7 +3,9 @@ import './ToggleLiveDataSwitch.css';
 export default function ToggleLiveDataSwitch({ label, isToggled, onToggle }) {
   return (
     <div className="toggleSwitchContainer">
-      <label htmlFor="toggleSwitch">{label}</label>
+      <label htmlFor="toggleSwitch" className="toggleSwitchLabel">
+        {label}
+      </label>
 
       <div className="toggleBtn" id="toggleSwitch">
         <input
