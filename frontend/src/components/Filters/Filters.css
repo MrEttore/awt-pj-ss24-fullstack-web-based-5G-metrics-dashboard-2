@@ -9,7 +9,8 @@
 
 .startTimeFilter,
 .endTimeFilter,
-.liveDataFilter {
+.liveDataFilter,
+.limitFilter {
   display: flex;
   flex-direction: row;
 
@@ -47,7 +48,8 @@
 .endTimeFilter span,
 .devicesFilter span,
 .metricsFilter span,
-.liveDataFilter span {
+.liveDataFilter span,
+.limitFilter span {
   font-weight: bold;
 }
 
@@ -55,7 +57,8 @@
 .endTimeFilter:hover,
 .liveDataFilter:hover,
 .devicesFilter:hover,
-.metricsFilter:hover {
+.metricsFilter:hover,
+.limitFilter:hover {
   transform: scale(1.01);
   transition: 0.2s;
   background-color: var(--color-primary-lighter);
