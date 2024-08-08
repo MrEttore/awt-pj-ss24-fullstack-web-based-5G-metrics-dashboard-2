@@ -4,10 +4,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   height: calc(100vh - 4rem - 0.6rem - 105px - 6.5rem);
 }
 
-.contentLogs.live {
+.contentLogs .live {
   display: flex;
   align-items: flex-start;
   height: 555px;

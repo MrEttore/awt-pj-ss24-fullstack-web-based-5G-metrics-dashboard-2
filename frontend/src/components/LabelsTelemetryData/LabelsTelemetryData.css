@@ -1,10 +1,16 @@
+@import url('../../styles/variables.css');
+
 .labelsTelemetry {
   display: grid;
   grid-template-columns: 40% 60%;
   align-items: center;
   height: 2rem;
   margin-top: -0.5rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--color-primary-light);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom: solid 4px var(--color-background-900);
 }
 
 .labelLeft {
