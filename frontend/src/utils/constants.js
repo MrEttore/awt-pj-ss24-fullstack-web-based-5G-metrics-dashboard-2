@@ -236,6 +236,8 @@ export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/gnb/telemetry';
 
 export const UES_URL = 'http://localhost:5173/api/ues';
 
+export const LATEST_DATAPOINT_URL = 'http://localhost:5173/api/latest';
+
 // Warning i.e., error messages
 
 export const EMPTY_MESSAGE = { type: null, text: '' };
