@@ -3,6 +3,7 @@ import {
   GNB_LOGS_URL,
   GNB_TELEMETRY_URL,
   UES_URL,
+  LATEST_DATAPOINT_URL,
 } from './constants.js';
 
 // CN5G
@@ -32,18 +33,15 @@ export async function getCn5gData(timeStart, timeEnd, limit) {
   }
 }
 
-// TODO: new endpoint needed!
 export async function getLiveCn5gData() {
   try {
-    const response = await fetch(`${CN5G_URL}`);
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=health`);
 
     if (!response.ok) throw new Error('Response not ok');
 
     const data = await response.json();
 
-    const mostRecentDatapoint = data[data.length - 1];
-
-    return { data: [mostRecentDatapoint], error: null };
+    return { data: [data], error: null };
   } catch (err) {
     return {
       data: null,
