@@ -4,7 +4,8 @@ const queries = require('../sql/messages.sql');
 module.exports.topics = {
     TELEMETRY: 'gnb.telemetry',
     HEALTH: 'cn5g.telemetry',
-    LOGS: 'gnb.logs'
+    LOGS: 'gnb.logs',
+    GNB_STATUS: 'ba.telemetry'
 }
 
 const MIN_TIME = 0
@@ -124,17 +125,16 @@ function applyDataReduction(rows, limit = LIMIT) {
  */
 module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_TIME, limit = LIMIT) {
     return new Promise((resolve, reject) => {
-        if (topic != this.topics.HEALTH
-            && topic != this.topics.TELEMETRY
-            && topic != this.topics.LOGS
-        ) {
+        if (!Object.values(this.topics).includes(topic)) {
             return reject('Invalid topic')
         }
         if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
             return reject('Invalid time interval')
         }
 
-        db.all(queries.GET, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
+        let sql = queries.GET
+
+        db.all(sql, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
             if (err)
                 return reject(err)
             return resolve(
@@ -211,21 +211,20 @@ module.exports.getUEs = async function (timeStart = MIN_TIME, timeEnd = MAX_TIME
  * GET /api/messages/latestTimestamp?topic=_
  * Returns latest timestamp for a given topic
  */
-module.exports.getLatestTimestamp = async function (topic) {
+module.exports.getLatest = async function (topic) {
     return new Promise((resolve, reject) => {
 
         // validate parameters
-        if (topic != this.topics.HEALTH
-            && topic != this.topics.TELEMETRY
-            && topic != this.topics.LOGS
-        ) {
+        if (!Object.values(this.topics).includes(topic)) {
             return reject('Invalid topic')
         }
 
-        db.get(queries.GET_LATEST_TIMESTAMP, [`%${topic}`], (err, row) => {
+        db.get(queries.GET_LATEST, [`%${topic}`], (err, row) => {
             if (err)
                 return reject(err)
-            return resolve(row)
+            if (!row)
+                return resolve()
+            return resolve(JSON.parse(row.payload))
         })
     })
 }
