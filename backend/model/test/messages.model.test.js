@@ -80,8 +80,8 @@ test('test getUEs', async () => {
     await testGetUEs();
 });
 
-test('test getLatestTimestamp', async () => {
-    await testGetLatestTimestamp();
+test('test getLatest', async () => {
+    await testgetLatest();
 });
 
 test('test add gnb.telemetry', async () => {
@@ -205,14 +205,14 @@ async function testGetUEs() {
     }
 }
 
-async function testGetLatestTimestamp() {
+async function testgetLatest() {
     // default
-    const latestTimestamp = await model.getLatestTimestamp(model.topics.LOGS)
+    const latestTimestamp = await model.getLatest(model.topics.LOGS)
     console.log(latestTimestamp)
 
     // invalid topic
     try {
-        await model.getLatestTimestamp('invalid.topic')
+        await model.getLatest('invalid.topic')
     } catch (error) {}
 }
 
