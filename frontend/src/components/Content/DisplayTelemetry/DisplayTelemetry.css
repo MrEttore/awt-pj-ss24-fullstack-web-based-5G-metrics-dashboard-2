@@ -3,6 +3,8 @@
 .contentTelemetry {
   display: flex;
   gap: 0.2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   height: calc(100vh - 4rem - 0.6rem - 105px - 8.2rem);
 }
 

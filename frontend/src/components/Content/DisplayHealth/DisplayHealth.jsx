@@ -108,8 +108,6 @@ export default function DisplayHealth({
 
         const processedLiveData = getHealthData(data);
 
-        // TODO: test live data feature
-
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
           processedLiveData

@@ -146,19 +146,39 @@ export function aggregateLiveUeTelemetryData(currentState, newData) {
   newData.forEach((metric) => {
     const metricName = metric.metricName;
 
+    const foundUeIds = new Set();
+
     metric.metricData.forEach((ue) => {
       const ueIdNewData = ue.ueId;
       const newDataArr = ue.data;
+
+      let isFound = false;
 
       for (const ueInCurrentState of aggregatedData[metricName].metricData) {
         if (ueInCurrentState.ueId === ueIdNewData) {
           ueInCurrentState.data.push(...newDataArr);
 
-          if (ueInCurrentState.data.length > 10)
+          if (ueInCurrentState.data.length > 10) {
             ueInCurrentState.data = ueInCurrentState.data.slice(-10);
+          }
+
+          isFound = true;
+          foundUeIds.add(ueIdNewData);
+          break;
         }
       }
+
+      if (!isFound) {
+        aggregatedData[metricName].metricData.push(ue);
+        foundUeIds.add(ueIdNewData);
+      }
     });
+
+    aggregatedData[metricName].metricData = aggregatedData[
+      metricName
+    ].metricData.filter((ueInCurrentState) =>
+      foundUeIds.has(ueInCurrentState.ueId)
+    );
   });
 
   return Object.values(aggregatedData);
