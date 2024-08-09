@@ -128,32 +128,47 @@ export default function DisplayTelemetry({
       try {
         setIsLiveDataLoading(true);
 
-        const { data, error } = await getLiveGnbTelemetry(ues);
+        const { data, error } = await getLiveGnbTelemetry();
 
         if (error) throw new Error(error);
 
-        const ueLiveData = getUeTelemetryData(data);
-        const generalLiveData = getGeneralTelemetryData(data);
+        if (data[0].ues.length === 0) {
+          const generalLiveData = getGeneralTelemetryData(data);
 
-        // TODO: test live data feature
+          const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
+            generalTelemetryStatus,
+            generalLiveData
+          );
 
-        const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
-          ueTelemetryStatus,
-          ueLiveData
-        );
+          setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+          setGeneralTelemetryStatus(aggregatedGeneralLiveData);
 
-        const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
-          generalTelemetryStatus,
-          generalLiveData
-        );
+          onMessage({
+            type: 'success-live-data',
+            text: 'Live data is on! Waiting a UE to connect ...',
+          });
+        } else {
+          const ueLiveData = getUeTelemetryData(data);
+          const generalLiveData = getGeneralTelemetryData(data);
 
-        setUeTelemetryStatus(aggregatedUeLiveData);
-        setGeneralTelemetryStatus(aggregatedGeneralLiveData);
+          const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
+            ueTelemetryStatus,
+            ueLiveData
+          );
 
-        onMessage({
-          type: 'success-live-data',
-          text: 'Live data is on!',
-        });
+          const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
+            generalTelemetryStatus,
+            generalLiveData
+          );
+
+          setUeTelemetryStatus(aggregatedUeLiveData);
+          setGeneralTelemetryStatus(aggregatedGeneralLiveData);
+
+          onMessage({
+            type: 'success-live-data',
+            text: 'Live data is on!',
+          });
+        }
       } catch (err) {
         onMessage({
           type: 'error',
