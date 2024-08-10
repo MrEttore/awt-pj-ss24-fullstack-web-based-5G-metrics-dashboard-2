@@ -3,35 +3,22 @@
 .ueTelemetryItem {
   display: flex;
   flex-direction: column;
-  height: 14rem;
-  gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  border-bottom: solid transparent 4px;
-  border-radius: 10px;
+  height: 14rem;
+  gap: 0.5rem;
   padding: 0.5rem;
+  border: solid 2px var(--color-primary-light);
+  border-radius: 10px;
   background-color: var(--color-background-900);
   box-shadow: 0 2.4rem 2.4rem rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
 }
 
-.ueTelemetryItem:hover {
-  transform: translateY(-1px);
-
-  border-bottom: solid 4px var(--color-primary-light);
+.ueTelemetryItem.live {
+  border-color: var(--color-live-gnb-fetching);
 }
 
-.noData {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 5px;
-
-  padding: 10px;
-
-  background-color: var(--color-background-900);
-  box-shadow: 0 2.4rem 2.4rem rgba(0, 0, 0, 0.05);
+.ueTelemetryItem:hover {
+  transform: translateY(-1px);
 }

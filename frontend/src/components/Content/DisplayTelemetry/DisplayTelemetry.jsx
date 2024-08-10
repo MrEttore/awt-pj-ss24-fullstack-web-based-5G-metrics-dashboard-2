@@ -1,12 +1,14 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 import UeTelemetryItem from '../../UeTelemetryItem/UeTelemetryItem';
 import GeneralTelemetryItem from '../../GeneralTelemetryItem/GeneralTelemetryItem';
+import GnbInfo from '../../GnbInfo/GnbInfo';
 import Loader from '../../Loader/Loader';
 import {
   getGnbTelemetry,
   getRecentGnbTelemetry,
   getLiveGnbTelemetry,
+  getGeneralGnbState,
 } from '../../../utils/fetching';
 import {
   getUeTelemetryData,
@@ -34,9 +36,16 @@ export default function DisplayTelemetry({
 
   const [generalTelemetryStatus, setGeneralTelemetryStatus] = useState([]);
 
+  const [generalGnbState, setGeneralGnbState] = useState([]);
+
+  const [isGeneralGnbStateLoading, setIsGeneralGnbStateLoading] =
+    useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
+
+  const isFirstFetchGnbStatus = useRef(true);
 
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
@@ -128,12 +137,13 @@ export default function DisplayTelemetry({
       try {
         setIsLiveDataLoading(true);
 
-        const { data, error } = await getLiveGnbTelemetry();
+        const { data: liveGnbTelemetryData, error: liveGnbTelemetryError } =
+          await getLiveGnbTelemetry();
 
-        if (error) throw new Error(error);
+        if (liveGnbTelemetryError) throw new Error(liveGnbTelemetryError);
 
-        if (data[0].ues.length === 0) {
-          const generalLiveData = getGeneralTelemetryData(data);
+        if (liveGnbTelemetryData[0].ues.length === 0) {
+          const generalLiveData = getGeneralTelemetryData(liveGnbTelemetryData);
 
           const aggregatedGeneralLiveData = aggregateLiveGeneralTelemetryData(
             generalTelemetryStatus,
@@ -145,11 +155,11 @@ export default function DisplayTelemetry({
 
           onMessage({
             type: 'success-live-data',
-            text: 'Live data is on! Waiting a UE to connect ...',
+            text: 'Live telemetry is on! Waiting a UE to connect ...',
           });
         } else {
-          const ueLiveData = getUeTelemetryData(data);
-          const generalLiveData = getGeneralTelemetryData(data);
+          const ueLiveData = getUeTelemetryData(liveGnbTelemetryData);
+          const generalLiveData = getGeneralTelemetryData(liveGnbTelemetryData);
 
           const aggregatedUeLiveData = aggregateLiveUeTelemetryData(
             ueTelemetryStatus,
@@ -166,13 +176,13 @@ export default function DisplayTelemetry({
 
           onMessage({
             type: 'success-live-data',
-            text: 'Live data is on!',
+            text: 'Live telemetry is on!',
           });
         }
       } catch (err) {
         onMessage({
           type: 'error',
-          text: `${err}`,
+          text: 'Live data is not available!',
         });
 
         setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
@@ -188,9 +198,9 @@ export default function DisplayTelemetry({
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
   }, [
-    ues,
     isLiveDataToggled,
     onMessage,
+    ues,
     ueTelemetryStatus,
     generalTelemetryStatus,
     isLiveDataLoading,
@@ -203,12 +213,17 @@ export default function DisplayTelemetry({
       try {
         setIsLoading(true);
 
-        const { recentData, error } = await getRecentGnbTelemetry(ues);
+        const { data: recentGnbTelemetryData, error: errorRecentGnbTelemetry } =
+          await getRecentGnbTelemetry(ues);
 
-        if (error) throw new Error(error);
+        if (errorRecentGnbTelemetry) throw new Error(errorRecentGnbTelemetry);
 
-        const processedRecentUeData = getUeTelemetryData(recentData);
-        const processedRecentGeneralData = getGeneralTelemetryData(recentData);
+        const processedRecentUeData = getUeTelemetryData(
+          recentGnbTelemetryData
+        );
+        const processedRecentGeneralData = getGeneralTelemetryData(
+          recentGnbTelemetryData
+        );
 
         setUeTelemetryStatus(processedRecentUeData);
         setGeneralTelemetryStatus(processedRecentGeneralData);
@@ -230,22 +245,59 @@ export default function DisplayTelemetry({
     fetchRecentData();
   }, [ues, onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
+  // FETCH LIVE GNB STATUS
+
+  useEffect(() => {
+    const fetchLiveData = async () => {
+      try {
+        const { data: generalGnbStateData, error: generalGnbStateDataError } =
+          await getGeneralGnbState();
+
+        if (generalGnbStateDataError) throw new Error(generalGnbStateDataError);
+
+        setGeneralGnbState(generalGnbStateData);
+      } catch (err) {
+        setGeneralGnbState([]);
+      } finally {
+        if (isFirstFetchGnbStatus.current) {
+          setIsGeneralGnbStateLoading(false);
+          isFirstFetchGnbStatus.current = false;
+        }
+      }
+    };
+
+    if (isFirstFetchGnbStatus.current) {
+      setIsGeneralGnbStateLoading(true);
+    }
+
+    const intervalId = setInterval(fetchLiveData, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div className={`contentTelemetry ${isLoading ? 'loading' : ''}`}>
       {isLoading && <Loader>Loading Telemetry ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
         <>
-          <div className="generalTelemetryItems">
-            {generalTelemetryStatus.map((metric, i) => {
-              return (
-                <GeneralTelemetryItem
-                  name={metric.metricName}
-                  rawData={metric.metricData}
-                  key={i}
-                />
-              );
-            })}
+          <div className="generalTelemetryData">
+            <GnbInfo
+              gnbState={generalGnbState}
+              isStateLoading={isGeneralGnbStateLoading}
+            />
+
+            <div className="generalTelemetryItems">
+              {generalTelemetryStatus.map((metric, i) => {
+                return (
+                  <GeneralTelemetryItem
+                    name={metric.metricName}
+                    rawData={metric.metricData}
+                    key={i}
+                    isLive={isLiveDataToggled}
+                  />
+                );
+              })}
+            </div>
           </div>
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
@@ -254,6 +306,7 @@ export default function DisplayTelemetry({
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}
@@ -263,16 +316,24 @@ export default function DisplayTelemetry({
 
       {!isLoading && (requestedData || isLiveDataToggled) && (
         <>
-          <div className="generalTelemetryItems">
-            {generalTelemetryStatus.map((metric, i) => {
-              return (
-                <GeneralTelemetryItem
-                  name={metric.metricName}
-                  rawData={metric.metricData}
-                  key={i}
-                />
-              );
-            })}
+          <div className="generalTelemetryData">
+            <GnbInfo
+              gnbState={generalGnbState}
+              isStateLoading={isGeneralGnbStateLoading}
+            />
+
+            <div className="generalTelemetryItems">
+              {generalTelemetryStatus.map((metric, i) => {
+                return (
+                  <GeneralTelemetryItem
+                    name={metric.metricName}
+                    rawData={metric.metricData}
+                    key={i}
+                    isLive={isLiveDataToggled}
+                  />
+                );
+              })}
+            </div>
           </div>
           <div className="ueTelemetryItems">
             {ueTelemetryStatus.map((metric, i) => {
@@ -281,6 +342,7 @@ export default function DisplayTelemetry({
                   name={metric.metricName}
                   rawData={metric.metricData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}

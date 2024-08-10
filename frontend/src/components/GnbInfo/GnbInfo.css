@@ -1,0 +1,84 @@
+@import url('../../styles/variables.css');
+
+.generalGnb {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: var(--color-background-900);
+  border: solid 2px var(--color-live-gnb-fetching);
+  border-radius: 10px;
+  padding: 0.2rem;
+  position: relative;
+}
+
+.liveIndicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--color-live-gnb-fetching);
+  color: var(--color-text);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0 6px 0 6px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.labelProduct,
+.labelStatus,
+.labelDlSpeed,
+.labelUlSpeend {
+  text-transform: uppercase;
+  font-weight: 250;
+  padding: 0.5rem;
+}
+
+.dataProduct,
+.dataStatus,
+.dataDlSpeed,
+.dataUlSpeed {
+  text-transform: none;
+  font-weight: 600;
+}
+
+.dataStatus.GnbRunning {
+  color: var(--color-gnb-running);
+}
+
+.dataStatus.GnbStarting {
+  color: var(--color-gnb-starting);
+}
+
+.dataStatus.GnbStopped {
+  color: var(--color-gnb-stopped);
+}
+
+.dataProduct.loadingData,
+.dataStatus.loadingData,
+.dataDlSpeed.loadingData,
+.dataUlSpeed.loadingData {
+  font-weight: 250;
+  font-style: italic;
+}
+
+.dataProduct.notAvailable,
+.dataStatus.notAvailable,
+.dataDlSpeed.notAvailable,
+.dataUlSpeed.notAvailable {
+  font-weight: 250;
+}

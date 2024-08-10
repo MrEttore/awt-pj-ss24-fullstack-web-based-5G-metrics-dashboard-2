@@ -182,6 +182,7 @@ export default function DisplayHealth({
                   name={module.moduleName}
                   rawData={module.moduleData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}
@@ -198,6 +199,7 @@ export default function DisplayHealth({
                   name={module.moduleName}
                   rawData={module.moduleData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}
