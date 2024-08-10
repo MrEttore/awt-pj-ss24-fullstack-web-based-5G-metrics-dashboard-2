@@ -48,7 +48,6 @@ export const DASHBOARD_GENERAL_METRICS = [
   'pci',
   'dlCarrierFreq',
   'ulCarrierFreq',
-  'avgLdpcIterations',
 ];
 
 export const EMPTY_UE_TELEMETRY_STATUS = [

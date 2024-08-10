@@ -174,6 +174,24 @@ export async function getLiveGnbTelemetry() {
   }
 }
 
+export async function getGeneralGnbState() {
+  try {
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=gnbStatus`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    return { data: [data], error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
+// TODO: from last 2 days
 export async function getRecentGnbTelemetry(ues, limit = 30) {
   try {
     const uesStr = ues.join(',');
@@ -184,12 +202,12 @@ export async function getRecentGnbTelemetry(ues, limit = 30) {
 
     if (!response.ok) throw new Error('Response not ok');
 
-    const recentData = await response.json();
+    const data = await response.json();
 
-    return { recentData: recentData, error: null };
+    return { data: data, error: null };
   } catch (err) {
     return {
-      recentData: [],
+      data: [],
       error: `${err.message}. Please check your internet connection and try again`,
     };
   }
