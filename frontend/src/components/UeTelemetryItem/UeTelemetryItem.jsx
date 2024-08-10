@@ -42,7 +42,7 @@ const pointRadiusMapping = (dataPoints) => {
   }
 };
 
-export default function UeTelemetryItem({ name, rawData = [] }) {
+export default function UeTelemetryItem({ name, rawData = [], isLive }) {
   const allTimestamps = rawData.flatMap((dp) =>
     dp.data.map((entry) => entry.timestamp)
   );
@@ -169,7 +169,7 @@ export default function UeTelemetryItem({ name, rawData = [] }) {
   };
 
   return (
-    <div className={`ueTelemetryItem ${rawData.length !== 0 ? '' : 'noData'}`}>
+    <div className={`ueTelemetryItem ${isLive ? 'live' : ''}`}>
       <Line options={options} data={data} />
     </div>
   );

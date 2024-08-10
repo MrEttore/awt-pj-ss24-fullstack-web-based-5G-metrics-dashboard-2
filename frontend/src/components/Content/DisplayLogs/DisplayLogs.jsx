@@ -160,7 +160,7 @@ export default function DisplayLogs({
   }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
-    <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>
+    <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
@@ -171,6 +171,7 @@ export default function DisplayLogs({
               payload={log.payload}
               logNr={i}
               key={i}
+              isLive={isLiveDataToggled}
             />
           ))}
         </ul>
@@ -184,6 +185,7 @@ export default function DisplayLogs({
               payload={log.payload}
               logNr={i}
               key={i}
+              isLive={isLiveDataToggled}
             />
           ))}
         </ul>

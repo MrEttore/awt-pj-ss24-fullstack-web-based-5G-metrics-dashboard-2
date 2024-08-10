@@ -43,7 +43,7 @@ const pointRadiusMapping = (dataPoints) => {
   }
 };
 
-export default function GeneralTelemetryItem({ name, rawData = [] }) {
+export default function GeneralTelemetryItem({ name, rawData = [], isLive }) {
   const uniqueLablesY = Array.from(new Set(rawData.map((dp) => dp.value)));
 
   const allValuesAreStrings = rawData.every(
@@ -129,9 +129,7 @@ export default function GeneralTelemetryItem({ name, rawData = [] }) {
   };
 
   return (
-    <div
-      className={`generalTelemetryItem ${rawData.length !== 0 ? '' : 'noData'}`}
-    >
+    <div className={`generalTelemetryItem ${isLive ? 'live' : ''}`}>
       <Line options={options} data={data} />
     </div>
   );
