@@ -1,6 +1,10 @@
 import './FormControlButtons.css';
 
-export default function FormControlButtons({ isLiveDataOn, onReset }) {
+export default function FormControlButtons({
+  isLiveDataOn,
+  onDataReset,
+  onResetForm,
+}) {
   return (
     <div className="btnContainer">
       <button className="btnSubmit" type="submit" disabled={isLiveDataOn}>
@@ -9,7 +13,10 @@ export default function FormControlButtons({ isLiveDataOn, onReset }) {
       <button
         className="btnReset"
         type="button"
-        onClick={onReset}
+        onClick={() => {
+          onDataReset();
+          onResetForm();
+        }}
         disabled={isLiveDataOn}
       >
         Reset

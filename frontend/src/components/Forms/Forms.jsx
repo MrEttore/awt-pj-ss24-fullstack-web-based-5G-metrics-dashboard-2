@@ -166,7 +166,8 @@ export default function Forms({
 
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={onDataReset}
+            onDataReset={onDataReset}
+            onResetForm={handleResetForm}
           />
         </Form>
       )}
@@ -238,7 +239,8 @@ export default function Forms({
 
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={onDataReset}
+            onDataReset={onDataReset}
+            onResetForm={handleResetForm}
           />
         </Form>
       )}
@@ -296,7 +298,8 @@ export default function Forms({
 
           <FormControlButtons
             isLiveDataOn={isLiveDataToggled}
-            onReset={onDataReset}
+            onDataReset={onDataReset}
+            onResetForm={handleResetForm}
           />
         </Form>
       )}
