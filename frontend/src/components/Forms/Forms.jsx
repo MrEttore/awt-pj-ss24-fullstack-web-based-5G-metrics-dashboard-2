@@ -115,9 +115,19 @@ export default function Forms({
     <div className="formContainer">
       {selectedTab === 'healthStatus' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitHealth}>
-          <DropDown name="devices" label="devices" isActive={false} />
+          <DropDown
+            name="devices"
+            label="devices"
+            isActive={false}
+            required={true}
+          />
 
-          <DropDown name="metrics" label="metrics" isActive={false} />
+          <DropDown
+            name="metrics"
+            label="metrics"
+            isActive={false}
+            required={true}
+          />
 
           <TimespanSelector
             startTime={startTime}
@@ -145,6 +155,7 @@ export default function Forms({
             isMulti={false}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
+            required={true}
           />
 
           <ToggleLiveDataSwitch
@@ -175,6 +186,7 @@ export default function Forms({
             isMulti={true}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
+            required={true}
           />
 
           <DropDown
@@ -186,6 +198,7 @@ export default function Forms({
             isMulti={true}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
+            required={true}
           />
 
           <TimespanSelector
@@ -214,6 +227,7 @@ export default function Forms({
             isMulti={false}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
+            required={true}
           />
 
           <ToggleLiveDataSwitch
@@ -231,9 +245,19 @@ export default function Forms({
 
       {selectedTab === 'logs' && (
         <Form selectedTab={selectedTab} onSubmit={handleSubmitLogs}>
-          <DropDown name="devices" label="devices" isActive={false} />
+          <DropDown
+            name="devices"
+            label="devices"
+            isActive={false}
+            required={true}
+          />
 
-          <DropDown name="metrics" label="metrics" isActive={false} />
+          <DropDown
+            name="metrics"
+            label="metrics"
+            isActive={false}
+            required={true}
+          />
 
           <TimespanSelector
             startTime={startTime}
@@ -261,6 +285,7 @@ export default function Forms({
             isMulti={false}
             isLiveDataOn={isLiveDataToggled}
             isActive={true}
+            required={true}
           />
 
           <ToggleLiveDataSwitch
