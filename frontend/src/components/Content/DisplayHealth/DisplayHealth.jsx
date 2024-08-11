@@ -27,12 +27,6 @@ export default function DisplayHealth({
 
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // RESET HEALTH STATUS
-
-  useEffect(() => {
-    if (resetFlag) setHealthStatus([]);
-  }, [resetFlag]);
-
   // SET INITIAL STATE
 
   useEffect(() => {
@@ -55,9 +49,13 @@ export default function DisplayHealth({
         setIsLoading(true);
         onMessage(EMPTY_MESSAGE);
 
-        const { startTime, endTime } = requestedData;
+        const { startTime, endTime, limitDatapoints } = requestedData;
 
-        const { data, error } = await getCn5gData(startTime, endTime);
+        const { data, error } = await getCn5gData(
+          startTime,
+          endTime,
+          limitDatapoints
+        );
 
         if (error) throw new Error(error);
 
@@ -106,22 +104,16 @@ export default function DisplayHealth({
 
         const { data, error } = await getLiveCn5gData();
 
-        // console.log('data: ', data);
-
         if (error) throw new Error(error);
 
         const processedLiveData = getHealthData(data);
 
-        console.log('processedLiveData: ', processedLiveData);
-
-        // FIXME: data aggregation in status
+        // TODO: test live data feature
 
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
           processedLiveData
         );
-
-        console.log('aggregatedLiveData: ', aggregatedLiveData);
 
         setHealthStatus(aggregatedLiveData);
 
@@ -177,7 +169,7 @@ export default function DisplayHealth({
     if (requestedData || isLiveDataToggled) return;
 
     fetchRecentData();
-  }, [onMessage, requestedData, isLiveDataToggled]);
+  }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
     <div className={`contentHealth  ${isLoading ? 'loading' : ''}`}>
