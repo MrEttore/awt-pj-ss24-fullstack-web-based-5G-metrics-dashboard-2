@@ -39,6 +39,7 @@ function Main() {
   function handleLiveDataToggle() {
     setIsLiveDataToggled(!isLiveDataToggled);
     setResetFlag(false);
+    setRequestedData(null);
   }
 
   function handleDataRequest(data) {
