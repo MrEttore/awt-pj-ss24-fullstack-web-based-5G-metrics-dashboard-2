@@ -695,6 +695,16 @@ h2.react-datepicker__current-month {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+.react-datepicker__input-container input.error::placeholder {
+  color: var(--color-background-900);
+  font-size: 0.7rem;
+}
+
+.react-datepicker__input-container input.error {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning-dark);
+}
+
 .react-datepicker__input-container input:disabled {
   pointer-events: none;
   opacity: 0.5;

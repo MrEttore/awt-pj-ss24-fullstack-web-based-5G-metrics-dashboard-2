@@ -19,14 +19,14 @@ export default function Forms({
   metrics,
 }) {
   const [startTime, setStartTime] = useState(null);
-
   const [endTime, setEndTime] = useState(null);
-
   const [selectedMetrics, setSelectedMetrics] = useState([]);
-
   const [selectedDevices, setSelectedDevices] = useState([]);
-
   const [selectedLimit, setSelectedLimit] = useState(null);
+
+  // Error states
+  const [startError, setStartError] = useState(false);
+  const [endError, setEndError] = useState(false);
 
   function handleResetForm() {
     setStartTime(null);
@@ -34,12 +34,27 @@ export default function Forms({
     setSelectedMetrics([]);
     setSelectedDevices([]);
     setSelectedLimit(null);
+    setStartError(false);
+    setEndError(false);
+  }
+
+  function validateTimespan() {
+    let isValid = true;
+    if (!startTime) {
+      setStartError(true);
+      isValid = false;
+    }
+    if (!endTime) {
+      setEndError(true);
+      isValid = false;
+    }
+    return isValid;
   }
 
   function handleSubmitHealth(e) {
     e.preventDefault();
 
-    if (!startTime && !endTime) return;
+    if (!validateTimespan()) return;
 
     const { value: limit } = selectedLimit;
 
@@ -57,7 +72,7 @@ export default function Forms({
   function handleSubmitLogs(e) {
     e.preventDefault();
 
-    if (!startTime && !endTime) return;
+    if (!validateTimespan()) return;
 
     const { value: limit } = selectedLimit;
 
@@ -75,7 +90,7 @@ export default function Forms({
   function handleSubmitTelemetry(e) {
     e.preventDefault();
 
-    if (!startTime && !endTime) return;
+    if (!validateTimespan()) return;
 
     const { value: limit } = selectedLimit;
 
@@ -92,8 +107,6 @@ export default function Forms({
     handleResetForm();
   }
 
-  // CLEAR INPUT FIELDS WHEN LIVE DATA IS ON
-
   useEffect(() => {
     if (isLiveDataToggled) handleResetForm();
   }, [isLiveDataToggled]);
@@ -109,9 +122,18 @@ export default function Forms({
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
-            onInputStartTime={setStartTime}
-            onInputEndTime={setEndTime}
+            onInputStartTime={(date) => {
+              setStartTime(date);
+              setStartError(false);
+            }}
+            onInputEndTime={(date) => {
+              setEndTime(date);
+              setEndError(false);
+            }}
             isLiveDataOn={isLiveDataToggled}
+            required={true}
+            startError={startError}
+            endError={endError}
           />
 
           <DropDown
@@ -169,9 +191,18 @@ export default function Forms({
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
-            onInputStartTime={setStartTime}
-            onInputEndTime={setEndTime}
+            onInputStartTime={(date) => {
+              setStartTime(date);
+              setStartError(false);
+            }}
+            onInputEndTime={(date) => {
+              setEndTime(date);
+              setEndError(false);
+            }}
             isLiveDataOn={isLiveDataToggled}
+            required={true}
+            startError={startError}
+            endError={endError}
           />
 
           <DropDown
@@ -207,9 +238,18 @@ export default function Forms({
           <TimespanSelector
             startTime={startTime}
             endTime={endTime}
-            onInputStartTime={setStartTime}
-            onInputEndTime={setEndTime}
+            onInputStartTime={(date) => {
+              setStartTime(date);
+              setStartError(false);
+            }}
+            onInputEndTime={(date) => {
+              setEndTime(date);
+              setEndError(false);
+            }}
             isLiveDataOn={isLiveDataToggled}
+            required={true}
+            startError={startError}
+            endError={endError}
           />
 
           <DropDown
