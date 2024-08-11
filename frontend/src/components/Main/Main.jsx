@@ -57,8 +57,6 @@ function Main() {
     setMessage(msg);
   }, []);
 
-  // GET LIST OF AVAILABLE DEVICES
-
   useEffect(() => {
     const getDevices = async () => {
       try {
@@ -76,8 +74,6 @@ function Main() {
 
     getDevices();
   }, []);
-
-  // GET LIST OF AVAILABLE METRICS
 
   useEffect(() => {
     function getMetrics(metricsArray) {
