@@ -76,27 +76,31 @@ export default function DisplayTelemetry({
 
         const ueIds = devices.map((device) => device.value);
 
-        const { data, error } = await getGnbTelemetry(
-          startTime,
-          endTime,
-          ueIds,
-          limitDatapoints
+        const {
+          data: queriedGnbTelemetryData,
+          error: errorQueriedGnbTelemetryData,
+        } = await getGnbTelemetry(startTime, endTime, ueIds, limitDatapoints);
+
+        if (errorQueriedGnbTelemetryData)
+          throw new Error(errorQueriedGnbTelemetryData);
+
+        const numDatapoints = queriedGnbTelemetryData.length;
+
+        const ueTelemetryData = getUeTelemetryData(queriedGnbTelemetryData);
+
+        const generalTelemetryData = getGeneralTelemetryData(
+          queriedGnbTelemetryData
         );
-
-        if (error) throw new Error(error);
-
-        const numDatapoints = data.length;
-
-        const ueTelemetryData = getUeTelemetryData(data);
-
-        const generalTelemetryData = getGeneralTelemetryData(data);
 
         if (numDatapoints === 0) {
           onMessage({
             type: 'success-queried-data-not-found',
             text: 'No telemetry data for the selected filters!',
           });
+
           setUeTelemetryStatus(ueTelemetryData);
+          setGeneralTelemetryStatus(generalTelemetryData);
+
           return;
         }
 
