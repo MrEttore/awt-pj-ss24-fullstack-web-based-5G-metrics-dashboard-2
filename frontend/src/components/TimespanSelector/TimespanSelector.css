@@ -701,7 +701,7 @@ h2.react-datepicker__current-month {
 }
 
 .react-datepicker__input-container input.error {
-  background-color: var(--color-warning);
+  background-color: rgb(255, 169, 77, 0.8);
   border-color: var(--color-warning-dark);
 }
 
