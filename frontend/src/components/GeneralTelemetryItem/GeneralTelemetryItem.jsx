@@ -118,6 +118,7 @@ export default function GeneralTelemetryItem({ name, rawData = [], isLive }) {
         label: name,
         data: telemetryData,
         borderColor: COLOR_DATASET_LINE,
+        borderWidth: 1.5,
         fill: false,
         stepped: false,
         pointBackgroundColor: COLOR_MODULE_ON,

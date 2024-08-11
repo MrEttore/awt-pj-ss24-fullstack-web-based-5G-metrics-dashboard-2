@@ -80,7 +80,7 @@ export default function UeTelemetryItem({ name, rawData = [], isLive }) {
       data: telemetryData,
       borderColor: color,
       backgroundColor: color + '66',
-      borderWidth: 2,
+      borderWidth: 1.5,
       pointBackgroundColor: color,
       pointBorderColor: color,
       pointRadius: pointRadiusMapping(telemetryData.length),
