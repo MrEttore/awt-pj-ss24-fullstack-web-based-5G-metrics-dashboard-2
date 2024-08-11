@@ -25,6 +25,7 @@ export default function TimespanSelector({
           dateFormat="dd/MM/yyyy, HH:mm"
           placeholderText="From ..."
           disabled={isLiveDataOn}
+          timeIntervals={15}
         />
         <DatePicker
           selected={endTime}
@@ -33,6 +34,7 @@ export default function TimespanSelector({
           dateFormat="dd/MM/yyyy, HH:mm"
           placeholderText="To ..."
           disabled={isLiveDataOn}
+          timeIntervals={15}
         />
       </div>
     </div>
