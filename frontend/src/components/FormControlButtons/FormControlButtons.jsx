@@ -6,7 +6,12 @@ export default function FormControlButtons({ isLiveDataOn, onReset }) {
       <button className="btnSubmit" type="submit" disabled={isLiveDataOn}>
         Submit
       </button>
-      <button className="btnReset" onClick={onReset} disabled={isLiveDataOn}>
+      <button
+        className="btnReset"
+        type="button"
+        onClick={onReset}
+        disabled={isLiveDataOn}
+      >
         Reset
       </button>
     </div>
