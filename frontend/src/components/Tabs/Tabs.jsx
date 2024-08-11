@@ -24,7 +24,7 @@ export default function Tabs({ selectedTab, onSelectTab }) {
         onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
-        Telemetry
+        gNB Telemetry
       </Tab>
       <Tab
         value="logs"
@@ -32,7 +32,7 @@ export default function Tabs({ selectedTab, onSelectTab }) {
         onSelect={onSelectTab}
         selectedTab={selectedTab}
       >
-        Logs
+        gNB Logs
       </Tab>
     </div>
   );

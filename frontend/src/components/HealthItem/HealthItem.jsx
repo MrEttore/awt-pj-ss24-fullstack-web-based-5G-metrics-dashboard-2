@@ -133,6 +133,7 @@ export default function HealthItem({ name, rawData = [], isLive }) {
         label: 'Health',
         data: healthData.map((value) => statusMapping[value] || 'UNKNOWN'),
         borderColor: COLOR_DATASET_LINE,
+        borderWidth: 1.5,
         fill: false,
         stepped: true,
         pointBackgroundColor: healthData.map(
