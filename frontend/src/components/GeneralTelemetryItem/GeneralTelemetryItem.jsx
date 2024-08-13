@@ -102,17 +102,18 @@ export default function GeneralTelemetryItem({ name, rawData = [], isLive }) {
     },
   };
 
-  const timestampsStrings = rawData.map((dp) => {
-    const date = new Date(dp.timestamp);
-    const dateString = date.toLocaleString();
+  const allTimestamps = rawData.map((dp) => dp.timestamp);
 
-    return dateString;
-  });
+  const uniqueTimestamps = Array.from(new Set(allTimestamps));
+
+  const uniqueTimestampsStrings = uniqueTimestamps.map((timestamp) =>
+    new Date(timestamp).toLocaleString()
+  );
 
   const telemetryData = rawData.map((dp) => dp.value);
 
   const data = {
-    labels: timestampsStrings,
+    labels: uniqueTimestampsStrings,
     datasets: [
       {
         label: name,
