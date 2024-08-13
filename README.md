@@ -7,11 +7,8 @@
     <img src="images/TU-Berlin-Logo.svg" alt="Logo">
   </a>
 
-<h1 align="center">Project Advanced Web Technologies  
-  <br />
-  <br />
-  Fullstack web-based 5G metrics dashboard
-</h1>
+<h1 align="center"> Fullstack web-based 5G metrics dashboard </h1>
+<h3>Project Advanced Web Technologies </h3>
 </div>
 
 
