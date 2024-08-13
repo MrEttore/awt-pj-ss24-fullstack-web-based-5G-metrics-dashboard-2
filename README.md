@@ -57,7 +57,7 @@ This project is a web-based dashboard application designed to display both store
 
 <br/>
 
-<a href="https://github.com/github_username/repo_name">View demo videos of the dashboard</a>
+<a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link">View demo videos of the dashboard</a>
 
 <br/>
 
