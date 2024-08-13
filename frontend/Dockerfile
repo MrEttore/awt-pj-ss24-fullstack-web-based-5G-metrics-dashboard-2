@@ -1,8 +1,14 @@
-FROM node:21.7.3-alpine3.20
+# CRA
+FROM node:21.7.3-alpine3.20 AS build
 WORKDIR /usr/src/app
-# Kopiere package.json und package-lock.json in das Arbeitsverzeichnis
-COPY package*.json ./
+COPY package.json package-lock.json ./
 RUN npm i
-COPY . .
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
+COPY . ./
+RUN npm run build
+
+# Nginx
+FROM nginx:latest
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+EXPOSE 80 5173
+COPY nginx.conf /etc/nginx/nginx.conf
+CMD ["nginx", "-g", "daemon off;"]
