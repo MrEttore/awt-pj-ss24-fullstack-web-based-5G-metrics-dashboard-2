@@ -1,19 +1,13 @@
-<a id="readme-top"></a>
-
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/MrEttore/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2">
-    <img src="images/TU-Berlin-Logo.svg" alt="Logo">
-  </a>
-
-<h1 align="center"> Fullstack web-based 5G metrics dashboard </h1>
-<h3>Project Advanced Web Technologies </h3>
+  <img src="images/TU-Berlin-Logo.svg" alt="Logo">
+  <h1 align="center"> Fullstack web-based 5G metrics dashboard </h1>
+  <h3>Project Advanced Web Technologies (SoSe24) </h3>
 </div>
 
 
 <!-- TABLE OF CONTENTS -->
-<details>
+<!-- <details>
   <summary>Table of Contents</summary>
   <ol>
     <li>
@@ -36,12 +30,16 @@
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
-</details>
+</details> -->
 
+<br/>
 
+<img src="images/dashboard.png"/>
+
+<br/>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## 💡 About The Project
 
 This project is a web-based dashboard application designed to display both stored and live metric data from a 5G mobile network, including information from base stations and user devices. The system is capable of capturing and storing 5G metrics in a database, enabling users to retrieve, view, and compare data across various test sessions.
 
@@ -54,27 +52,23 @@ This project is a web-based dashboard application designed to display both store
 
 <br/>
 
-<a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link">View demo videos of the dashboard</a>
+<div align="center">
+  <h3>🎥 <a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link">View demo videos of the dashboard</a></h3>
+</div>
 
 <br/>
 
-<img src="images/dashboard.png"/>
 
----
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Built With
+## 🛠️ Built With
 
 * [![React][React.js]][React-url]
 * ...
 
 
 
-
-
 <!-- GETTING STARTED -->
-## Getting Started
+## 🚀 Getting Started 
 
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
@@ -119,8 +113,6 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
@@ -133,16 +125,12 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -153,8 +141,6 @@ Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_
 
 Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ACKNOWLEDGMENTS -->
@@ -163,9 +149,6 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 * []()
 * []()
 * []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
