@@ -33,20 +33,13 @@ export default function DisplayTelemetry({
   devices,
 }) {
   const [ueTelemetryStatus, setUeTelemetryStatus] = useState([]);
-
   const [generalTelemetryStatus, setGeneralTelemetryStatus] = useState([]);
-
   const [generalGnbState, setGeneralGnbState] = useState([]);
-
   const [isGeneralGnbStateLoading, setIsGeneralGnbStateLoading] =
     useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
-
   const isFirstFetchGnbStatus = useRef(true);
-
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
   // SET INITIAL STATE
