@@ -22,9 +22,7 @@ export default function DisplayHealth({
   isLiveDataToggled,
 }) {
   const [healthStatus, setHealthStatus] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
   // SET INITIAL STATE

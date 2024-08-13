@@ -33,20 +33,13 @@ export default function DisplayTelemetry({
   devices,
 }) {
   const [ueTelemetryStatus, setUeTelemetryStatus] = useState([]);
-
   const [generalTelemetryStatus, setGeneralTelemetryStatus] = useState([]);
-
   const [generalGnbState, setGeneralGnbState] = useState([]);
-
   const [isGeneralGnbStateLoading, setIsGeneralGnbStateLoading] =
     useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
-
   const isFirstFetchGnbStatus = useRef(true);
-
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
   // SET INITIAL STATE
@@ -161,6 +154,14 @@ export default function DisplayTelemetry({
             type: 'success-live-data',
             text: 'Live telemetry is on! Waiting a UE to connect ...',
           });
+        } else if (generalGnbState[0].gnbStatus === 'GnbStopped') {
+          setUeTelemetryStatus(EMPTY_UE_TELEMETRY_STATUS);
+          setGeneralTelemetryStatus(EMPTY_GENERAL_TELEMETRY_STATUS);
+
+          onMessage({
+            type: 'success-live-data',
+            text: 'Live telemetry is on! Waiting gNB to start ...',
+          });
         } else {
           const ueLiveData = getUeTelemetryData(liveGnbTelemetryData);
           const generalLiveData = getGeneralTelemetryData(liveGnbTelemetryData);
@@ -208,6 +209,7 @@ export default function DisplayTelemetry({
     ueTelemetryStatus,
     generalTelemetryStatus,
     isLiveDataLoading,
+    generalGnbState,
   ]);
 
   // FETCH RECENT DATA

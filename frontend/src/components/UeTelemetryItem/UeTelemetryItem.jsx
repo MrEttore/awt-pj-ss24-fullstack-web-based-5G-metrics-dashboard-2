@@ -47,11 +47,9 @@ export default function UeTelemetryItem({ name, rawData = [], isLive }) {
     dp.data.map((entry) => entry.timestamp)
   );
 
-  // !!! Take out uniqueTimestamps to test live telemetry data
+  const uniqueTimestamps = Array.from(new Set(allTimestamps));
 
-  // const uniqueTimestamps = Array.from(new Set(allTimestamps));
-
-  const uniqueTimestampsStrings = allTimestamps.map((timestamp) =>
+  const uniqueTimestampsStrings = uniqueTimestamps.map((timestamp) =>
     new Date(timestamp).toLocaleString()
   );
 

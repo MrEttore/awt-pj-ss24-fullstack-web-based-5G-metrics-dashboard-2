@@ -1,4 +1,4 @@
-const PORT = import.meta.env.VITE_PORT;
+const PORT = import.meta.env.VITE_PORT || 5173;
 
 // Dashboards modules and metrics
 
@@ -239,6 +239,6 @@ export const UES_URL = `http://localhost:${PORT}/api/ues`;
 
 export const LATEST_DATAPOINT_URL = `http://localhost:${PORT}/api/latest`;
 
-// Warning i.e., error messages
+// Message structure
 
 export const EMPTY_MESSAGE = { type: null, text: '' };
