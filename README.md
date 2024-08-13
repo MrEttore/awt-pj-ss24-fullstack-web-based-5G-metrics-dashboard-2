@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/MrEttore/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/TU-Berlin-Logo.svg" alt="Logo">
   </a>
 
 <h1 align="center">Project Advanced Web Technologies  
