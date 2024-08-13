@@ -12,16 +12,7 @@
   <br />
   Fullstack web-based 5G metrics dashboard
 </h1>
-
-  <p align="center">
-    <br />
-    <br />
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>    
-  </p>
 </div>
-
 
 
 <!-- TABLE OF CONTENTS -->
