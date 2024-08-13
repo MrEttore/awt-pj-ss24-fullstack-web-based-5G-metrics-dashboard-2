@@ -53,7 +53,7 @@ This project implements a web-based dashboard application designed to display bo
 <br/>
 
 <div align="center">
-  <h3>🎥 <a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link">View demo videos of the dashboard</a></h3>
+  <h3>🎥 <a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link">View the demo videos of our dashboard!</a></h3>
 </div>
 
 <br/>
