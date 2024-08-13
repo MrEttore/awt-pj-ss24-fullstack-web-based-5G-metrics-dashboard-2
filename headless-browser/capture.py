@@ -4,8 +4,10 @@ from dotenv import load_dotenv
 import os, re, json
 import aiohttp
 
-# Load environment variables from .env.local
+
+# Load environment variables
 load_dotenv(dotenv_path=".env.local")
+
 
 # Import login data
 auth_url = os.getenv("AUTH_LINK")
@@ -73,7 +75,7 @@ async def send_data(json_data, destination, timestamp, url_ending):
         msg_obj = {
             "timestamp": timestamp,
             "destination": destination,
-            "payload": json_data
+            "payload": json_data,
         }
         async with aiohttp.ClientSession() as session:
             async with session.post(

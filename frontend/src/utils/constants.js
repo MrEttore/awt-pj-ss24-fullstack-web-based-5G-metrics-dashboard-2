@@ -1,4 +1,4 @@
-const PORT = import.meta.env.VITE_PORT;
+const PORT = import.meta.env.VITE_PORT || 5173;
 
 // Dashboards modules and metrics
 
