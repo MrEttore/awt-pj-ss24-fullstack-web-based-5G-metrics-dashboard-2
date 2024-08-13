@@ -17,6 +17,8 @@
     project_description
     <br />
     <br />
+    <img src="images/dashboard.png"
+    <br />
     <br />
     <a href="https://github.com/github_username/repo_name">View Demo</a>    
   </p>
