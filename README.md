@@ -7,8 +7,11 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">TU Project AWT | Fullstack web-based 5G metrics dashboard
-</h3>
+<h1 align="center">Project Advanced Web Technologies  
+  <br />
+  <br />
+  Fullstack web-based 5G metrics dashboard
+</h1>
 
   <p align="center">
     project_description
