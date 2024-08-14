@@ -5,33 +5,6 @@
   <h3>Project Advanced Web Technologies (SoSe24) </h3>
 </div>
 
-
-<!-- TABLE OF CONTENTS -->
-<!-- <details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details> -->
-
 <br/>
 
 <img src="images/dashboard.png"/>
@@ -47,7 +20,7 @@ This project implements a web-based dashboard application designed to display bo
 
 - **Live and Stored Data Display:** View real-time metrics as well as historical data from 5G network components.
 - **Data Capture and Storage:** Efficiently capture and store 5G metrics in a database for future analysis.
-- **Comparison and Analysis:** Retrieve and compare data from multiple test sessions to analyze network performance.
+- **Comparison and Analysis:** Retrieve and compare data from multiple test sessions to analyze 5G network performance.
 - **WebSocket Integration:** Reverse engineering and capturing of WebSocket messages from an existing [OAIBOX](https://oaibox.com/) dashboard to provide the necessary 5G data.
 
 <br/>
@@ -64,9 +37,31 @@ This project implements a web-based dashboard application designed to display bo
 
 * ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 * ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+* ![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)
 * ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 * ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
-* ![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)
+* ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+* ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+* ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+
+## 🏛️ System Architecture
+
+The architecture of our 5G metric dashboard web application is a modular, containerized system built for flexibility, scalability, and ease of maintenance. The system is composed of five key components:
+
+- **Frontend:** The frontend serves as the user interface, enabling users to interact with and visualize 5G data in real-time. It provides a responsive and intuitive experience, ensuring that the complex metrics are presented in a user-friendly manner.
+- **Backend:** The backend acts as the central hub for data processing. It manages the flow of information between the frontend and the database, handling requests and ensuring that data is processed accurately and efficiently.
+- **Database:** The database stores both historical and live telemetry data, serving as the persistent data repository. It ensures that all 5G metric data is securely stored and can be retrieved quickly for analysis and display.
+- **NGINX:** To enhance security and simplify the handling of Cross-Origin Resource Sharing (CORS) issues, the application traffic is managed by an NGINX container. NGINX serves as a reverse proxy, forwarding requests to the appropriate service.
+- **Scraper:** The scraper component is responsible for collecting 5G telemetry data from external [OAIBOX](https://oaibox.com/) instances. It feeds this data into the database, ensuring that the system has up-to-date information for processing and display.
+
+<br/>
+
+<div align="center">
+  <img src="images/sys-architecture.png"/>
+</div>
+
+<br/>
+
 
 
 <!-- GETTING STARTED -->
@@ -78,75 +73,75 @@ To get a local copy up and running follow these simple example steps.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+
+Docker, etc ...
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
-   ```
+1. Clone the repo
+  ```sh
+git clone https://github.com/MrEttore/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2.git
+```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+2. ...
+```sh
+...
+```
+
+3. ...
+```sh
+...
+```
+   
+4. ...
+```sh
+...
+```
+   
+5. ...
+```js
+...
+```
+   
+6. ...
+```sh
+...
+```
 
 
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## 🔧 Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+...
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- DOCUMENTATION -->
+## 📃 Documentation & APIs
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
+...
 
 
 <!-- LICENSE -->
-## License
+## 🧾 License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 
 
 <!-- CONTACT -->
-## Contact
+## 📬 Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Ettore Marangon - [LinkedIn](www.linkedin.com/in/ettore-marangon-7ba517215) | ettore.carlo.marangon@campus.tu-berlin.de
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Daniel Hermann - 
+
+Moritz Schelten - 
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 🫡 Acknowledgments
 
 * []()
 * []()
