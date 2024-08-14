@@ -1,3 +1,5 @@
+const PORT = import.meta.env.VITE_PORT || 5173;
+
 // Dashboards modules and metrics
 
 export const CN5G_MODULES = [
@@ -46,7 +48,6 @@ export const DASHBOARD_GENERAL_METRICS = [
   'pci',
   'dlCarrierFreq',
   'ulCarrierFreq',
-  'avgLdpcIterations',
 ];
 
 export const EMPTY_UE_TELEMETRY_STATUS = [
@@ -228,16 +229,16 @@ export const LIMITS = [
 
 // API urls
 
-export const CN5G_URL = 'http://localhost:5173/api/messages?topic=health';
+export const CN5G_URL = `http://localhost:${PORT}/api/cn5g/telemetry`;
 
-export const GNB_LOGS_URL = 'http://localhost:5173/api/messages?topic=logs';
+export const GNB_LOGS_URL = `http://localhost:${PORT}/api/gnb/logs`;
 
-export const GNB_TELEMETRY_URL = 'http://localhost:5173/api/messages/gnbTelemetry';
+export const GNB_TELEMETRY_URL = `http://localhost:${PORT}/api/gnb/telemetry`;
 
-export const UES_URL = 'http://localhost:5173/api/messages/gnbTelemetry/ues';
+export const UES_URL = `http://localhost:${PORT}/api/ues`;
 
-export const TELEMETRY_BASE_URL = 'http://localhost:5173/api/messages?topic=telemetry'
+export const LATEST_DATAPOINT_URL = `http://localhost:${PORT}/api/latest`;
 
-// Warning i.e., error messages
+// Message structure
 
 export const EMPTY_MESSAGE = { type: null, text: '' };

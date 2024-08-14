@@ -4,6 +4,7 @@ import {
   GNB_TELEMETRY_URL,
   TELEMETRY_BASE_URL,
   UES_URL,
+  LATEST_DATAPOINT_URL,
 } from './constants.js';
 
 // CN5G
@@ -33,18 +34,15 @@ export async function getCn5gData(timeStart, timeEnd, limit) {
   }
 }
 
-// TODO: new endpoint needed!
 export async function getLiveCn5gData() {
   try {
-    const response = await fetch(`${CN5G_URL}`);
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=health`);
 
     if (!response.ok) throw new Error('Response not ok');
 
     const data = await response.json();
 
-    const mostRecentDatapoint = data[data.length - 1];
-
-    return { data: [mostRecentDatapoint], error: null };
+    return { data: [data], error: null };
   } catch (err) {
     return {
       data: null,
@@ -97,6 +95,23 @@ export async function getGnbLogs(timeStart, timeEnd, limit) {
   }
 }
 
+export async function getLiveGnbLogs() {
+  try {
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=logs`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    return { data: [data], error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
 export async function getRecentGnbLogs(limit = 30) {
   try {
     const response = await fetch(`${GNB_LOGS_URL}&limit=${limit}`);
@@ -111,24 +126,6 @@ export async function getRecentGnbLogs(limit = 30) {
       recentData: [],
       error: `${err.message}. Please check your internet connection and try again`,
     };
-  }
-}
-
-// TODO: new endpoint needed!
-export async function getLiveGnbLogs() {
-  try {
-    const response = await fetch(`${GNB_LOGS_URL}`);
-
-    if (!response.ok) throw new Error('Response not ok');
-
-    const data = await response.json();
-
-    const mostRecentLog = data[data.length - 1];
-
-    return mostRecentLog ? [mostRecentLog] : [];
-  } catch (error) {
-    console.error(error);
-    return [];
   }
 }
 
@@ -161,20 +158,15 @@ export async function getGnbTelemetry(timeStart, timeEnd, ueIds, limit) {
   }
 }
 
-// TODO: new endpoint needed!
-export async function getLiveGnbTelemetry(ues) {
+export async function getLiveGnbTelemetry() {
   try {
-    const uesStr = ues.join(',');
-
-    const response = await fetch(`${GNB_TELEMETRY_URL}?ueIds=${uesStr}`);
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=telemetry`);
 
     if (!response.ok) throw new Error('Response not ok');
 
     const data = await response.json();
 
-    const mostRecentDatapoint = data[data.length - 1];
-
-    return { data: [mostRecentDatapoint], error: null };
+    return { data: [data], error: null };
   } catch (err) {
     return {
       data: null,
@@ -183,6 +175,24 @@ export async function getLiveGnbTelemetry(ues) {
   }
 }
 
+export async function getGeneralGnbState() {
+  try {
+    const response = await fetch(`${LATEST_DATAPOINT_URL}?topic=gnbStatus`);
+
+    if (!response.ok) throw new Error('Response not ok');
+
+    const data = await response.json();
+
+    return { data: [data], error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error: `${err.message}. Please check your internet connection and try again`,
+    };
+  }
+}
+
+// TODO: from last 2 days
 export async function getRecentGnbTelemetry(ues, limit = 30) {
   try {
     const uesStr = ues.join(',');
@@ -193,12 +203,12 @@ export async function getRecentGnbTelemetry(ues, limit = 30) {
 
     if (!response.ok) throw new Error('Response not ok');
 
-    const recentData = await response.json();
+    const data = await response.json();
 
-    return { recentData: recentData, error: null };
+    return { data: data, error: null };
   } catch (err) {
     return {
-      recentData: [],
+      data: [],
       error: `${err.message}. Please check your internet connection and try again`,
     };
   }

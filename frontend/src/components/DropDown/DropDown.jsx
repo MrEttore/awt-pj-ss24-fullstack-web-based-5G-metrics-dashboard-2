@@ -10,6 +10,7 @@ export default function DropDown({
   onSelectOption,
   isMulti,
   isLiveDataOn,
+  required = false,
   isActive,
 }) {
   return (
@@ -18,7 +19,9 @@ export default function DropDown({
         !isActive || isLiveDataOn ? 'inactive' : ''
       }`}
     >
-      <label htmlFor="select">{label}</label>
+      <label htmlFor="select">
+        {label} {required && '*'}
+      </label>
       <Select
         className="select"
         classNamePrefix="react-select"

@@ -41,8 +41,8 @@ module.exports.get = async function (req, res) {
             case 'logs':
                 internalTopic = model.topics.LOGS;
                 break;
-            case 'telemetry':
-                internalTopic = model.topics.TELEMETRY;
+            case 'gnbStatus':
+                internalTopic = model.topics.GNB_STATUS;
                 break;
             default:
                 return res.status(400).json({ error: 'Invalid topic parameter' });
@@ -170,8 +170,8 @@ module.exports.getLatest = async function (req, res) {
         case 'logs':
             internalTopic = model.topics.LOGS;
             break;
-        case 'telemetry':
-            internalTopic = model.topics.TELEMETRY;
+        case 'gnbStatus':
+            internalTopic = model.topics.GNB_STATUS;
             break;
         default:
             return res.status(400).json({ error: 'Invalid topic parameter' });

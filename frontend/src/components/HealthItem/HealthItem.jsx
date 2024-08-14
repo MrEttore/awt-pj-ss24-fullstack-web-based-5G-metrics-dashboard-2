@@ -25,7 +25,6 @@ import {
   Legend,
 } from 'chart.js';
 
-// Register Chart.js components and scales
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -36,9 +35,7 @@ ChartJS.register(
   Legend
 );
 
-export default function HealthItem({ name, rawData = [] }) {
-  // GRAPH'S OPTIONS
-
+export default function HealthItem({ name, rawData = [], isLive }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -129,8 +126,6 @@ export default function HealthItem({ name, rawData = [] }) {
     NotImplemented: COLOR_MODULE_NOT_IMPLEMENTED,
   };
 
-  // DATA'S OPTIONS
-
   const data = {
     labels: labels,
     datasets: [
@@ -138,6 +133,7 @@ export default function HealthItem({ name, rawData = [] }) {
         label: 'Health',
         data: healthData.map((value) => statusMapping[value] || 'UNKNOWN'),
         borderColor: COLOR_DATASET_LINE,
+        borderWidth: 1.5,
         fill: false,
         stepped: true,
         pointBackgroundColor: healthData.map(
@@ -153,7 +149,7 @@ export default function HealthItem({ name, rawData = [] }) {
   };
 
   return (
-    <div className={`healthItem ${rawData.length !== 0 ? '' : 'noData'}`}>
+    <div className={`healthItem ${isLive ? 'live' : ''}`}>
       <Line options={options} data={data} />
     </div>
   );

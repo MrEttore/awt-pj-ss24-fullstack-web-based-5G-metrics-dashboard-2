@@ -1,6 +1,4 @@
 import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
-
 import './TimespanSelector.css';
 
 export default function TimespanSelector({
@@ -10,30 +8,36 @@ export default function TimespanSelector({
   onInputStartTime,
   onInputEndTime,
   isLiveDataOn,
+  required = false,
+  startError,
+  endError,
 }) {
   return (
     <div className="timeSpanContainer">
       <label htmlFor="time" className={`${isLiveDataOn ? 'inactive' : ''}`}>
-        {label}
+        {label} {required && '*'}
       </label>
       <div className="inputContainer">
-        {/* TODO: add "required"? */}
-
         <DatePicker
           selected={startTime}
-          onChange={(date) => onInputStartTime(date)}
+          onChange={onInputStartTime}
           showTimeSelect
           dateFormat="dd/MM/yyyy, HH:mm"
-          placeholderText="From ..."
+          placeholderText={startError ? 'Start time is required!' : 'From ...'}
           disabled={isLiveDataOn}
+          timeIntervals={15}
+          className={startError ? 'error' : ''}
         />
+
         <DatePicker
           selected={endTime}
-          onChange={(date) => onInputEndTime(date)}
+          onChange={onInputEndTime}
           showTimeSelect
           dateFormat="dd/MM/yyyy, HH:mm"
-          placeholderText="To ..."
+          placeholderText={endError ? 'End time is required!' : 'To ...'}
           disabled={isLiveDataOn}
+          timeIntervals={15}
+          className={endError ? 'error' : ''}
         />
       </div>
     </div>

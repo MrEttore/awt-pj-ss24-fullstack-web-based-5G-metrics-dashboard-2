@@ -22,9 +22,7 @@ export default function DisplayHealth({
   isLiveDataToggled,
 }) {
   const [healthStatus, setHealthStatus] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
-
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
   // SET INITIAL STATE
@@ -108,8 +106,6 @@ export default function DisplayHealth({
 
         const processedLiveData = getHealthData(data);
 
-        // TODO: test live data feature
-
         const aggregatedLiveData = aggregateLiveHealthData(
           healthStatus,
           processedLiveData
@@ -184,6 +180,7 @@ export default function DisplayHealth({
                   name={module.moduleName}
                   rawData={module.moduleData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}
@@ -200,6 +197,7 @@ export default function DisplayHealth({
                   name={module.moduleName}
                   rawData={module.moduleData}
                   key={i}
+                  isLive={isLiveDataToggled}
                 />
               );
             })}

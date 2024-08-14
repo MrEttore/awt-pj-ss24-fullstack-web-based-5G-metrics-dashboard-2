@@ -81,7 +81,7 @@
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
 }
 
-.success,
+.success:hover,
 .successWithData:hover {
   transform: scale(1.01);
   transition: 0.2s;

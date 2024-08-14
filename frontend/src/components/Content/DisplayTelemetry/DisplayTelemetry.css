@@ -3,17 +3,25 @@
 .contentTelemetry {
   display: flex;
   gap: 0.2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   height: calc(100vh - 4rem - 0.6rem - 105px - 8.2rem);
+}
+
+.generalTelemetryData {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 0 40%;
+  background-color: var(--color-background-500);
 }
 
 .generalTelemetryItems {
   display: grid;
-  flex: 0 40%;
   grid-template-columns: 1fr;
   gap: 0.5rem;
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color: var(--color-background-500);
   border-radius: 10px;
 }
 

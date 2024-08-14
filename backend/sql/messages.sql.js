@@ -18,8 +18,8 @@ module.exports = {
         WHERE ? <= timestamp
         AND timestamp <= ?`,
 
-    GET_LATEST_TIMESTAMP: `
-        SELECT timestamp FROM Messages
+    GET_LATEST: `
+        SELECT payload FROM Messages
         WHERE destination LIKE ?
         ORDER BY timestamp DESC`,
     

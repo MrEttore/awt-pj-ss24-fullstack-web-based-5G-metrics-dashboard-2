@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   height: calc(100vh - 4rem - 0.6rem - 105px - 6.5rem);
 }
 

@@ -93,11 +93,13 @@ export default function DisplayLogs({
       try {
         setIsLiveDataLoading(true);
 
-        const newLog = await getLiveGnbLogs();
+        const { data: newLog, error } = await getLiveGnbLogs();
+
+        if (error) throw new Error(error);
 
         if (
           logsStatus.length === 0 ||
-          newLog[0].rowId !== logsStatus[0].rowId
+          newLog[0].timestamp !== logsStatus[0].timestamp
         ) {
           setLogsStatus((logsStatus) => [...newLog, ...logsStatus]);
 
@@ -158,7 +160,7 @@ export default function DisplayLogs({
   }, [onMessage, requestedData, isLiveDataToggled, resetFlag]);
 
   return (
-    <div className={`contentLogs ${isLiveDataToggled ? 'live' : ''}`}>
+    <div className="contentLogs">
       {isLoading && <Loader>Loading Logs ...</Loader>}
 
       {!isLoading && !requestedData && !isLiveDataToggled && (
@@ -169,6 +171,7 @@ export default function DisplayLogs({
               payload={log.payload}
               logNr={i}
               key={i}
+              isLive={isLiveDataToggled}
             />
           ))}
         </ul>
@@ -182,6 +185,7 @@ export default function DisplayLogs({
               payload={log.payload}
               logNr={i}
               key={i}
+              isLive={isLiveDataToggled}
             />
           ))}
         </ul>

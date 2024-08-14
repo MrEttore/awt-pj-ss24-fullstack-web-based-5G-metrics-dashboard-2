@@ -42,16 +42,14 @@ const pointRadiusMapping = (dataPoints) => {
   }
 };
 
-export default function UeTelemetryItem({ name, rawData = [] }) {
+export default function UeTelemetryItem({ name, rawData = [], isLive }) {
   const allTimestamps = rawData.flatMap((dp) =>
     dp.data.map((entry) => entry.timestamp)
   );
 
-  // !!! Take out uniqueTimestamps to test live telemetry data
+  const uniqueTimestamps = Array.from(new Set(allTimestamps));
 
-  // const uniqueTimestamps = Array.from(new Set(allTimestamps));
-
-  const uniqueTimestampsStrings = allTimestamps.map((timestamp) =>
+  const uniqueTimestampsStrings = uniqueTimestamps.map((timestamp) =>
     new Date(timestamp).toLocaleString()
   );
 
@@ -80,7 +78,7 @@ export default function UeTelemetryItem({ name, rawData = [] }) {
       data: telemetryData,
       borderColor: color,
       backgroundColor: color + '66',
-      borderWidth: 2,
+      borderWidth: 1.5,
       pointBackgroundColor: color,
       pointBorderColor: color,
       pointRadius: pointRadiusMapping(telemetryData.length),
@@ -169,7 +167,7 @@ export default function UeTelemetryItem({ name, rawData = [] }) {
   };
 
   return (
-    <div className={`ueTelemetryItem ${rawData.length !== 0 ? '' : 'noData'}`}>
+    <div className={`ueTelemetryItem ${isLive ? 'live' : ''}`}>
       <Line options={options} data={data} />
     </div>
   );
