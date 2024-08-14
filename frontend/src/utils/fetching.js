@@ -114,7 +114,7 @@ export async function getLiveGnbLogs() {
 
 export async function getRecentGnbLogs(limit = 30) {
   try {
-    const response = await fetch(`${GNB_LOGS_URL}&limit=${limit}`);
+    const response = await fetch(`${GNB_LOGS_URL}?limit=${limit}`);
 
     if (!response.ok) throw new Error('Response not ok');
 
