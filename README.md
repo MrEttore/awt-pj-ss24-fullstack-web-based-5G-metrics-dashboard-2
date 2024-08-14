@@ -72,6 +72,7 @@ First, Docker and Docker Compose should be installed on the machine. Moreover, g
 
 ### Start The Application
 1. Execute the following command to start the project
+
    ```sh
    docker compose up -d --build
    ```
@@ -79,13 +80,11 @@ First, Docker and Docker Compose should be installed on the machine. Moreover, g
     + `--build` means that the images are newly built before the containers are started
 
 ### Shut Down The Application
-1. Execute the following command to stop the project
+1. Execute the following command to stop the project. This will stop and remove all containers.
+
    ```sh
    docker compose down
    ```
-    + This command stops and removes all containers
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- USAGE EXAMPLES -->
 ## 🔧 Usage
