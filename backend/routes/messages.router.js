@@ -302,4 +302,6 @@ router.get('/gnbTelemetry', controller.getGnbTelemetry);
  */
 router.get('/gnbTelemetry/ues', controller.getUEs);
 
+router.get('/latest', controller.getLatest);
+
 module.exports = router;

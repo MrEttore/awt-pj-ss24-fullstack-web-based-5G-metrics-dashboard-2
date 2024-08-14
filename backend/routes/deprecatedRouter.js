@@ -1,3 +1,7 @@
+/*
+* deprecated endpoints that are supported for compatibility
+*/
+
 const express = require('express');
 const router = express.Router();
 const controller = require('../controller/messages.controller');
@@ -13,6 +17,10 @@ router.get('/gnb/telemetry', controller.getGnbTelemetry);
 
 router.get('/gnb/logs', controller.getGnbLogs);
 
-router.get('/cn5g/telemetry', controller.getHealth)
+router.get('/cn5g/telemetry', controller.getHealth);
+
+router.get('/ues', controller.getUEs);
+
+router.get('/latest', controller.getLatest);
 
 module.exports = router;
