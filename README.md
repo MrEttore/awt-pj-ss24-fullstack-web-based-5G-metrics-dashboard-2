@@ -1,81 +1,68 @@
-<a id="readme-top"></a>
-
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/MrEttore/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2">
-    <img src="images/TU-Berlin-Logo.svg" alt="Logo">
-  </a>
-
-<h1 align="center">Project Advanced Web Technologies  
-  <br />
-  <br />
-  Fullstack web-based 5G metrics dashboard
-</h1>
-
-  <p align="center">
-    project_description
-    <br />
-    <br />
-    <img src="images/dashboard.png"
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>    
-  </p>
+  <img src="images/TU-Berlin-Logo.svg" alt="Logo">
+  <h1 align="center"> Fullstack web-based 5G metrics dashboard </h1>
+  <h3>Project Advanced Web Technologies (SoSe24) </h3>
 </div>
 
+<br/>
 
+<img src="images/dashboard.png"/>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
+<br/>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## 💡 About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+This project implements a web-based dashboard application designed to display both stored and live metric data from a 5G mobile network, including information from base stations (gNBs) and user devices (UEs). The system is capable of capturing and storing 5G metrics in a database, enabling users to retrieve, view, and compare data across various test sessions.
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+### Key Features
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- **Live and Stored Data Display:** View real-time metrics as well as historical data from 5G network components.
+- **Data Capture and Storage:** Efficiently capture and store 5G metrics in a database for future analysis.
+- **Comparison and Analysis:** Retrieve and compare data from multiple test sessions to analyze 5G network performance.
+- **WebSocket Integration:** Reverse engineering and capturing of WebSocket messages from an existing [OAIBOX](https://oaibox.com/) dashboard to provide the necessary 5G data.
+
+<br/>
+
+<div align="center">
+  <h3>🎥 <a href="https://drive.google.com/drive/folders/1WxvNU8Wwfcp0o9jDBbSbkER7GcXYajBT?usp=drive_link" style="color: #6a0dad; text-decoration: none;">View the demo videos of our dashboard!</a></h3>
+</div>
+
+<br/>
 
 
 
-### Built With
+## 🛠️ Built With
 
-* [![React][React.js]][React-url]
-* ...
+* ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+* ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+* ![Chart.js](https://img.shields.io/badge/chart.js-F5788D.svg?style=for-the-badge&logo=chart.js&logoColor=white)
+* ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+* ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+* ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+* ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+* ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## 🏛️ System Architecture
 
+The architecture of our 5G metric dashboard web application is a modular, containerized system built for flexibility, scalability, and ease of maintenance. The system is composed of five key components:
 
+- **Frontend:** The frontend serves as the user interface, enabling users to interact with and visualize 5G data in real-time. It provides a responsive and intuitive experience, ensuring that the complex metrics are presented in a user-friendly manner.
+- **Backend:** The backend acts as the central hub for data processing. It manages the flow of information between the frontend and the database, handling requests and ensuring that data is processed accurately and efficiently.
+- **Database:** The database stores both historical and live telemetry data, serving as the persistent data repository. It ensures that all 5G metric data is securely stored and can be retrieved quickly for analysis and display.
+- **NGINX:** To enhance security and simplify the handling of Cross-Origin Resource Sharing (CORS) issues, the application traffic is managed by an NGINX container. NGINX serves as a reverse proxy, forwarding requests to the appropriate service.
+- **Scraper:** The scraper component is responsible for collecting 5G telemetry data from external [OAIBOX](https://oaibox.com/) instances. It feeds this data into the database, ensuring that the system has up-to-date information for processing and display.
 
-<!-- GETTING STARTED -->
-## Getting Started
+<br/>
+
+<div align="center">
+  <img src="images/sys-architecture.png"/>
+</div>
+
+<br/>
+
+## 🚀 Getting Started 
 
 To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
 
@@ -84,7 +71,6 @@ To keep the deployment as simple as possible Docker compose is used to offer an 
 First, Docker and Docker Compose should be installed on the machine. Moreover, general knowledge of Docker is required.
 
 ### Start The Application
-
 1. Execute the following command to start the project
    ```sh
    docker compose up -d --build
@@ -101,90 +87,40 @@ First, Docker and Docker Compose should be installed on the machine. Moreover, g
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
 <!-- USAGE EXAMPLES -->
-## Usage
+## 🔧 Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+...
 
 
 
-<!-- ROADMAP -->
-## Roadmap
+<!-- DOCUMENTATION -->
+## 📃 Documentation & APIs
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+...
 
 
 <!-- LICENSE -->
-## License
+## 🧾 License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
 <!-- CONTACT -->
-## Contact
+## 📬 Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Ettore Marangon - [LinkedIn](www.linkedin.com/in/ettore-marangon-7ba517215) | ettore.carlo.marangon@campus.tu-berlin.de
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Daniel Hermann - 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Moritz Schelten - 
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 🫡 Acknowledgments
 
 * []()
 * []()
 * []()
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
