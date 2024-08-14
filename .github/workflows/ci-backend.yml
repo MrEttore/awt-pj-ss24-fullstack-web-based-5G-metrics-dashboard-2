@@ -6,7 +6,7 @@ on:
       - main
       - DEV
       - backend
-      - feature/set-up-cd-pipeline
+      - feature/openapi-pages
   pull_request:
     branches:
       - main
