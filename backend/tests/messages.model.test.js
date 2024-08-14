@@ -54,7 +54,7 @@ test('Add row gnbTelemetry invalid payload', async () => {
     assert.rejects(async () => {
         await model.add(1, DESTINATION, PAYLOAD);
     },
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     );
 })
 
@@ -68,7 +68,7 @@ test('Add row missing parameters', async () => {
     assert.rejects(async () => {
         await model.add(undefined, undefined, undefined)
     },
-        {message: EXPECTED_MESSAGE}
+        EXPECTED_MESSAGE
     );
 })
 
@@ -84,7 +84,7 @@ test('Add row invalid payload', async () => {
     assert.rejects(async () => {
         await model.add(LOGS_ROW.timestamp, LOGS_ROW.destination, PAYLOAD)
     },
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     );
 })
 
@@ -109,10 +109,14 @@ test('getByID default', async () => {
 test('getByID undefined', async () => {
     // row does not exist
     let id = 999;
-    let row = await model.getByID(id)
 
-    // should be undefined
-    assert.equal(row, undefined)
+    const EXPECTED_MESSAGE = 'Error retrieving message by ID';
+
+    assert.rejects(async () => {
+        await model.getByID(id) 
+    },
+        EXPECTED_MESSAGE
+    )
 })
 
 test('get default', async () => {
@@ -196,7 +200,7 @@ test('get with interval, no timeStart', async () => {
         model.add(TIMESTAMP + 1, destination, PAYLOAD_2)
     ]);
 
-    let rows = await model.get(TOPIC, TIMESTAMP);
+    let rows = await model.get(TOPIC, undefined, TIMESTAMP);
 
     assert.equal(rows.length, EXPECTED_ROWS_LENGTH);
 
@@ -216,7 +220,7 @@ test('get with invalid interval', async () => {
     assert.rejects(async () => {
         await model.get(TOPIC, TIME_START, TIME_END)
     },
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     )
 })
 
@@ -228,7 +232,7 @@ test('get, invalid topic', async () => {
     assert.rejects(async () => {
         await model.get(TOPIC);
     },
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     )
 })
 
@@ -306,7 +310,7 @@ test('getUEs, invalid time interval', async () => {
     assert.rejects(async () => {
         await model.getUEs(TIME_START, TIME_END)
     }, 
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     )
 })
 
@@ -354,7 +358,7 @@ test('getLatest, invalid topic', async () => {
     assert.rejects(async () => {
         await model.getLatest(TOPIC)
     }, 
-        { message: EXPECTED_MESSAGE }
+        EXPECTED_MESSAGE
     )
 })
 
