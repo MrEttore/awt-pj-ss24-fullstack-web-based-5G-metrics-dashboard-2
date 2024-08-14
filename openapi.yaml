@@ -279,31 +279,3 @@ paths:
           description: Missing or invalid query parameters.
         '500':
           description: Internal server error.
-  /api/messages/latest:
-    get:
-      summary: Get the latest message timestamp for a given topic
-      tags:
-        - Messages
-      parameters:
-        - in: query
-          name: topic
-          schema:
-            type: string
-            description: The topic of the latest message.
-            example: telemetry
-      responses:
-        '200':
-          description: The latest message timestamp.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  timestamp:
-                    type: string
-                    format: date-time
-                    description: The timestamp of the latest message.
-        '400':
-          description: Missing or invalid query parameters.
-        '500':
-          description: Internal server error.
