@@ -62,52 +62,29 @@ The architecture of our 5G metric dashboard web application is a modular, contai
 
 <br/>
 
-
-
-<!-- GETTING STARTED -->
 ## 🚀 Getting Started 
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+First, Docker and Docker Compose should be installed on the machine. Moreover, general knowledge of Docker is required.
 
-Docker, etc ...
+### Start The Application
+1. Execute the following command to start the project
+   ```sh
+   docker compose up -d --build
+   ```
+    + `-d` means detached mode, so the terminal is not blocked by the running containers
+    + `--build` means that the images are newly built before the containers are started
 
-### Installation
-
-1. Clone the repo
-  ```sh
-git clone https://github.com/MrEttore/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2.git
-```
-
-2. ...
-```sh
-...
-```
-
-3. ...
-```sh
-...
-```
-   
-4. ...
-```sh
-...
-```
-   
-5. ...
-```js
-...
-```
-   
-6. ...
-```sh
-...
-```
-
+### Shut Down The Application
+1. Execute the following command to stop the project
+   ```sh
+   docker compose down
+   ```
+    + This command stops and removes all containers
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- USAGE EXAMPLES -->
