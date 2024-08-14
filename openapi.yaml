@@ -6,6 +6,9 @@ info:
 tags:
   - name: Messages
     description: API to manage 5G metric messages.
+servers:
+  - url: http://localhost:80
+    description: Endpoint of Nginx Docker Container
 paths:
   /api/messages:
     post:
