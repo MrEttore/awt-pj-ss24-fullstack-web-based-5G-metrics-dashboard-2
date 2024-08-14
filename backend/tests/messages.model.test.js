@@ -1,220 +1,363 @@
+const assert = require('assert')
+const { deleteConnection } = require('../database/sqlite3DatabaseAdapter');
 const model = require('../model/messages.model');
 
-const logsEntry = {
-    timestamp: 1715076982855,
-    destination: 'gnb.logs',
-    payload: '{"timestamp":1715076982855,"payload":"UE a393: UL-RI 1, TPMI 0"}'
-};
+const LOGS_ROW = require('./data/gnbLogsMessage.json');
+const GNB_TELEMETRY_ROW = require('./data/gnbTelemetryMessage.json');
 
-const telemetryEntry = {
-    timestamp: 1715085257102,
-    destination: 'gnb.telemetry',
-    payload: `{
-            "id": 12345678,
-            "frame": 800,
-            "slot": 4,
-            "pci": 0,
-            "dlCarrierFreq": 3349380000,
-            "ulCarrierFreq": 3349380000,
-            "ues": [
-                {
-                    "ueId": "1",
-                    "rnti": "a393",
-                    "inSync": 1,
-                    "dlBytes": 913141864,
-                    "dlMcs": 9,
-                    "dlBler": 0,
-                    "ulBytes": 282731733,
-                    "ulMcs": 9,
-                    "ulBler": 0,
-                    "ri": 2,
-                    "pmi": "(0,0)",
-                    "phr": 58,
-                    "pcmax": 23,
-                    "rsrq": -10.5,
-                    "sinr": 23.5,
-                    "rsrp": -96,
-                    "rssi": 85.5,
-                    "cqi": 9,
-                    "pucchSnr": 20,
-                    "puschSnr": 28.5
-                }
-            ],
-            "avgLdpcIterations": 3,
-            "timestamp": 1715085257102
-        }`
-}
+const LOGS_PAYLOAD = require('./data/gnbLogsPayload.json');
+const TELEMETRY_PAYLOAD = require('./data/gnbTelemetryPayload.json');
 
-async function main() {
-    // Initialize model
-    await model.init();
-    
-    // Execute tests
-    await testAdd();
-    await testGet();
-    await testGetTelemetry();
-    await testGetUEs();
-}
+const { MAX_TIME } = model.constants;
+
+beforeAll(async () => {
+    process.env.DB_PATH = ':memory:'
+})
 
 beforeEach(async () => {
     await model.init();
 });
 
 afterEach(async () => {
-    // Close database or perform any cleanup if necessary
-});
-
-test('test add', async () => {
-    await testAdd();
-});
-
-test('test get', async () => {
-    await testGet();
-});
-
-test('test getTelemetry', async () => {
-    await testGetTelemetry();
-});
-
-test('test getUEs', async () => {
-    await testGetUEs();
-});
-
-test('test getLatestTimestamp', async () => {
-    await testGetLatestTimestamp();
-});
-
-test('test add gnb.telemetry', async () => {
-    await testAddTelemetry();
+    await deleteConnection();
 })
 
-async function testAdd() {
-    console.log('[testAdd] default');
-    await model.add(logsEntry.timestamp, logsEntry.destination, logsEntry.payload);
-    console.log('Success\n');
+test('Get non existent row', async () => {
+    const TOPIC = model.topics.LOGS;
+    const EXPECTED_ROWS = []
 
-    console.log('[testAdd] Omit timestamp');
-    try {
-        await model.add(undefined, logsEntry.destination, logsEntry.payload);
-    } catch (error) {
-        console.log('Success');
-    }
+    let rows = await model.get(TOPIC)
+    assert.deepEqual(rows, EXPECTED_ROWS);
+})
 
-    console.log('[testAdd] Omit destination');
-    try {
-        await model.add(logsEntry.timestamp, undefined, logsEntry.payload);
-    } catch (error) {
-        console.log('Success');
-    }
+/**
+ *  timestamp   destination     payload     expected
+ *  ...         'gnb.logs'      ...         rowID
+ */
+test('Add row default', async () => {
+    let id = await model.add( ...Object.values(LOGS_ROW) );
+    assert.ok(id);
+})
 
-    console.log('[testAdd] Omit payload');
-    try {
-        await model.add(logsEntry.timestamp, logsEntry.destination, undefined);
-    } catch (error) {
-        console.log('Success');
-    }
-}
+test('Add row gnbTelemetry', async () => {
+    const {timestamp, destination, payload} = GNB_TELEMETRY_ROW;
+    let id = await model.add(timestamp, destination, payload);
+    assert.ok(id)
+});
 
-async function testAddTelemetry() {
-    await model.add(telemetryEntry.timestamp, telemetryEntry.destination, telemetryEntry.payload);
-}
+test('Add row gnbTelemetry invalid payload', async () => {
+    const DESTINATION = model.topics.TELEMETRY;
+    const PAYLOAD = { timestamp: 123, payload: 'abc' };
 
-async function testGet() {
-    console.log('[model.get] default');
-    await model.get(model.topics.LOGS);
+    const EXPECTED_MESSAGE = 'Invalid payload'
 
-    console.log('[model.get] default with time interval');
-    await model.get(model.topics.LOGS, 0, Infinity);
+    assert.rejects(async () => {
+        await model.add(1, DESTINATION, PAYLOAD);
+    },
+        { message: EXPECTED_MESSAGE }
+    );
+})
 
-    console.log('[model.get] startTime, no endTime');
-    await model.get(model.topics.LOGS, 0);
+/**
+ * timestamp    destination     payload     expected
+ * undefined    undefined       undefined   Error(...)
+ */
+test('Add row missing parameters', async () => {
+    const EXPECTED_MESSAGE = 'Missing parameters';
 
-    console.log('[model.get] endTime, no startTime');
-    await model.get(model.topics.LOGS, undefined, Infinity);
+    assert.rejects(async () => {
+        await model.add(undefined, undefined, undefined)
+    },
+        {message: EXPECTED_MESSAGE}
+    );
+})
 
-    console.log('[model.get] no params');
-    try {
-        await model.get();
-    } catch (error) {
-        console.log('Expected error: Missing topic');
-    }
+/**
+ * timestamp      destination   payload  expected
+ * ...            ...           {}       Error
+ */
+test('Add row invalid payload', async () => {
+    // should be a string
+    const PAYLOAD = {timestamp: 123}
+    const EXPECTED_MESSAGE = 'Invalid payload';
 
-    console.log('[model.get] invalid interval');
-    try {
-        await model.get(model.topics.LOGS, 1, 0);
-    } catch (error) {
-        console.log('Expected error: Invalid interval');
-    }
+    assert.rejects(async () => {
+        await model.add(LOGS_ROW.timestamp, LOGS_ROW.destination, PAYLOAD)
+    },
+        { message: EXPECTED_MESSAGE }
+    );
+})
 
-    console.log('[model.get] invalid topic');
-    try {
-        await model.get('invalid.topic');
-    } catch (error) {
-        console.log('Expected error: Invalid topic');
-    }
+/**
+ *  id      expected
+ *  lastID  LOGS_ROW.payload
+ */
+test('getByID default', async () => {
+    const { timestamp, destination, payload } = LOGS_ROW;
+    const EXPECTED_PAYLOAD = JSON.parse(LOGS_ROW.payload)
 
-    console.log('[model.get] with limit')
-    await model.get(model.topics.LOGS, 0, 1, 1);
-}
+    let lastID = await model.add(timestamp, destination, payload);
+    let row = await model.getByID(lastID);
+    console.log(row)
 
-async function testGetTelemetry() {
-    console.log('[model.getTelemetry] get all records');
-    await model.getTelemetry();
+    assert.deepEqual(row, EXPECTED_PAYLOAD);
+})
 
-    console.log('[model.getTelemetry] with time interval');
-    await model.getTelemetry(0, Infinity);
+/**
+ * try to get row that does not exist
+ */
+test('getByID undefined', async () => {
+    // row does not exist
+    let id = 999;
+    let row = await model.getByID(id)
 
-    console.log('[model.getTelemetry] startTime, no endTime');
-    await model.getTelemetry(0);
+    // should be undefined
+    assert.equal(row, undefined)
+})
 
-    console.log('[model.getTelemetry] endTime, no startTime');
-    await model.getTelemetry(undefined, Infinity);
+test('get default', async () => {
+    let id = await model.add(...Object.values(LOGS_ROW))
+    let EXPECTED_PAYLOAD = JSON.parse(LOGS_ROW.payload);
 
-    console.log('[model.getTelemetry] invalid interval');
-    try {
-        await model.getTelemetry(1, 0);
-    } catch (error) {
-        console.log('Expected error: Invalid interval');
-    }
+    let rows = await model.get(model.topics.LOGS)
+    assert.deepEqual(rows[0], EXPECTED_PAYLOAD)
+})
 
-    console.log('[model.getTelemetry] with limit')
-    await model.getTelemetry(undefined, undefined, 1)
+test('get with interval', async () => {
+    const { destination, payload } = LOGS_ROW
+    const TIMESTAMP = 1
 
-    console.log('[model.getTelemetry] ues list');
-    await model.getTelemetry(0, Infinity, undefined, ['1', '2', '3']);
-}
+    const TOPIC = model.topics.LOGS;
 
-async function testGetUEs() {
-    console.log('[model.getUEs] get all records, no interval');
-    await model.getUEs();
+    const EXPECTED_ROWS_LENGTH = 1;
+    const EXPECTED_ROW = JSON.parse(payload);
 
-    console.log('[model.getUEs] with interval');
-    await model.getUEs(0, Infinity);
+    await Promise.all([
+        model.add(TIMESTAMP - 1, destination, payload),
+        model.add(TIMESTAMP, destination, payload),
+        model.add(TIMESTAMP + 1, destination, payload)
+    ]);
 
-    console.log('[model.getUEs] startTime, no endTime');
-    await model.getUEs(0);
+    let rows = await model.get(TOPIC, TIMESTAMP, TIMESTAMP)
 
-    console.log('[model.getUEs] endTime, no startTime');
-    await model.getUEs(undefined, Infinity);
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH);
+    assert.deepEqual(rows[0], EXPECTED_ROW);
+})
 
-    console.log('[model.getUEs] invalid interval');
-    try {
-        await model.getUEs(1, 0);
-    } catch (error) {
-        console.log('Expected error: Invalid interval');
-    }
-}
+test('get with interval, no timeEnd', async () => {
+    const DESTINATION = LOGS_ROW.destination
+    const TIMESTAMP = 1
 
-async function testGetLatestTimestamp() {
-    // default
-    const latestTimestamp = await model.getLatestTimestamp(model.topics.LOGS)
-    console.log(latestTimestamp)
+    const PAYLOAD_0 = '{"timestamp": 0}'
+    const PAYLOAD_1 = '{"timestamp": 1}'
+    const PAYLOAD_2 = '{"timestamp": 2}'
 
-    // invalid topic
-    try {
-        await model.getLatestTimestamp('invalid.topic')
-    } catch (error) {}
-}
+    const TOPIC = model.topics.LOGS;
+
+    const EXPECTED_ROWS_LENGTH = 2;
+
+    // get should return PAYLOAD_1 and PAYLOAD_2
+    const EXPECTED_ROW_0 = JSON.parse(PAYLOAD_1);
+    const EXPECTED_ROW_1 = JSON.parse(PAYLOAD_2);
+
+    await Promise.all([
+        model.add(TIMESTAMP - 1, DESTINATION, PAYLOAD_0),
+        model.add(TIMESTAMP, DESTINATION, PAYLOAD_1),
+        model.add(TIMESTAMP + 1, DESTINATION, PAYLOAD_2)
+    ]);
+
+    let rows = await model.get(TOPIC, TIMESTAMP);
+
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH);
+
+    assert.deepEqual(rows[0], EXPECTED_ROW_0);
+    assert.deepEqual(rows[1], EXPECTED_ROW_1);
+})
+
+test('get with interval, no timeStart', async () => {
+    const { destination } = LOGS_ROW
+    const TIMESTAMP = 1
+
+    const PAYLOAD_0 = '{"timestamp": 0}'
+    const PAYLOAD_1 = '{"timestamp": 1}'
+    const PAYLOAD_2 = '{"timestamp": 2}'
+
+    const TOPIC = model.topics.LOGS;
+
+    const EXPECTED_ROWS_LENGTH = 2;
+
+    // get should return PAYLOAD_1 and PAYLOAD_2
+    const EXPECTED_ROW_0 = JSON.parse(PAYLOAD_0);
+    const EXPECTED_ROW_1 = JSON.parse(PAYLOAD_1);
+
+    await Promise.all([
+        model.add(TIMESTAMP - 1, destination, PAYLOAD_0),
+        model.add(TIMESTAMP, destination, PAYLOAD_1),
+        model.add(TIMESTAMP + 1, destination, PAYLOAD_2)
+    ]);
+
+    let rows = await model.get(TOPIC, TIMESTAMP);
+
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH);
+
+    assert.deepEqual(rows[0], EXPECTED_ROW_0);
+    assert.deepEqual(rows[1], EXPECTED_ROW_1);
+})
+
+test('get with invalid interval', async () => {
+    // does not require setup
+
+    const TOPIC = model.topics.LOGS
+    const TIME_START = 1
+    const TIME_END = 0
+
+    const EXPECTED_MESSAGE = 'Invalid time interval'
+
+    assert.rejects(async () => {
+        await model.get(TOPIC, TIME_START, TIME_END)
+    },
+        { message: EXPECTED_MESSAGE }
+    )
+})
+
+test('get, invalid topic', async () => {
+    const TOPIC = 'invalid'
+
+    const EXPECTED_MESSAGE = 'Invalid topic'
+
+    assert.rejects(async () => {
+        await model.get(TOPIC);
+    },
+        { message: EXPECTED_MESSAGE }
+    )
+})
+
+test('get, specify limit', async () => {
+    const { destination } = LOGS_ROW;
+
+    const TIMESTAMP_0 = 0;
+    const TIMESTAMP_1 = 1;
+
+    const PAYLOAD_0 = '{"timestamp": 0}';
+    const PAYLOAD_1 = '{"timestamp": 1}';
+
+    await model.add(TIMESTAMP_0, destination, PAYLOAD_0);
+    await model.add(TIMESTAMP_1, destination, PAYLOAD_1);
+
+    const TOPIC = model.topics.LOGS;
+    const LIMIT = 1
+
+    const EXPECTED_ROWS_LENGTH = 1
+    const EXPECTED_ROW = JSON.parse(PAYLOAD_0);
+
+    const rows = await model.get(TOPIC, undefined, undefined, LIMIT);
+
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH);
+    assert.deepEqual(rows[0], EXPECTED_ROW);
+})
+
+/**
+ *  timeStart       timeEnd         limit       expected
+ *  undefined       undefined       undefined   payload
+ */
+test('getUEs default, 1 ueId', async () => {
+    await model.add(...Object.values(GNB_TELEMETRY_ROW));
+    
+    const EXPECTED_ROWS_LENGTH = 1
+    const EXPECTED_ROWS = ['204']
+
+    let rows = await model.getUEs();
+
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH)
+    assert.deepEqual(rows, EXPECTED_ROWS);
+})
+
+test('getUEs, time interval', async () => {
+    // setup
+    const TIMESTAMP = 1
+
+    const DESTINATION = GNB_TELEMETRY_ROW.destination;
+
+    const PAYLOAD_0 = {...TELEMETRY_PAYLOAD, timestamp: 0}
+    const PAYLOAD_1 = {...TELEMETRY_PAYLOAD, timestamp: 1}
+
+    PAYLOAD_1.ues[0].ueId = '1'
+
+    const TOPIC = model.topics.TELEMETRY
+
+    await model.add(0, DESTINATION, JSON.stringify(PAYLOAD_0))
+    await model.add(TIMESTAMP, DESTINATION, JSON.stringify(PAYLOAD_1))
+
+    const EXPECTED_ROWS_LENGTH = 1
+    const EXPECTED_ROWS = ['1']
+
+    let rows = await model.getUEs(TIMESTAMP, TIMESTAMP);
+
+    assert.equal(rows.length, EXPECTED_ROWS_LENGTH)
+    assert.deepEqual(rows, EXPECTED_ROWS);
+})
+
+test('getUEs, invalid time interval', async () => {
+    const TIME_START = 1
+    const TIME_END = 0
+
+    const EXPECTED_MESSAGE = 'Invalid time interval'
+
+    assert.rejects(async () => {
+        await model.getUEs(TIME_START, TIME_END)
+    }, 
+        { message: EXPECTED_MESSAGE }
+    )
+})
+
+test('getUEs, multiple ueIds', async () => {
+    const PAYLOAD_JSON = require('./data/gnbTelemetryPayloadUeIds.json');
+
+    const TIMESTAMP = 1;
+    const DESTINATION = model.topics.TELEMETRY;
+    const PAYLOAD = JSON.stringify(PAYLOAD_JSON);
+
+    await model.add(TIMESTAMP, DESTINATION, PAYLOAD);
+
+    const EXPECTED_UES_LENGTH = 2
+    const EXPECTED_UES = ['204', '1'] 
+
+    let ues = await model.getUEs();
+
+    assert.equal(ues.length, EXPECTED_UES_LENGTH);
+    assert.deepEqual(ues, EXPECTED_UES);
+})
+
+test('getLatest, default', async () => {
+    const PAYLOAD_0 = '{"payload": 0}'
+    const PAYLOAD_1 = '{"payload": 1}'
+
+    const DESTINATION = LOGS_ROW.destination
+
+    // reverse order when adding
+    await model.add(1, DESTINATION, PAYLOAD_1)
+    await model.add(0, DESTINATION, PAYLOAD_0)
+
+    const TOPIC = model.topics.LOGS;
+    const EXPECTED_ROW = JSON.parse(PAYLOAD_1)
+
+    let row = await model.getLatest(TOPIC)
+
+    assert.deepEqual(row, EXPECTED_ROW)
+})
+
+test('getLatest, invalid topic', async () => {
+    const TOPIC = 'invalid'
+
+    const EXPECTED_MESSAGE = 'Invalid topic'
+
+    assert.rejects(async () => {
+        await model.getLatest(TOPIC)
+    }, 
+        { message: EXPECTED_MESSAGE }
+    )
+})
+
 
 // Uncomment to run manually
 // main();

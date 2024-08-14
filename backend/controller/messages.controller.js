@@ -156,7 +156,7 @@ module.exports.addLogs = async function(req, res) {
     return res.status(201).json({ success: true, id: id });
 }
 
-module.exports.getLatestTimestamp = async function (req, res) {
+module.exports.getLatest = async function (req, res) {
     const { topic } = req.query
 
     let internalTopic;
@@ -178,7 +178,7 @@ module.exports.getLatestTimestamp = async function (req, res) {
     }
 
     try {
-        const latestTimestamp = await model.getLatestTimestamp(internalTopic)
+        const latestTimestamp = await model.getLatest(internalTopic)
         return res.status(200).json(latestTimestamp)
     } catch (error) {
         return res.status(500).json({ error: error.toString() });

@@ -17,5 +17,5 @@
    ```
 4. Run the Docker container:
    ```
-   docker run -p 3000:3000 backend
+   docker run -p 3000:3000 -v database.db:/usr/src/app backend
    ```

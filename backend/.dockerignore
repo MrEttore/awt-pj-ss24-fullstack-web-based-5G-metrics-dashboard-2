@@ -39,3 +39,6 @@ scripts
 temp
 tmp
 *.swp
+
+# database files
+*.db

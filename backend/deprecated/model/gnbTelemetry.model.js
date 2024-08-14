@@ -14,7 +14,7 @@ class GnbTelemetryModel {
     #ueModel;
 
     constructor() {
-        this.#db = require('../../database/sqlite3');
+        this.#db = require('../../database/sqlite3Adapter');
         this.#ueModel = require('./gnb.telemetryUE.model');
     }
 

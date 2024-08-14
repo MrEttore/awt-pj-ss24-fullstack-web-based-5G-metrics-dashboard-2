@@ -26,6 +26,8 @@ module.exports = {
     // Coverage-Berichte konfigurieren
     collectCoverage: true,
     collectCoverageFrom: [
+      'database/*.js',
+      'model/*.js',
       'src/**/*.{js,jsx,ts,tsx}',
       '!src/**/*.d.ts'
     ],
