@@ -77,38 +77,27 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+First, Docker and Docker Compose should be installed on the machine. Moreover, general knowledge of Docker is required.
 
-### Installation
+### Start The Application
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Execute the following command to start the project
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   docker compose up -d --build
    ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
-   ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
-   ```
+    + `-d` means detached mode, so the terminal is not blocked by the running containers
+    + `--build` means that the images are newly built before the containers are started
 
+### Shut Down The Application
+1. Execute the following command to stop the project
+   ```sh
+   docker compose down
+   ```
+    + This command stops and removes all containers
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
