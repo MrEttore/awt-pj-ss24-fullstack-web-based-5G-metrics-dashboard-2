@@ -60,6 +60,7 @@ paths:
           schema:
             type: string
             description: The topic of the messages to retrieve (e.g., 'gnbTelemetry', 'health', 'logs', 'telemetry').
+            example: telemetry
         - in: query
           name: timeStart
           schema:
@@ -278,7 +279,7 @@ paths:
           description: Missing or invalid query parameters.
         '500':
           description: Internal server error.
-  /api/messages:
+  /api/messages/latest:
     get:
       summary: Get the latest message timestamp for a given topic
       tags:
