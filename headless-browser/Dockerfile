@@ -1,10 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
-
-# Set the working directory in the container
+FROM python:3.9-slim AS base
 WORKDIR /app
-
-# Install dependencies for Chromium
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -28,17 +23,19 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Chromium
-RUN apt-get update && apt-get install -y chromium curl && apt-get clean && rm -rf /var/lib/apt/lists/*
+    RUN apt-get update && apt-get install -y chromium curl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set environment variable to use Chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install any needed packages specified in requirements.txt
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the script when the container launches
-CMD ["python","-u", "capture.py"]
+# Final image
+FROM python:3.9-slim AS final
+WORKDIR /app
+COPY --from=base /usr/lib /usr/lib
+COPY --from=base /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
+COPY --from=base /usr/bin/chromium /usr/bin/chromium
+COPY . .
+# Run the application
+CMD ["python", "-u", "capture.py"]
