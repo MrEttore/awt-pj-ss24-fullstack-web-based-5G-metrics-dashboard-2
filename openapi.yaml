@@ -278,7 +278,7 @@ paths:
           description: Missing or invalid query parameters.
         '500':
           description: Internal server error.
-  /api/messages/latest:
+  /api/messages:
     get:
       summary: Get the latest message timestamp for a given topic
       tags:
@@ -289,6 +289,7 @@ paths:
           schema:
             type: string
             description: The topic of the latest message.
+            example: telemetry
       responses:
         '200':
           description: The latest message timestamp.
