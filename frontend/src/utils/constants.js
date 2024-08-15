@@ -1,5 +1,3 @@
-const PORT = import.meta.env.VITE_PORT || 5173;
-
 // Dashboards modules and metrics
 
 export const CN5G_MODULES = [
