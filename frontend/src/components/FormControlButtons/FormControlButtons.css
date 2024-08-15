@@ -1,15 +1,11 @@
 @import url('../../styles/variables.css');
 
-/** BTNS FORM */
-
 .btnContainer {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-left: auto;
 }
-
-/** Btn SUBMIT */
 
 .btnSubmit {
   background-color: #15b244;
@@ -37,8 +33,6 @@
 .btnSubmit:not(:disabled):hover {
   background-color: #229b3e;
 }
-
-/** Btn RESET */
 
 .btnReset {
   background-color: #f1bf29;
@@ -70,5 +64,5 @@
 label {
   display: block;
   margin-left: 1rem;
-  ont-weight: 100;
+  font-weight: 100;
 }

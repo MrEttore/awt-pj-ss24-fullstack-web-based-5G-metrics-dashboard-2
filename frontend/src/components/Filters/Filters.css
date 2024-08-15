@@ -10,37 +10,19 @@
 .startTimeFilter,
 .endTimeFilter,
 .liveDataFilter,
-.limitFilter {
-  display: flex;
-  flex-direction: row;
-
-  background-color: var(--color-primary-light);
-  border: solid 2px var(--color-background-900);
-  border-radius: 20px;
-
-  font-size: 0.76rem;
-  font-weight: 500;
-  color: var(--color-background-900);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
-
-  padding: 0.4rem;
-}
-
+.limitFilter,
 .devicesFilter,
 .metricsFilter {
   display: flex;
   flex-direction: row;
   gap: 0.3rem;
-
   background-color: var(--color-primary-light);
   border: solid 2px var(--color-background-900);
   border-radius: 20px;
-
   font-size: 0.76rem;
   font-weight: 500;
   color: var(--color-background-900);
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.1);
-
   padding: 0.4rem;
 }
 
