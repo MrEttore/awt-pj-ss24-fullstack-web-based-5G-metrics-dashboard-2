@@ -74,7 +74,7 @@ Once the repository is downloaded, navigate to the `headless-browser` directory.
 
 ### Configure the .env.local File
 
-In the `headless-browser` directory of the downloaded repository create a `.env.local` file. This file stores the login credentials required for the scraper to access the OAIBOX.
+In the `headless-browser` directory of the downloaded repository create a `.env.local` file.
 
 Your `.env.local` file should look like the template below. Be sure to replace the placeholder values with your actual credentials:
 
