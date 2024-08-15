@@ -7,7 +7,7 @@ tags:
   - name: Messages
     description: API to manage 5G metric messages.
 servers:
-  - url: http://localhost:80
+ - url: http://localhost:3000
     description: Endpoint of Nginx Docker Container
 paths:
   /api/messages:
@@ -275,6 +275,33 @@ paths:
                 type: array
                 items:
                   type: string
+        '400':
+          description: Missing or invalid query parameters.
+        '500':
+          description: Internal server error.
+  /api/messages/latest:
+    get:
+      summary: Get the latest message timestamp for a given topic
+      tags:
+        - Messages
+      parameters:
+        - in: query
+          name: topic
+          schema:
+            type: string
+            description: The topic of the latest message.
+      responses:
+        '200':
+          description: The latest message timestamp.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: The timestamp of the latest message.
         '400':
           description: Missing or invalid query parameters.
         '500':
