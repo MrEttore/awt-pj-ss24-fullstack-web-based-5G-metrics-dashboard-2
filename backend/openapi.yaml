@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: 5G Metric Messages API
+  title: 5G Metrics Dashboard API
   description: API to manage 5G metric messages.
   version: 1.0.0
 tags:
@@ -10,7 +10,7 @@ paths:
   /api/messages:
     post:
       summary: Add a new message to the database
-      tags:
+      tags: 
         - Messages
       requestBody:
         required: true
@@ -33,7 +33,7 @@ paths:
                 destination: gnbTelemetry
                 payload: { key: "value" }
       responses:
-        '201':
+        201:
           description: The message was successfully added.
           content:
             application/json:
@@ -43,13 +43,14 @@ paths:
                   message:
                     type: string
                     description: Success message.
-        '400':
+        400:
           description: Missing required fields.
-        '500':
+        500:
           description: Internal server error.
+
     get:
       summary: Get messages from the database based on topic and time interval
-      tags:
+      tags: 
         - Messages
       parameters:
         - in: query
@@ -75,7 +76,7 @@ paths:
             type: integer
             description: Maximum number of records to return.
       responses:
-        '200':
+        200:
           description: A list of messages.
           content:
             application/json:
@@ -94,108 +95,15 @@ paths:
                       type: string
                       format: date-time
                       description: The timestamp of the message.
-        '400':
+        400:
           description: Missing or invalid query parameters.
-        '500':
+        500:
           description: Internal server error.
-  /api/messages/logs:
-    get:
-      summary: Get log messages from the database within a specified time interval
-      tags:
-        - Messages
-      parameters:
-        - in: query
-          name: timeStart
-          schema:
-            type: string
-            format: date-time
-            description: Start time of the interval in ISO format.
-        - in: query
-          name: timeEnd
-          schema:
-            type: string
-            format: date-time
-            description: End time of the interval in ISO format.
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            description: Maximum number of records to return.
-      responses:
-        '200':
-          description: A list of log messages.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    topic:
-                      type: string
-                      description: The topic of the log.
-                    payload:
-                      type: object
-                      description: The content of the log message.
-                    timestamp:
-                      type: string
-                      format: date-time
-                      description: The timestamp of the log message.
-        '400':
-          description: Missing or invalid query parameters.
-        '500':
-          description: Internal server error.
-  /api/messages/health:
-    get:
-      summary: Get health data from the database within a specified time interval
-      tags:
-        - Messages
-      parameters:
-        - in: query
-          name: timeStart
-          schema:
-            type: string
-            format: date-time
-            description: Start time of the interval in ISO format.
-        - in: query
-          name: timeEnd
-          schema:
-            type: string
-            format: date-time
-            description: End time of the interval in ISO format.
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            description: Maximum number of records to return.
-      responses:
-        '200':
-          description: A list of health data messages.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    topic:
-                      type: string
-                      description: The topic of the health data.
-                    payload:
-                      type: object
-                      description: The content of the health message.
-                    timestamp:
-                      type: string
-                      format: date-time
-                      description: The timestamp of the health message.
-        '400':
-          description: Missing or invalid query parameters.
-        '500':
-          description: Internal server error.
+
   /api/messages/gnbTelemetry:
     get:
       summary: Get telemetry data from the database and filter by UE IDs
-      tags:
+      tags: 
         - Messages
       parameters:
         - in: query
@@ -221,7 +129,7 @@ paths:
             type: integer
             description: Maximum number of records to return.
       responses:
-        '200':
+        200:
           description: A list of telemetry data.
           content:
             application/json:
@@ -240,14 +148,15 @@ paths:
                       type: string
                       format: date-time
                       description: The timestamp of the telemetry data.
-        '400':
+        400:
           description: Missing or invalid query parameters.
-        '500':
+        500:
           description: Internal server error.
-  /api/messages/gnbTelemetry/ues:
+
+  /api/messages/telemetry/ues:
     get:
       summary: Get a list of unique UE IDs from telemetry data within a specified time interval
-      tags:
+      tags: 
         - Messages
       parameters:
         - in: query
@@ -263,7 +172,7 @@ paths:
             format: date-time
             description: End time of the interval in ISO format.
       responses:
-        '200':
+        200:
           description: A list of unique UE IDs.
           content:
             application/json:
@@ -271,24 +180,28 @@ paths:
                 type: array
                 items:
                   type: string
-        '400':
+        400:
           description: Missing or invalid query parameters.
-        '500':
+        500:
           description: Internal server error.
+
   /api/messages/latest:
     get:
-      summary: Get the latest message timestamp for a given topic
-      tags:
+      summary: Retrieve the latest timestamp for a specific topic
+      description: Returns the latest timestamp available for the specified topic.
+      tags: 
         - Messages
       parameters:
         - in: query
           name: topic
+          required: true
+          description: The topic for which to retrieve the latest timestamp (e.g., telemetry, health, logs, gnbStatus).
           schema:
             type: string
-            description: The topic of the latest message.
+            enum: [telemetry, health, logs, gnbStatus]
       responses:
-        '200':
-          description: The latest message timestamp.
+        200:
+          description: Latest timestamp for the specified topic.
           content:
             application/json:
               schema:
@@ -297,8 +210,24 @@ paths:
                   timestamp:
                     type: string
                     format: date-time
-                    description: The timestamp of the latest message.
-        '400':
-          description: Missing or invalid query parameters.
-        '500':
-          description: Internal server error.
+                    example: "2023-08-13T12:45:00Z"
+        400:
+          description: Invalid topic parameter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid topic parameter.
+        500:
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred while retrieving the latest timestamp."
