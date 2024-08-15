@@ -191,7 +191,6 @@ export async function getGeneralGnbState() {
   }
 }
 
-// TODO: from last 2 days
 export async function getRecentGnbTelemetry(ues, limit = 30) {
   try {
     const uesStr = ues.join(',');
