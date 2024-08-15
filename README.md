@@ -70,7 +70,7 @@ The architecture of our 5G metric dashboard web application is a modular, contai
 <!-- GETTING STARTED -->
 ## 🚀 Getting Started 
 
-To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
+To keep the deployment as simple as possible Docker Compose is used to offer an easy and fast deployment.
 
 ### Prerequisites
 
