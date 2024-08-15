@@ -9,6 +9,6 @@ RUN npm run build
 # Nginx
 FROM nginx:latest
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
-EXPOSE 80 5173
+EXPOSE 5173
 COPY nginx.conf /etc/nginx/nginx.conf
 CMD ["nginx", "-g", "daemon off;"]

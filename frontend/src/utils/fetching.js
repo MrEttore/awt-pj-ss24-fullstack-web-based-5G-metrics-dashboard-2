@@ -2,7 +2,6 @@ import {
   CN5G_URL,
   GNB_LOGS_URL,
   GNB_TELEMETRY_URL,
-  TELEMETRY_BASE_URL,
   UES_URL,
   LATEST_DATAPOINT_URL,
 } from './constants.js';
@@ -192,7 +191,6 @@ export async function getGeneralGnbState() {
   }
 }
 
-// TODO: from last 2 days
 export async function getRecentGnbTelemetry(ues, limit = 30) {
   try {
     const uesStr = ues.join(',');
