@@ -199,20 +199,54 @@ module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds =
     try {
         let rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd);
 
+        // Debugging: Anzahl der initialen Datensätze
+        console.log(`Initial row count: ${rows.length}`);
+
+        // Entferne Duplikate aus der ueIds-Liste
+        ueIds = [...new Set(ueIds)];
+
         let allReducedRows = [];
 
-        for (let ueId of ueIds) {
-            let filteredRows = rows.filter(row =>
-                Array.isArray(row.ues) && row.ues.some(ue => ue.ueId == ueId)
-            );
+        if (ueIds.length === 0) {
+            // Datenreduktion auf alle Datensätze anwenden, wenn ueIds leer ist
+            allReducedRows = applyDataReduction(rows, limit);
+        } else {
+            for (let ueId of ueIds) {
+                // Kopiere die rows, um den ursprünglichen Zustand beizubehalten
+                let copiedRows = rows.map(row => ({
+                    ...row,
+                    ues: row.ues ? [...row.ues] : []
+                }));
 
-            if (filteredRows.length > 0) {
-                let reducedRows = applyDataReduction(filteredRows, limit);
-                allReducedRows = allReducedRows.concat(reducedRows);
+                let filteredRows = copiedRows.filter(row => {
+                    if (Array.isArray(row.ues)) {
+                        // Filtere nur die UEs, die dem aktuellen ueId entsprechen
+                        let originalUEsCount = row.ues.length;
+                        row.ues = row.ues.filter(ue => ue.ueId == ueId);
+
+                        // Debugging: Anzahl der gefilterten UEs pro Datensatz
+                        console.log(`Original UEs: ${originalUEsCount}, Filtered UEs: ${row.ues.length} for ueId: ${ueId}`);
+
+                        return row.ues.length > 0;
+                    }
+                    return false;
+                });
+
+                // Debugging: Anzahl der gefilterten Datensätze für das aktuelle ueId
+                console.log(`Filtered row count for ueId ${ueId}: ${filteredRows.length}`);
+
+                if (filteredRows.length > 0) {
+                    let reducedRows = applyDataReduction(filteredRows, limit);
+                    allReducedRows = allReducedRows.concat(reducedRows);
+                }
             }
         }
 
+        // Sortiere die Datensätze nach dem Timestamp
         allReducedRows.sort((a, b) => a.timestamp - b.timestamp);
+
+        // Debugging: Anzahl der zurückgegebenen Datensätze nach der Reduktion
+        console.log(`Final reduced row count: ${allReducedRows.length}`);
 
         logger.info('Telemetry data retrieved successfully', { timeStart, timeEnd, limit, ueIds });
         return allReducedRows;

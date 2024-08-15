@@ -62,21 +62,23 @@ router.post('/', controller.add);
  *     parameters:
  *       - in: query
  *         name: topic
+ *         required: true
+ *         description: The topic for which to retrieve messages.
  *         schema:
  *           type: string
- *           description: The topic of the messages to retrieve (e.g., 'gnbTelemetry', 'health', 'logs', 'telemetry').
+ *           enum: [telemetry, health, logs, gnbStatus]
  *       - in: query
  *         name: timeStart
  *         schema:
- *           type: string
- *           format: date-time
- *           description: Start time of the interval in ISO format (e.g., '2023-08-13T12:00:00Z').
+ *           type: number
+ *           description: Start time of the interval as a UNIX timestamp.
+ *           example: 1629885291
  *       - in: query
  *         name: timeEnd
  *         schema:
- *           type: string
- *           format: date-time
- *           description: End time of the interval in ISO format (e.g., '2023-08-14T12:00:00Z').
+ *           type: number
+ *           description: End time of the interval as a UNIX timestamp.
+ *           example: 1629985291
  *       - in: query
  *         name: limit
  *         schema:
@@ -99,9 +101,8 @@ router.post('/', controller.add);
  *                     type: object
  *                     description: The content of the message.
  *                   timestamp:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp of the message.
+ *                     type: number
+ *                     description: The UNIX timestamp of the message.
  *       400:
  *         description: Missing or invalid query parameters.
  *       500:
@@ -111,7 +112,7 @@ router.get('/', controller.get);
 
 /**
  * @swagger
- * /api/messages/gnbTelemetry:
+ * /api/messages/telemetry:
  *   get:
  *     summary: Get telemetry data from the database and filter by UE IDs
  *     tags: [Messages]
@@ -124,15 +125,15 @@ router.get('/', controller.get);
  *       - in: query
  *         name: timeStart
  *         schema:
- *           type: string
- *           format: date-time
- *           description: Start time of the interval in ISO format.
+ *           type: number
+ *           description: Start time of the interval as a UNIX timestamp.
+ *           example: 1629885291
  *       - in: query
  *         name: timeEnd
  *         schema:
- *           type: string
- *           format: date-time
- *           description: End time of the interval in ISO format.
+ *           type: number
+ *           description: End time of the interval as a UNIX timestamp.
+ *           example: 1629985291
  *       - in: query
  *         name: limit
  *         schema:
@@ -155,9 +156,8 @@ router.get('/', controller.get);
  *                     type: object
  *                     description: The content of the telemetry data.
  *                   timestamp:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp of the telemetry data.
+ *                     type: number
+ *                     description: The UNIX timestamp of the telemetry data.
  *       400:
  *         description: Missing or invalid query parameters.
  *       500:
@@ -175,15 +175,15 @@ router.get('/telemetry', controller.getGnbTelemetry);
  *       - in: query
  *         name: timeStart
  *         schema:
- *           type: string
- *           format: date-time
- *           description: Start time of the interval in ISO format.
+ *           type: number
+ *           description: Start time of the interval as a UNIX timestamp.
+ *           example: 1629885291
  *       - in: query
  *         name: timeEnd
  *         schema:
- *           type: string
- *           format: date-time
- *           description: End time of the interval in ISO format.
+ *           type: number
+ *           description: End time of the interval as a UNIX timestamp.
+ *           example: 1629985291
  *     responses:
  *       200:
  *         description: A list of unique UE IDs.
@@ -212,10 +212,10 @@ router.get('/telemetry/ues', controller.getUEs);
  *       - in: query
  *         name: topic
  *         required: true
- *         description: The topic for which to retrieve the latest timestamp (e.g., telemetry, health, logs, gnbStatus).
  *         schema:
  *           type: string
  *           enum: [telemetry, health, logs, gnbStatus]
+ *         description: The topic for which to retrieve the latest timestamp.
  *     responses:
  *       200:
  *         description: Latest timestamp for the specified topic.
@@ -225,9 +225,9 @@ router.get('/telemetry/ues', controller.getUEs);
  *               type: object
  *               properties:
  *                 timestamp:
- *                   type: string
- *                   format: date-time
- *                   example: "2023-08-13T12:45:00Z"
+ *                   type: number
+ *                   description: The UNIX timestamp of the latest message for the specified topic.
+ *                   example: 1629985291
  *       400:
  *         description: Invalid topic parameter.
  *         content:

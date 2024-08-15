@@ -12,6 +12,9 @@ const options = {
       {
         url: 'http://localhost:80', // Update with your server's URL
       },
+      {
+        url: 'http://localhost:3000'
+      }
     ],
   },
   apis: ['./routes/*.js'], // Path to the API docs (update with the correct path)
