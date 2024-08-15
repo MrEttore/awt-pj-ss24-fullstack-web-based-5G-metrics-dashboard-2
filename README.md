@@ -103,7 +103,7 @@ First, Docker and Docker Compose should be installed on the machine. Moreover, g
 <!-- LICENSE -->
 ## 🧾 License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+This project is licensed under the terms of the [MIT License](LICENSE).
 
 
 
