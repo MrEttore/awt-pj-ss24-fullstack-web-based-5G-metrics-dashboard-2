@@ -32,8 +32,8 @@ module.exports.get = async function (req, res) {
         // Übersetze das übergebene topic in die interne Repräsentation
         let internalTopic;
         switch (topic) {
-            case 'gnbTelemetry':
-                internalTopic = model.topics.GNB_TELEMETRY;
+            case 'telemetry':
+                internalTopic = model.topics.TELEMETRY;
                 break;
             case 'health':
                 internalTopic = model.topics.HEALTH;
@@ -161,8 +161,8 @@ module.exports.getLatest = async function (req, res) {
 
     let internalTopic;
     switch (topic) {
-        case 'gnbTelemetry':
-            internalTopic = model.topics.GNB_TELEMETRY;
+        case 'telemetry':
+            internalTopic = model.topics.TELEMETRY;
             break;
         case 'health':
             internalTopic = model.topics.HEALTH;

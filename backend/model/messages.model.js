@@ -176,16 +176,16 @@ module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_
     const SQL = `SELECT payload FROM Messages
         WHERE ${timeStart} <= timestamp 
         AND timestamp <= ${timeEnd}
-        AND destination = '${topic}'
+        AND destination LIKE '%${topic}'
         ORDER BY timestamp ASC
     `;
 
     try {
         let connection = await getConnection();
         let rows = await connection.all(SQL)
-            .then(_rows => _rows.map(row => row.payload))
-            .then(_rows => _rows.map(JSON.parse))
-            .then(_rows => applyDataReduction(_rows, limit));
+            .then(rows => rows.map(row => row.payload))
+            .then(rows => rows.map(JSON.parse))
+            .then(rows => applyDataReduction(rows, limit));
 
         logger.info('Messages retrieved successfully', { topic, timeStart, timeEnd, limit });
         return rows;
@@ -203,7 +203,7 @@ module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds =
 
         for (let ueId of ueIds) {
             let filteredRows = rows.filter(row =>
-                Array.isArray(row.ues) && row.ues.some(ue => ue.ueId === ueId)
+                Array.isArray(row.ues) && row.ues.some(ue => ue.ueId == ueId)
             );
 
             if (filteredRows.length > 0) {
@@ -263,7 +263,7 @@ module.exports.getLatest = async function (topic) {
 
     const SQL = `
         SELECT payload FROM Messages
-        WHERE destination LIKE '${topic}'
+        WHERE destination LIKE '%${topic}'
         ORDER BY timestamp DESC
     `;
 

@@ -27,6 +27,6 @@ app.use('/api', require('../routes/deprecatedRouter'))
 module.exports.app = app;
 
 module.exports.init = async function() {
-    process.env.DB_PATH ||= 'database.db';
+    process.env.DB_PATH = process.env.DB_PATH || 'database.db';
     await model.init();
 }
