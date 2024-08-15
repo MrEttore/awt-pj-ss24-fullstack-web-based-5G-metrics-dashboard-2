@@ -70,7 +70,7 @@ The architecture of our 5G metric dashboard web application is a modular, contai
 <!-- GETTING STARTED -->
 ## 🚀 Getting Started 
 
-To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
+To keep the deployment as simple as possible Docker Compose is used to offer an easy and fast deployment.
 
 ### Prerequisites
 
@@ -80,7 +80,7 @@ Once the repository is downloaded, navigate to the `headless-browser` directory.
 
 ### Configure the .env.local File
 
-In the `headless-browser` directory of the downloaded repository create a `.env.local` file.
+In the `headless-browser` directory of project folder create a `.env.local` file.
 
 Your `.env.local` file should look like the template below. Be sure to replace the placeholder values with your actual credentials:
 
@@ -97,7 +97,7 @@ PW="your-password"
 
 ### Start The Application
 
-Execute the following command to start the project
+Execute the following command to start the application:
 
    ```sh
    docker compose up -d --build
@@ -109,7 +109,7 @@ Execute the following command to start the project
 
 ### Shut Down The Application
 
-Execute the following command to stop and removes all containers.
+Execute the following command to stop and removes all containers:
 
    ```sh
    docker compose down
@@ -122,7 +122,7 @@ Execute the following command to stop and removes all containers.
 
 A details overview of the project and the system's implementation can be found in our project report: ...
 
-Additionally, an overview of the system's APIs can be found here: [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/).
+For an overview of the system's APIs, visit the [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/). Ensure that the Docker Compose image is running before executing any API calls.
 
 
 
@@ -146,5 +146,5 @@ Moritz Schelten -
 
 ## 🫡 Acknowledgments
 
-* Alexander Futasz | Fokus Fraunhofer
+* Alexander Futasz | Fraunhofer FOKUS
 
