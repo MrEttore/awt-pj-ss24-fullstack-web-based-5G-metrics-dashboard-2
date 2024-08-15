@@ -4,12 +4,11 @@
   <h1 align="center"> Fullstack web-based 5G metrics dashboard </h1>
   <h3>Project Advanced Web Technologies (SoSe24) </h3>
 </div>
-
 <br/>
-
 <img src="images/dashboard.png"/>
-
 <br/>
+
+
 
 <!-- ABOUT THE PROJECT -->
 ## 💡 About The Project
@@ -33,6 +32,7 @@ This project implements a web-based dashboard application designed to display bo
 
 
 
+<!-- BUILT WITH -->
 ## 🛠️ Built With
 
 * ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -44,6 +44,9 @@ This project implements a web-based dashboard application designed to display bo
 * ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
 * ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
+
+
+<!-- SYSTEM ARCHITECTURE -->
 ## 🏛️ System Architecture
 
 The architecture of our 5G metric dashboard web application is a modular, containerized system built for flexibility, scalability, and ease of maintenance. The system is composed of five key components:
@@ -62,6 +65,9 @@ The architecture of our 5G metric dashboard web application is a modular, contai
 
 <br/>
 
+
+
+<!-- GETTING STARTED -->
 ## 🚀 Getting Started 
 
 To keep the deployment as simple as possible Docker compose is used to offer an easy and fast deployment.
@@ -74,7 +80,7 @@ Once the repository is downloaded, navigate to the `headless-browser` directory.
 
 ### Configure the .env.local File
 
-In the `headless-browser` directory of the downloaded repository create a `.env.local` file. This file stores the login credentials required for the scraper to access the OAIBOX.
+In the `headless-browser` directory of the downloaded repository create a `.env.local` file.
 
 Your `.env.local` file should look like the template below. Be sure to replace the placeholder values with your actual credentials:
 
@@ -109,10 +115,6 @@ Execute the following command to stop and removes all containers.
    docker compose down
    ```
 
-<!-- USAGE EXAMPLES -->
-## 🔧 Usage
-
-...
 
 
 <!-- DOCUMENTATION -->
@@ -121,6 +123,7 @@ Execute the following command to stop and removes all containers.
 A details overview of the project and the system's implementation can be found in our project report: ...
 
 Additionally, an overview of the system's APIs can be found here: [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/).
+
 
 
 <!-- LICENSE -->
@@ -143,7 +146,5 @@ Moritz Schelten -
 
 ## 🫡 Acknowledgments
 
-* []()
-* []()
-* []()
+* Alexander Futasz | Fokus Fraunhofer
 
