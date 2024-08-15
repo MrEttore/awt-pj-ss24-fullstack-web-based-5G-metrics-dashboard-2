@@ -111,108 +111,6 @@ router.get('/', controller.get);
 
 /**
  * @swagger
- * /api/messages/logs:
- *   get:
- *     summary: Get log messages from the database within a specified time interval
- *     tags: [Messages]
- *     parameters:
- *       - in: query
- *         name: timeStart
- *         schema:
- *           type: string
- *           format: date-time
- *           description: Start time of the interval in ISO format.
- *       - in: query
- *         name: timeEnd
- *         schema:
- *           type: string
- *           format: date-time
- *           description: End time of the interval in ISO format.
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           description: Maximum number of records to return.
- *     responses:
- *       200:
- *         description: A list of log messages.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   topic:
- *                     type: string
- *                     description: The topic of the log.
- *                   payload:
- *                     type: object
- *                     description: The content of the log message.
- *                   timestamp:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp of the log message.
- *       400:
- *         description: Missing or invalid query parameters.
- *       500:
- *         description: Internal server error.
- */
-router.get('/logs', controller.getGnbLogs);
-
-/**
- * @swagger
- * /api/messages/health:
- *   get:
- *     summary: Get health data from the database within a specified time interval
- *     tags: [Messages]
- *     parameters:
- *       - in: query
- *         name: timeStart
- *         schema:
- *           type: string
- *           format: date-time
- *           description: Start time of the interval in ISO format.
- *       - in: query
- *         name: timeEnd
- *         schema:
- *           type: string
- *           format: date-time
- *           description: End time of the interval in ISO format.
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           description: Maximum number of records to return.
- *     responses:
- *       200:
- *         description: A list of health data messages.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   topic:
- *                     type: string
- *                     description: The topic of the health data.
- *                   payload:
- *                     type: object
- *                     description: The content of the health message.
- *                   timestamp:
- *                     type: string
- *                     format: date-time
- *                     description: The timestamp of the health message.
- *       400:
- *         description: Missing or invalid query parameters.
- *       500:
- *         description: Internal server error.
- */
-router.get('/health', controller.getHealth);
-
-/**
- * @swagger
  * /api/messages/gnbTelemetry:
  *   get:
  *     summary: Get telemetry data from the database and filter by UE IDs
@@ -265,11 +163,11 @@ router.get('/health', controller.getHealth);
  *       500:
  *         description: Internal server error.
  */
-router.get('/gnbTelemetry', controller.getGnbTelemetry);
+router.get('/telemetry', controller.getGnbTelemetry);
 
 /**
  * @swagger
- * /api/messages/gnbTelemetry/ues:
+ * /api/messages/telemetry/ues:
  *   get:
  *     summary: Get a list of unique UE IDs from telemetry data within a specified time interval
  *     tags: [Messages]
@@ -300,8 +198,57 @@ router.get('/gnbTelemetry', controller.getGnbTelemetry);
  *       500:
  *         description: Internal server error.
  */
-router.get('/gnbTelemetry/ues', controller.getUEs);
+router.get('/telemetry/ues', controller.getUEs);
 
+/**
+ * @swagger
+ * /api/messages/latest:
+ *   get:
+ *     summary: Retrieve the latest timestamp for a specific topic
+ *     description: Returns the latest timestamp available for the specified topic.
+ *     tags:
+ *       - Messages
+ *     parameters:
+ *       - in: query
+ *         name: topic
+ *         required: true
+ *         description: The topic for which to retrieve the latest timestamp (e.g., telemetry, health, logs, gnbStatus).
+ *         schema:
+ *           type: string
+ *           enum: [telemetry, health, logs, gnbStatus]
+ *     responses:
+ *       200:
+ *         description: Latest timestamp for the specified topic.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2023-08-13T12:45:00Z"
+ *       400:
+ *         description: Invalid topic parameter.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid topic parameter.
+ *       500:
+ *         description: Server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "An error occurred while retrieving the latest timestamp."
+ */
 router.get('/latest', controller.getLatest);
 
 module.exports = router;
