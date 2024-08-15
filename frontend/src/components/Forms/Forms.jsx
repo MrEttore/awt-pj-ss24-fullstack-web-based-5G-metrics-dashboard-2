@@ -24,7 +24,6 @@ export default function Forms({
   const [selectedDevices, setSelectedDevices] = useState([]);
   const [selectedLimit, setSelectedLimit] = useState(null);
 
-  // Error states
   const [startError, setStartError] = useState(false);
   const [endError, setEndError] = useState(false);
 
