@@ -3,15 +3,12 @@ info:
   title: 5G Metric Messages API
   description: API to manage 5G metric messages.
   version: 1.0.0
-
 tags:
   - name: Messages
     description: API to manage 5G metric messages.
-
 servers:
-  - url: http://localhost:3000
-    description: Endpoint of Nginx Docker Container
-
+  - url: http://localhost:80
+    description: Endpoint of Backend Docker Container
 paths:
   /api/messages:
     post:
@@ -63,6 +60,11 @@ paths:
           schema:
             type: string
             description: The topic of the messages to retrieve (e.g., 'gnbTelemetry', 'health', 'logs', 'telemetry').
+            enum:
+              - gnbTelemetry
+              - health
+              - logs
+              - telemetry
             example: telemetry
         - in: query
           name: timeStart
@@ -94,6 +96,12 @@ paths:
                     topic:
                       type: string
                       description: The topic of the message.
+                      enum:
+                        - gnbTelemetry
+                        - health
+                        - logs
+                        - telemetry
+                      example: telemetry
                     payload:
                       type: object
                       description: The content of the message.
@@ -141,6 +149,12 @@ paths:
                     topic:
                       type: string
                       description: The topic of the log.
+                      enum:
+                        - gnbTelemetry
+                        - health
+                        - logs
+                        - telemetry
+                      example: telemetry
                     payload:
                       type: object
                       description: The content of the log message.
@@ -188,6 +202,12 @@ paths:
                     topic:
                       type: string
                       description: The topic of the health data.
+                      enum:
+                        - gnbTelemetry
+                        - health
+                        - logs
+                        - telemetry
+                      example: telemetry
                     payload:
                       type: object
                       description: The content of the health message.
@@ -293,6 +313,12 @@ paths:
           schema:
             type: string
             description: The topic of the latest message.
+            enum:
+              - gnbTelemetry
+              - health
+              - logs
+              - telemetry
+            example: telemetry
       responses:
         '200':
           description: The latest message timestamp.
