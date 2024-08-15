@@ -1,107 +1,146 @@
-const db = require("../database/sqlite3");
-const queries = require('../sql/messages.sql');
+const { getConnection } = require("../database/sqlite3DatabaseAdapter");
+// const logger = require('../utils/logger');  // Assuming a logger utility is used
+const logger = console;
 
-module.exports.topics = {
+module.exports.topics = Object.freeze({
     TELEMETRY: 'gnb.telemetry',
     HEALTH: 'cn5g.telemetry',
     LOGS: 'gnb.logs',
     GNB_STATUS: 'ba.telemetry'
-}
+});
 
-const MIN_TIME = 0
-const MAX_TIME = Infinity
-const LIMIT = 100
+module.exports.topicsKey = [
+    'gnbTelemetry', 'health', 'logs', 'telemetry'
+];
+
+const MIN_TIME = 0;
+const MAX_TIME = 9_999_999_999_999;
+const LIMIT = 100;
+
+module.exports.constants = Object.freeze({
+    MIN_TIME, MAX_TIME
+});
+
+let connection;
 
 module.exports.init = async function () {
-    await initMessages()
-    await initUes()
-}
+    try {
+        connection = await getConnection();
+        await Promise.all([initMessages(), initUes()]);
+        logger.info('Database initialized successfully.');
+    } catch (err) {
+        logger.error('Error initializing database:', err);
+        throw new Error('Failed to initialize the database');
+    }
+};
 
 async function initMessages() {
-    return new Promise((resolve, reject) => {
-        const CREATE = `
-            CREATE TABLE IF NOT EXISTS Messages (
-                rowId INTEGER PRIMARY KEY,
-                timestamp BIGINT NOT NULL,
-                destination TEXT NOT NULL,
-                payload TEXT NOT NULL
-            );`
-
-        db.run(CREATE, [], function (err) {
-            if (err)
-                return reject(err)
-            return resolve()
-        })
-    })
+    const CREATE = `
+        CREATE TABLE IF NOT EXISTS Messages (
+            rowId INTEGER PRIMARY KEY NOT NULL,
+            timestamp BIGINT NOT NULL,
+            destination TEXT NOT NULL,
+            payload TEXT NOT NULL
+        );
+    `;
+    try {
+        let connection = await getConnection();
+        await connection.run(CREATE);
+        logger.info('Messages table initialized successfully.');
+    } catch (err) {
+        logger.error('Error initializing Messages table:', err);
+        throw new Error('Failed to initialize Messages table');
+    }
 }
 
 async function initUes() {
-    return new Promise((resolve, reject) => {
-        const createUes = `
-            CREATE TABLE IF NOT EXISTS Ues (
-                rowId INTEGER PRIMARY KEY,
-                timestamp BIGINT NOT NULL,
-                ueId TEXT NOT NULL
-            );  
-        `
-        db.run(createUes, [], function (err) {
-            if (err)
-                return reject(err)
-            return resolve()
-        });
-    });
-}
-
-module.exports.add = async function (timestamp, destination, payload) {
-    // verify params
+    const SQL = `
+        CREATE TABLE IF NOT EXISTS Ues (
+            rowId INTEGER PRIMARY KEY,
+            timestamp BIGINT NOT NULL,
+            ueId TEXT NOT NULL
+        );  
+    `;
     try {
-        JSON.parse(payload)
-    } catch (e) {
-        throw new Error('Invalid payload')
-    }
-
-    await addMessage(timestamp, destination, payload)
-
-    const payloadObj = JSON.parse(payload)
-
-    // maintain separate Ues table to improve performance of getUEs
-    if (destination.endsWith('gnb.telemetry') && payloadObj.ues) {
-        for (let uesElement of payloadObj.ues) {
-            await addUe(timestamp, uesElement.ueId)
-        }
+        let connection = await getConnection();
+        await connection.run(SQL);
+        logger.info('Ues table initialized successfully.');
+    } catch (err) {
+        logger.error('Error initializing Ues table:', err);
+        throw new Error('Failed to initialize Ues table');
     }
 }
+
+/**
+ * Adds a message to the Messages table.
+ */
+module.exports.add = async function (timestamp, destination, payload) {
+    // Verify parameters
+    if (isNaN(timestamp) || !destination || !payload) {
+        const errMsg = 'Missing or invalid parameters for add method';
+        logger.error(errMsg, { timestamp, destination, payload });
+        throw new Error(errMsg);
+    }
+
+    try {
+        JSON.parse(payload);
+    } catch (e) {
+        const errMsg = 'Invalid payload JSON format';
+        logger.error(errMsg, { payload });
+        throw new Error(errMsg);
+    }
+
+    try {
+        const lastID = await addMessage(timestamp, destination, payload);
+        const payloadObj = JSON.parse(payload);
+
+        // Maintain a separate Ues table to improve performance of getUEs
+        if (destination.endsWith('gnb.telemetry') && payloadObj.ues) {
+            for (let uesElement of payloadObj.ues) {
+                await addUe(timestamp, uesElement.ueId);
+            }
+        }
+
+        logger.info('Message added successfully', { lastID, timestamp, destination });
+        return lastID;
+    } catch (err) {
+        logger.error('Error adding message:', err);
+        throw new Error('Failed to add message to the database');
+    }
+};
 
 async function addUe(timestamp, ueId) {
-    return new Promise((resolve, reject) => {
-        db.run(queries.ADD_UE, [timestamp, ueId], function (err) {
-            if (err) {
-                return reject(err)
-            }
-            return resolve(this.lastID)
-        })
-    })
+    const SQL = `
+        INSERT INTO Ues (timestamp, ueId)
+        VALUES (${timestamp}, '${ueId}')
+    `;
+
+    try {
+        let connection = await getConnection();
+        let lastID = await connection.run(SQL);
+        logger.info('UE added successfully', { timestamp, ueId, lastID });
+        return lastID;
+    } catch (err) {
+        logger.error('Error adding UE:', err);
+        throw new Error('Failed to add UE to the database');
+    }
 }
 
 async function addMessage(timestamp, destination, payload) {
-    return new Promise((resolve, reject) => {
+    const SQL = `
+        INSERT INTO Messages (timestamp, destination, payload)
+        VALUES (${timestamp}, '${destination}', '${payload}')
+    `;
 
-        // verify params
-        try {
-            JSON.parse(payload)
-        } catch (e) {
-            return reject('Invalid payload')
-        }
-
-        // payload = JSON.stringify(payload)
-
-        db.run(queries.ADD_MESSAGE, [timestamp, destination, payload], function (err) {
-            if (err) {
-                return reject(err)
-            }
-            return resolve(this.lastID)
-        })
-    })
+    try {
+        let connection = await getConnection();
+        const lastID = await connection.run(SQL);
+        logger.info('Message added successfully', { lastID, timestamp, destination });
+        return lastID;
+    } catch (err) {
+        logger.error('Error adding message:', err);
+        throw new Error('Failed to add message to the database');
+    }
 }
 
 function applyDataReduction(rows, limit = LIMIT) {
@@ -119,112 +158,152 @@ function applyDataReduction(rows, limit = LIMIT) {
     return reducedRows;
 }
 
-
 /**
  * GET /api/messages?topic=_&timeStart=_&timeEnd=_
  */
 module.exports.get = async function (topic, timeStart = MIN_TIME, timeEnd = MAX_TIME, limit = LIMIT) {
-    return new Promise((resolve, reject) => {
-        if (!Object.values(this.topics).includes(topic)) {
-            return reject('Invalid topic')
-        }
-        if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
-            return reject('Invalid time interval')
-        }
+    if (!Object.values(this.topics).includes(topic)) {
+        const errMsg = `Invalid topic: ${topic}`;
+        logger.error(errMsg);
+        throw new Error(errMsg);
+    }
+    if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
+        const errMsg = `Invalid time interval: timeStart=${timeStart}, timeEnd=${timeEnd}`;
+        logger.error(errMsg);
+        throw new Error(errMsg);
+    }
 
-        let sql = queries.GET
+    const SQL = `SELECT payload FROM Messages
+        WHERE ${timeStart} <= timestamp 
+        AND timestamp <= ${timeEnd}
+        AND destination LIKE '%${topic}'
+        ORDER BY timestamp ASC
+    `;
 
-        db.all(sql, [`%${topic}`, timeStart, timeEnd], (err, rows) => {
-            if (err)
-                return reject(err)
-            return resolve(
-                applyDataReduction(
-                    rows.map(row => row.payload)
-                        .map(JSON.parse),
-                    limit
-                ))
-        })
-    })
+    try {
+        let connection = await getConnection();
+        let rows = await connection.all(SQL)
+            .then(rows => rows.map(row => row.payload))
+            .then(rows => rows.map(JSON.parse))
+            .then(rows => applyDataReduction(rows, limit));
+
+        logger.info('Messages retrieved successfully', { topic, timeStart, timeEnd, limit });
+        return rows;
+    } catch (err) {
+        logger.error('Error retrieving messages:', err);
+        throw new Error('Failed to retrieve messages');
+    }
 }
 
 module.exports.getTelemetry = async function (timeStart, timeEnd, limit, ueIds = []) {
-    // Abrufen aller Telemetriedatensätze innerhalb des angegebenen Zeitintervalls
-    let rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd, Infinity);
+    try {
+        let rows = await this.get(this.topics.TELEMETRY, timeStart, timeEnd);
 
-    // Iteriere über jede Zeile und filtere das 'ues' Feld basierend auf 'ueIds'
-    for (let row of rows) {
-        if (Array.isArray(row.ues)) {
-            // Filtert die UEs basierend auf dem ueIds Array
-            row.ues = row.ues.filter(ue => ueIds.includes(ue.ueId));
+        let allReducedRows = [];
+
+        for (let ueId of ueIds) {
+            let filteredRows = rows.filter(row =>
+                Array.isArray(row.ues) && row.ues.some(ue => ue.ueId == ueId)
+            );
+
+            if (filteredRows.length > 0) {
+                let reducedRows = applyDataReduction(filteredRows, limit);
+                allReducedRows = allReducedRows.concat(reducedRows);
+            }
         }
+
+        allReducedRows.sort((a, b) => a.timestamp - b.timestamp);
+
+        logger.info('Telemetry data retrieved successfully', { timeStart, timeEnd, limit, ueIds });
+        return allReducedRows;
+    } catch (err) {
+        logger.error('Error retrieving telemetry data:', err);
+        throw new Error('Failed to retrieve telemetry data');
     }
-
-    rows = rows.filter(row => row.ues.length > 0)
-
-    // Rückgabe der gefilterten Zeilen
-    return applyDataReduction(rows, limit);
 }
-
-// /**
-//  * GET /api/ues?timeStart=_&timeEnd=_
-//  */
-// module.exports._getUEs = async function (timeStart, timeEnd) {
-
-//     // fetch telemetry items
-//     const data = await this.get(this.topics.TELEMETRY, timeStart, timeEnd)
-//     const ueIds = new Set();
-
-//     data.forEach(item => {
-//         if (item.ues && Array.isArray(item.ues)) {
-//             item.ues.forEach(ue => {
-//                 if (ue.ueId !== undefined) {
-//                     ueIds.add(ue.ueId);
-//                 }
-//             });
-//         }
-//     });
-
-//     return Array.from(ueIds);
-// }
 
 /**
  * GET /api/ues?timeStart=_&timeEnd=_
  */
 module.exports.getUEs = async function (timeStart = MIN_TIME, timeEnd = MAX_TIME) {
-    return new Promise((resolve, reject) => {
-        // verify params
-        if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
-            return reject('Invalid time interval')
-        }
+    if (isNaN(timeStart) || isNaN(timeEnd) || timeEnd < timeStart) {
+        const errMsg = `Invalid time interval: timeStart=${timeStart}, timeEnd=${timeEnd}`;
+        logger.error(errMsg);
+        throw new Error(errMsg);
+    }
 
-        db.all(queries.GET_UES, [timeStart, timeEnd], (err, rows) => {
-            if (err)
-                return reject(err)
-            return resolve(rows
-                .map(row => row.ueId)
-            )
-        })
-    })
+    const SQL = `
+        SELECT DISTINCT ueId FROM Ues
+        WHERE ${timeStart} <= timestamp
+        AND timestamp <= ${timeEnd}
+    `;
+
+    try {
+        let rows = await connection.all(SQL)
+            .then(rows => rows.map(row => row.ueId));
+
+        logger.info('UEs retrieved successfully', { timeStart, timeEnd });
+        return rows;
+    } catch (err) {
+        logger.error('Error retrieving UEs:', err);
+        throw new Error('Failed to retrieve UEs');
+    }
 }
 
 /**
  * GET /api/messages/latestTimestamp?topic=_
- * Returns latest timestamp for a given topic
+ * Returns the latest timestamp for a given topic.
  */
 module.exports.getLatest = async function (topic) {
-    return new Promise((resolve, reject) => {
+    if (!Object.values(this.topics).includes(topic)) {
+        const errMsg = `Invalid topic: ${topic}`;
+        logger.error(errMsg);
+        throw new Error(errMsg);
+    }
 
-        // validate parameters
-        if (!Object.values(this.topics).includes(topic)) {
-            return reject('Invalid topic')
-        }
+    const SQL = `
+        SELECT payload FROM Messages
+        WHERE destination LIKE '%${topic}'
+        ORDER BY timestamp DESC
+    `;
 
-        db.get(queries.GET_LATEST, [`%${topic}`], (err, row) => {
-            if (err)
-                return reject(err)
-            if (!row)
-                return resolve()
-            return resolve(JSON.parse(row.payload))
-        })
-    })
+    try {
+        let row = await connection.get(SQL)
+            .then(_row => _row.payload)
+            .then(JSON.parse);
+
+        logger.info('Latest message retrieved successfully', { topic });
+        return row;
+    } catch (err) {
+        logger.error('Error retrieving the latest message:', err);
+        throw new Error('Failed to retrieve the latest message');
+    }
+}
+
+/**
+ * Get single data row by ID. Used for testing.
+ */
+module.exports.getByID = async function (rowID) {
+    if (isNaN(rowID)) {
+        const errMsg = `Invalid rowID: ${rowID}`;
+        logger.error(errMsg);
+        throw new Error(errMsg);
+    }
+
+    const SQL = `
+        SELECT payload FROM Messages
+        WHERE rowId = ${rowID}
+    `;
+
+    try {
+        const row = await connection.get(SQL)
+            .then(row => row.payload)
+            .then(JSON.parse);
+
+        logger.info('Message retrieved successfully by ID', { rowID });
+        return row;
+    } catch (err) {
+        logger.error('Error retrieving message by ID:', err);
+        throw new Error('Failed to retrieve message by ID');
+    }
 }

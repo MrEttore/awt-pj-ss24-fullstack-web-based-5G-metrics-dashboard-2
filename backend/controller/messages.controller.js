@@ -6,19 +6,12 @@ const model = require('../model/messages.model');
 module.exports.add = async function (req, res) {
     try {
         const { timestamp, destination, payload } = req.body;
+        
         if (!timestamp || !destination || !payload) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // Verify that the payload is valid JSON
-        let payloadStr;
-        try {
-            payloadStr = JSON.stringify(payload);
-        } catch (e) {
-            return res.status(400).json({ error: 'Invalid JSON payload' });
-        }
-
-        await model.add(timestamp, destination, payloadStr);
+        await model.add(timestamp, destination, payload);
         return res.status(201).json({ message: 'Message added successfully' });
     } catch (error) {
         return res.status(500).json({ error: error.toString() });
@@ -65,7 +58,7 @@ module.exports.get = async function (req, res) {
 /**
  * Get log messages from the database within a specified time interval.
  */
-module.exports.getLogs = async function (req, res) {
+module.exports.getGnbLogs = async function (req, res) {
     try {
         const { timeStart, timeEnd, limit } = req.query;
 
@@ -93,7 +86,7 @@ module.exports.getHealth = async function (req, res) {
 /**
  * Get telemetry data from the database and filter by UE IDs.
  */
-module.exports.getTelemetry = async function (req, res) {
+module.exports.getGnbTelemetry = async function (req, res) {
     try {
         const { timeStart, timeEnd, ueIds, limit } = req.query;
 
@@ -131,7 +124,7 @@ module.exports.addTelemetry = async function(req, res) {
     }
 
     try {
-        const id = await model.add(timestamp, model.topics.TELEMETRY, JSON.stringify(req.body))
+        const id = await model.add(timestamp, model.topics.GNB_TELEMETRY, JSON.stringify(req.body))
         return res.status(201).json({ success: true, id: id });
     } catch (error) {
         return res.status(500).json({error: error.toString()})

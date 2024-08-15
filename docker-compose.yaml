@@ -19,8 +19,6 @@ services:
     restart: always
     volumes:
       - ./backend/database.db:/usr/src/app/database.db
-    ports:
-      - "3000:3000"
     networks:
       - awt
   frontend:
@@ -30,15 +28,13 @@ services:
     image: frontend:latest
     container_name: frontend
     restart: always
-    ports:
-      - "5173:5173"
     networks:
       - awt
   nginx:
     build: 
       context: ./nginx
       dockerfile: Dockerfile
-    image: nginx:awt
+    image: nginx:awt  
     ports:
       - "80:80"
     networks:
