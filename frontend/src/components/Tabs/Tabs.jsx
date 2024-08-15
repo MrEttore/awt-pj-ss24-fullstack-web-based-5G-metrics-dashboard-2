@@ -9,7 +9,6 @@ import './Tabs.css';
 export default function Tabs({ selectedTab, onSelectTab }) {
   return (
     <div className="tabContainer">
-      {/* TAB */}
       <Tab
         value="healthStatus"
         icon={<TbActivityHeartbeat />}

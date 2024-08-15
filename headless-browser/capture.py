@@ -101,7 +101,7 @@ async def filter_data(text):
                 js = json.loads(json_obj)
                 timestamp = js["timestamp"]
                 print(f"time: {timestamp}")
-                await send_data(js, destination, timestamp, "messages")
+                await send_data(json_obj, destination, timestamp, "messages")
     except Exception as e:
         print(f"Error filtering data: {e}")
         print(destination)

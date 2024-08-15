@@ -1,12 +1,7 @@
 import './ControlBar.css';
 
 function ControlBar({ children }) {
-  return (
-    <div className="controlsContainer">
-      {/* TABS and FORMS */}
-      {children}
-    </div>
-  );
+  return <div className="controlsContainer">{children}</div>;
 }
 
 export default ControlBar;
