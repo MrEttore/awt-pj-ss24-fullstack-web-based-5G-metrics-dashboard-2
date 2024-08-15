@@ -68,8 +68,6 @@ To keep the deployment as simple as possible Docker compose is used to offer an 
 
 ### Prerequisites
 
-### Prerequisites
-
 Before you begin, ensure that Docker and Docker Compose are installed on your machine. Familiarity with Docker is recommended.
 
 Once the repository is downloaded, navigate to the `headless-browser` directory. Here, you'll need to create a `.env.local` file, which will store the login credentials needed for the scraper to access the OAIBOX's websocket messages. Detailed instructions for configuring this file can be found below.
