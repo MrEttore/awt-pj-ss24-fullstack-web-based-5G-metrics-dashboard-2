@@ -20,8 +20,8 @@ This project implements a web-based dashboard application designed to display bo
 
 - **Live and Stored Data Display:** View real-time metrics as well as historical data from 5G network components.
 - **Data Capture and Storage:** Efficiently capture and store 5G metrics in a database for future analysis.
-- **Comparison and Analysis:** Retrieve and compare data from multiple test sessions to analyze 5G network performance.
-- **WebSocket Integration:** Reverse engineering and capturing of WebSocket messages from an existing [OAIBOX](https://oaibox.com/) dashboard to provide the necessary 5G data.
+- **Comparison and Analysis:** Retrieve and compare data from multiple test sessions to analyze the performance of a 5G network.
+- **Scraping of WebSocket messages:** Reverse engineering and capturing of WebSocket messages from an existing [OAIBOX](https://oaibox.com/) setup to provide the necessary 5G data.
 
 <br/>
 
@@ -68,19 +68,42 @@ To keep the deployment as simple as possible Docker compose is used to offer an 
 
 ### Prerequisites
 
-First, Docker and Docker Compose should be installed on the machine. Moreover, general knowledge of Docker is required.
+Before you begin, ensure that Docker and Docker Compose are installed on your machine. Familiarity with Docker is recommended.
+
+Once the repository is downloaded, navigate to the `headless-browser` directory. Here, you'll need to create a `.env.local` file, which will store the login credentials needed for the scraper to access the OAIBOX's websocket messages. Detailed instructions for configuring this file can be found below.
+
+### Configure the .env.local File
+
+In the `headless-browser` directory of the downloaded repository create a `.env.local` file. This file stores the login credentials required for the scraper to access the OAIBOX.
+
+Your `.env.local` file should look like the template below. Be sure to replace the placeholder values with your actual credentials:
+
+```sh
+# Access link for the OAIBOX dashboard
+AUTH_LINK="https://..."
+
+# User email for the OAIBOX dashboard login
+EMAIL="your-email@example.com"
+
+# Password for the OAIBOX dashboard login
+PW="your-password"
+```
 
 ### Start The Application
-1. Execute the following command to start the project
+
+Execute the following command to start the project
 
    ```sh
    docker compose up -d --build
    ```
-    + `-d` means detached mode, so the terminal is not blocked by the running containers
-    + `--build` means that the images are newly built before the containers are started
+
+  `-d` means detached mode, so the terminal is not blocked by the running containers.
+  
+  `--build` means that the images are newly built before the containers are started.
 
 ### Shut Down The Application
-1. Execute the following command to stop the project. This will stop and remove all containers.
+
+Execute the following command to stop and removes all containers.
 
    ```sh
    docker compose down
@@ -92,17 +115,18 @@ First, Docker and Docker Compose should be installed on the machine. Moreover, g
 ...
 
 
-
 <!-- DOCUMENTATION -->
 ## 📃 Documentation & APIs
 
-...
+A details overview of the project and the system's implementation can be found in our project report: ...
+
+Additionally, an overview of the system's APIs can be found here: [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/).
 
 
 <!-- LICENSE -->
 ## 🧾 License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+This project is licensed under the terms of the [MIT License](LICENSE).
 
 
 
