@@ -229,15 +229,15 @@ export const LIMITS = [
 
 // API urls
 
-export const CN5G_URL = `http://localhost:${PORT}/api/cn5g/telemetry`;
+export const CN5G_URL = `/api/cn5g/telemetry`;
 
-export const GNB_LOGS_URL = `http://localhost:${PORT}/api/gnb/logs`;
+export const GNB_LOGS_URL = `/api/gnb/logs`;
 
-export const GNB_TELEMETRY_URL = `http://localhost:${PORT}/api/gnb/telemetry`;
+export const GNB_TELEMETRY_URL = `/api/gnb/telemetry`;
 
-export const UES_URL = `http://localhost:${PORT}/api/ues`;
+export const UES_URL = `/api/ues`;
 
-export const LATEST_DATAPOINT_URL = `http://localhost:${PORT}/api/latest`;
+export const LATEST_DATAPOINT_URL = `/api/latest`;
 
 // Message structure
 
