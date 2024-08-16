@@ -95,6 +95,14 @@ EMAIL="your-email@example.com"
 PW="your-password"
 ```
 
+### Database Setup
+
+In the `backend/` directory, a `database.db` file must be present. This file can either be pre-populated with data or be an empty file. 
+
+- If the `database.db` file does not exist, it must be manually created.
+- Ensure that the `database.db` file has the correct permissions, allowing the application to read from and write to it.
+
+
 ### Start The Application
 
 Execute the following command to start the application:
