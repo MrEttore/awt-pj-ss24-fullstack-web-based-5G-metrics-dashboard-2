@@ -6,6 +6,13 @@ This is the backend for the 5G Metrics Dashboard, responsible for processing and
 
 ## Installation
 
+This Readme contains instructions to setup and run the backend as a standalone process.
+
+- Navigate to the backend directory:
+```
+cd backend
+```
+
 ### Without Docker
 
 1. Ensure Node.js is installed on your system.
@@ -31,9 +38,13 @@ This is the backend for the 5G Metrics Dashboard, responsible for processing and
    ```bash
    docker build -t backend .
    ```
+4. Make sure a database.db exists in the current directory. In case, there is none:
+   ```
+   touch database.db
+   ```
 4. Run the Docker container and mount the database as a volume:
    ```bash
-   docker run -p 3000:3000 -v \$(pwd)/database.db:/usr/src/app/database.db backend
+   docker run -p 3000:3000 -v ./database.db:/usr/src/app/database.db backend
    ```
    This starts the container and binds the SQLite database `database.db` from your current directory to the container's directory where the database is stored.
 
@@ -58,7 +69,6 @@ backend/
 │ │ └── messages.routes.js
 │ │
 │ ├── server.js # Main entry point of the application
-│ └── utils/ # Utility functions and helpers
 │
 ├── Dockerfile # Dockerfile for building Docker image
 ├── database.db # SQLite database file (mounted as volume)
@@ -75,7 +85,7 @@ backend/
 
 ## API Documentation
 
-The API documentation is annotated with Swagger and describes all the endpoints available for accessing and managing metrics. To view the documentation, start the application and navigate to `/api-docs` (the path may vary depending on your implementation).
+The API documentation is annotated with Swagger and describes all the endpoints available for accessing and managing metrics. To view the documentation, start the application and navigate to `/api/docs`.
 
 ## Testing
 
@@ -95,7 +105,5 @@ The API documentation is annotated with Swagger and describes all the endpoints 
   docker run -e PORT=4000 -p 4000:4000 -v ./database.db:/usr/src/app/database.db backend
   ```
   This starts the container on port 4000.
-
-- **Docker Compose:** If using Docker Compose, you can easily integrate and manage additional services like databases or a load balancer.
 
 ---
