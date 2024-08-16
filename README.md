@@ -51,11 +51,11 @@ This project implements a web-based dashboard application designed to display bo
 
 The architecture of our 5G metric dashboard web application is a modular, containerized system built for flexibility, scalability, and ease of maintenance. The system is composed of five key components:
 
-- **Frontend:** The frontend serves as the user interface, enabling users to interact with and visualize 5G data in real-time. It provides a responsive and intuitive experience, ensuring that the complex metrics are presented in a user-friendly manner.
-- **Backend:** The backend acts as the central hub for data processing. It manages the flow of information between the frontend and the database, handling requests and ensuring that data is processed accurately and efficiently.
+- **Frontend:** The frontend service serves as the user interface, enabling users to interact with and visualize 5G data in real-time. It provides a responsive and intuitive experience, ensuring that the complex metrics are presented in a user-friendly manner.
+- **Backend:** The backend service acts as the central hub for data processing. It manages the flow of information between the frontend and the database, handling requests and ensuring that data is processed accurately and efficiently.
 - **Database:** The database stores both historical and live telemetry data, serving as the persistent data repository. It ensures that all 5G metric data is securely stored and can be retrieved quickly for analysis and display.
 - **NGINX:** To enhance security and simplify the handling of Cross-Origin Resource Sharing (CORS) issues, the application traffic is managed by an NGINX container. NGINX serves as a reverse proxy, forwarding requests to the appropriate service.
-- **Scraper:** The scraper component is responsible for collecting 5G telemetry data from external [OAIBOX](https://oaibox.com/) instances. It feeds this data into the database, ensuring that the system has up-to-date information for processing and display.
+- **Scraper:** The scraper service is responsible for collecting 5G telemetry data from external [OAIBOX](https://oaibox.com/) instances. It feeds this data into the database, ensuring that the system has up-to-date information for processing and display.
 
 <br/>
 
@@ -138,9 +138,9 @@ This project is licensed under the terms of the [MIT License](LICENSE).
 
 Ettore Marangon - [LinkedIn](www.linkedin.com/in/ettore-marangon-7ba517215) | ettore.carlo.marangon@campus.tu-berlin.de
 
-Daniel Hermann - 
+Daniel Hermann - d.schrenk@campus.tu-berlin.de
 
-Moritz Schelten - 
+Moritz Schelten - m.schelten@campus.tu-berlin.de
 
 
 
