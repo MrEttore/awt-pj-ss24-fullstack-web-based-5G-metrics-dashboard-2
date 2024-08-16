@@ -132,7 +132,7 @@ Execute the following command to stop and removes all containers:
 <!-- DOCUMENTATION -->
 ## 📃 Documentation & APIs
 
-A details overview of the project and the system implementation can be found in our project report: ...
+A details overview of the project and the system implementation can be found in our [project report](report/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2.pdf).
 
 For an overview of the system's APIs, visit the [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/). Ensure that the Docker Compose image is running before executing any API calls.
 
