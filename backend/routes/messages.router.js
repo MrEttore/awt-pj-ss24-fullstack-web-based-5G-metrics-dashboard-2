@@ -29,12 +29,12 @@ const controller = require('../controller/messages.controller');
  *                 type: string
  *                 description: The topic of the message.
  *               payload:
- *                 type: object
+ *                 type: string
  *                 description: The content of the message.
  *             example:
- *               timestamp: 1629885291
- *               destination: gnbTelemetry
- *               payload: { key: "value" }
+ *               timestamp: 1715076982855
+ *               destination: "gnb.logs"
+ *               payload: "{\"timestamp\":1715076982855,\"payload\":\"UE a393: UL-RI 1, TPMI 0\"}"
  *     responses:
  *       201:
  *         description: The message was successfully added.
@@ -64,6 +64,7 @@ router.post('/', controller.add);
  *         name: topic
  *         required: true
  *         description: The topic for which to retrieve messages.
+ *         example: logs
  *         schema:
  *           type: string
  *           enum: [telemetry, health, logs, gnbStatus]
@@ -72,13 +73,13 @@ router.post('/', controller.add);
  *         schema:
  *           type: number
  *           description: Start time of the interval as a UNIX timestamp.
- *           example: 1629885291
+ *           example: 1715076982855
  *       - in: query
  *         name: timeEnd
  *         schema:
  *           type: number
  *           description: End time of the interval as a UNIX timestamp.
- *           example: 1629985291
+ *           example: 1715076982855
  *       - in: query
  *         name: limit
  *         schema:
@@ -127,13 +128,13 @@ router.get('/', controller.get);
  *         schema:
  *           type: number
  *           description: Start time of the interval as a UNIX timestamp.
- *           example: 1629885291
+ *           example: 1715076982855
  *       - in: query
  *         name: timeEnd
  *         schema:
  *           type: number
  *           description: End time of the interval as a UNIX timestamp.
- *           example: 1629985291
+ *           example: 1715076982855
  *       - in: query
  *         name: limit
  *         schema:
@@ -177,13 +178,13 @@ router.get('/telemetry', controller.getGnbTelemetry);
  *         schema:
  *           type: number
  *           description: Start time of the interval as a UNIX timestamp.
- *           example: 1629885291
+ *           example: 1715076982855
  *       - in: query
  *         name: timeEnd
  *         schema:
  *           type: number
  *           description: End time of the interval as a UNIX timestamp.
- *           example: 1629985291
+ *           example: 1715076982855
  *     responses:
  *       200:
  *         description: A list of unique UE IDs.
@@ -216,6 +217,7 @@ router.get('/telemetry/ues', controller.getUEs);
  *           type: string
  *           enum: [telemetry, health, logs, gnbStatus]
  *         description: The topic for which to retrieve the latest timestamp.
+ *         example: logs
  *     responses:
  *       200:
  *         description: Latest timestamp for the specified topic.

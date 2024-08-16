@@ -28,6 +28,8 @@ module.exports = {
     collectCoverageFrom: [
       'database/*.js',
       'model/*.js',
+      'controller/*.js',
+      'routes/*.js',
       'src/**/*.{js,jsx,ts,tsx}',
       '!src/**/*.d.ts'
     ],
