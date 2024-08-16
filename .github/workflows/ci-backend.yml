@@ -6,7 +6,6 @@ on:
       - main
       - DEV
       - backend
-      - feature/openapi-pages
   pull_request:
     branches:
       - main
