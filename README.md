@@ -76,11 +76,11 @@ To keep the deployment as simple as possible Docker Compose is used to offer an 
 
 Before you begin, ensure that Docker and Docker Compose are installed on your machine. Familiarity with Docker is recommended.
 
-Once the repository is downloaded, navigate to the `headless-browser` directory. Here, you'll need to create a `.env.local` file, which will store the login credentials needed for the scraper to access the OAIBOX's websocket messages. Detailed instructions for configuring this file can be found below.
+Once the repository is downloaded, navigate to the `headless-browser/` directory. Here, you'll need to create a `.env.local` file, which will store the login credentials needed for the scraper to access the OAIBOX's websocket messages. Detailed instructions for configuring this file can be found below.
 
 ### Configure the .env.local File
 
-In the `headless-browser` directory of project folder create a `.env.local` file.
+In the `headless-browser/` directory of project folder create a `.env.local` file.
 
 Your `.env.local` file should look like the template below. Be sure to replace the placeholder values with your actual credentials:
 
