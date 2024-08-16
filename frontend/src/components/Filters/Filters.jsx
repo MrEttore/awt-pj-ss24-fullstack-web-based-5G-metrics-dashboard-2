@@ -4,7 +4,6 @@ export default function Filters({ filters, isThereError }) {
   if (!filters || isThereError) return <div className="filters"></div>;
 
   const { startTime, endTime, devices, metrics, limitDatapoints } = filters;
-
   const startTimeString = new Date(startTime).toLocaleString();
   const startEndString = new Date(endTime).toLocaleString();
 

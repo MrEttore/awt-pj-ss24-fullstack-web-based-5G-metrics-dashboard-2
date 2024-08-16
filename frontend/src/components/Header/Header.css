@@ -27,10 +27,10 @@
 
 .title {
   font-size: 1.5rem;
-  margin-right: auto; /* Pushes the title to the leftmost part of the flex container */
+  margin-right: auto;
   text-transform: uppercase;
 }
 
 .date {
-  margin-left: 1rem; /* Adds margin between title and date */
+  margin-left: 1rem;
 }
