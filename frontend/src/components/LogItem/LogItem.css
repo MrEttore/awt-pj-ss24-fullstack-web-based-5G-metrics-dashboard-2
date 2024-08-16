@@ -1,0 +1,53 @@
+@import url('../../styles/variables.css');
+
+.log {
+  list-style-type: none;
+  margin-top: 0.2rem;
+  margin-bottom: 1.2rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 50px;
+  background-color: var(--color-background-900);
+  transition: all 0.5s;
+}
+
+.log:hover {
+  border-color: var(--color-background-900);
+  border: 3px solid var(--color-primary-light);
+  cursor: pointer;
+  transform: translateY(-2px);
+}
+
+.log.live {
+  border-color: var(--color-live-gnb-fetching);
+}
+
+.logContent {
+  display: flex;
+  flex-direction: row;
+  height: 5rem;
+  gap: 4rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.logTime {
+  width: 135px;
+  margin-left: 0.5rem;
+  color: var(--color-text-dark);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.logMessage {
+  color: var(--color-text-dark);
+  white-space: normal;
+  flex-grow: 1;
+  word-wrap: break-word;
+  font-size: 0.9rem;
+}
+
+.log:hover .logTime,
+.log:hover .logMessage {
+  color: var(--color-text);
+}

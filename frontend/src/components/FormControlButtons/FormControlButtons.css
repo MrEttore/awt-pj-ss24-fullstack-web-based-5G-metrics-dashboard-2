@@ -1,0 +1,68 @@
+@import url('../../styles/variables.css');
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.btnSubmit {
+  background-color: #15b244;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: var(--color-text);
+  border: 2px solid var(--color-background-900);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, width 0.3s;
+}
+
+.btnSubmit:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSubmit:disabled::after {
+  content: '';
+  display: block;
+  font-size: initial;
+}
+
+.btnSubmit:not(:disabled):hover {
+  background-color: #229b3e;
+}
+
+.btnReset {
+  background-color: #f1bf29;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  color: white;
+  border: 2px solid var(--color-background-900);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, width 0.3s;
+}
+
+.btnReset:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnReset:disabled::after {
+  content: '';
+  display: block;
+  font-size: initial;
+}
+
+.btnReset:not(:disabled):hover {
+  background-color: #ffb347;
+}
+
+label {
+  display: block;
+  margin-left: 1rem;
+  font-weight: 100;
+}

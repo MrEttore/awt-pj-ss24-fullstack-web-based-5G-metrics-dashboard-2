@@ -1,0 +1,39 @@
+@import url('../../styles/variables.css');
+
+.labelsTelemetry {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  align-items: center;
+  height: 2rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--color-primary-light);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom: solid 4px var(--color-background-900);
+}
+
+.labelLeft {
+  display: flex;
+  justify-content: center;
+}
+
+.labelRight {
+  display: flex;
+  justify-content: center;
+}
+
+.labelLeft .text,
+.labelRight .text {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--color-text);
+  text-shadow: 1px 0px 4px rgba(0, 0, 0, 0.5);
+}
+
+.icon {
+  font-size: 1.2rem;
+}

@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "NODE_ENV=prod DB_PATH=test.db node server.js",
-    "dev": "DB_PATH=test.db node --watch server",
+    "start": "NODE_ENV=prod node server.js",
+    "dev": "node --watch server",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -15,7 +15,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.4.0",

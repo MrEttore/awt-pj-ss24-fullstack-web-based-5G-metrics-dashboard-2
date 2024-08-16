@@ -1,8 +1,0 @@
-@import url('../../Styles/variables.css');
-
-.controlsContainer {
-  display: flex;
-  flex-direction: column;
-
-  gap: 0.5rem;
-}

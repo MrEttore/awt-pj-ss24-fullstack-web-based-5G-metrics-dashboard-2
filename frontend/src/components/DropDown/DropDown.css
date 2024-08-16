@@ -1,0 +1,107 @@
+@import url('../../styles/variables.css');
+
+.dropdown {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 0.5rem;
+  border-right: solid rgba(8, 15, 37, 0.2) 2px;
+  height: 5.4rem;
+}
+
+.dropdown label {
+  margin-left: 0.5rem;
+  margin-top: -4.2rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.select {
+  margin-left: -1rem;
+  margin-top: 1rem;
+  width: 10rem;
+  border: solid 2px var(--color-background-900);
+  background-color: var(--color-background-100);
+  border-radius: 30px;
+  padding: 0.3rem;
+}
+
+.inactive {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/** Custom CSS for the <Select/> component **/
+
+.select .react-select__placeholder {
+  font-size: 0.8rem;
+  text-transform: initial;
+  color: var(--color-background-500);
+}
+
+.select .react-select__control {
+  padding: 8px;
+  align-items: center;
+}
+
+.react-select__control--is-disabled {
+  cursor: not-allowed;
+}
+
+.select .react-select__menu {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  border: solid 2px var(--color-background-900);
+  background-color: var(--color-background-100);
+  border-radius: 30px;
+  margin-top: 0.5rem;
+  margin-left: -6px;
+  overflow: hidden;
+}
+/* Option styling */
+.select .react-select__option {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  cursor: pointer;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--color-background-900);
+}
+
+.select .react-select__option:hover {
+  transition: all 0.1s;
+  border-radius: 30px;
+  font-weight: bolder;
+}
+
+.select .react-select__indicators {
+  color: var(--color-background-900);
+}
+
+.select .react-select__single-value {
+  border-radius: 2px;
+  color: var(--color-background-900);
+  padding: 2px;
+}
+
+.select .react-select__multi-value {
+  border-radius: 2px;
+  color: #080f25;
+  padding: 2px;
+}
+
+.select .react-select__multi-value__label {
+  color: #080f25;
+  font-size: 0.85rem;
+}
+
+.select .react-select__multi-value__remove {
+  color: red;
+  cursor: pointer;
+}
+
+.select .react-select__multi-value__remove:hover {
+  color: #800020;
+}
