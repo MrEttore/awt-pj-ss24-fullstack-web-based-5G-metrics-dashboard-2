@@ -107,6 +107,10 @@ Execute the following command to start the application:
   
   `--build` means that the images are newly built before the containers are started.
 
+### Open the UI
+
+Once the application has started, you can access the user interface by opening a new tab in your web browser and navigating to: `http://localhost`
+
 ### Shut Down The Application
 
 Execute the following command to stop and removes all containers:
@@ -120,7 +124,7 @@ Execute the following command to stop and removes all containers:
 <!-- DOCUMENTATION -->
 ## 📃 Documentation & APIs
 
-A details overview of the project and the system's implementation can be found in our project report: ...
+A details overview of the project and the system implementation can be found in our project report: ...
 
 For an overview of the system's APIs, visit the [API Overview](https://mrettore.github.io/awt-pj-ss24-fullstack-web-based-5G-metrics-dashboard-2/). Ensure that the Docker Compose image is running before executing any API calls.
 
