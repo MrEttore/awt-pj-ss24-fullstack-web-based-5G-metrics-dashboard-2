@@ -142,7 +142,7 @@ This project is licensed under the terms of the [MIT License](LICENSE).
 
 Ettore Marangon - ettore.carlo.marangon@campus.tu-berlin.de | [LinkedIn](www.linkedin.com/in/ettore-marangon-7ba517215)
 
-Daniel Hermann - d.schrenk@campus.tu-berlin.de
+Daniel Schrenk - d.schrenk@campus.tu-berlin.de
 
 Moritz Schelten - m.schelten@campus.tu-berlin.de
 
