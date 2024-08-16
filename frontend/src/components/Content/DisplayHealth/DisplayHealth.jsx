@@ -25,8 +25,6 @@ export default function DisplayHealth({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // SET INITIAL STATE
-
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
       onMessage({
@@ -38,8 +36,6 @@ export default function DisplayHealth({
       setHealthStatus([]);
     }
   }, [requestedData, isLiveDataToggled, onMessage]);
-
-  // FETCH QUERIED DATA
 
   useEffect(() => {
     const fetchHealthData = async () => {
@@ -93,8 +89,6 @@ export default function DisplayHealth({
     fetchHealthData();
   }, [requestedData, onMessage]);
 
-  // FETCH LIVE DATA
-
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
@@ -135,8 +129,6 @@ export default function DisplayHealth({
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
   }, [isLiveDataToggled, onMessage, healthStatus, isLiveDataLoading]);
-
-  // FETCH RECENT DATA
 
   useEffect(() => {
     const fetchRecentData = async () => {

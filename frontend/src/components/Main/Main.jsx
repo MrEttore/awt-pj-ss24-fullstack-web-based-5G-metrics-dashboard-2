@@ -14,19 +14,12 @@ import './Main.css';
 
 function Main() {
   const [selectedTab, setSelectedTab] = useState('healthStatus');
-
   const [requestedData, setRequestedData] = useState(null);
-
   const [resetFlag, setResetFlag] = useState(false);
-
   const [isLiveDataToggled, setIsLiveDataToggled] = useState(false);
-
   const [message, setMessage] = useState(EMPTY_MESSAGE);
-
   const [error, setError] = useState(false);
-
   const [devices, setDevices] = useState([]);
-
   const [metrics, setMetrics] = useState([]);
 
   function handleSelectedTab(e) {

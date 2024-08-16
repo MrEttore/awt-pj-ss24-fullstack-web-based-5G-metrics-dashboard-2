@@ -10,7 +10,6 @@ function Header() {
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
 
-    // Clear the interval when component unmounts
     return () => clearInterval(interval);
   }, []);
 

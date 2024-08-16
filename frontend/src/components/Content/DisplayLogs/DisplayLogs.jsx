@@ -21,8 +21,6 @@ export default function DisplayLogs({
   const [isLoading, setIsLoading] = useState(false);
   const [isLiveDataLoading, setIsLiveDataLoading] = useState(false);
 
-  // SET INITIAL STATE
-
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
       onMessage({
@@ -34,8 +32,6 @@ export default function DisplayLogs({
       setLogsStatus([]);
     }
   }, [requestedData, isLiveDataToggled, onMessage]);
-
-  // FETCH QUERIED DATA
 
   useEffect(() => {
     const fetchLogsData = async () => {
@@ -86,8 +82,6 @@ export default function DisplayLogs({
     fetchLogsData();
   }, [requestedData, onMessage]);
 
-  // FETCH LIVE DATA
-
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
@@ -129,8 +123,6 @@ export default function DisplayLogs({
     const intervalId = setInterval(fetchLiveData, 3000);
     return () => clearInterval(intervalId);
   }, [isLiveDataToggled, onMessage, isLiveDataLoading, logsStatus]);
-
-  // FETCH RECENT DATA
 
   useEffect(() => {
     const fetchRecentData = async () => {

@@ -42,8 +42,6 @@ export default function DisplayTelemetry({
   const isFirstFetchGnbStatus = useRef(true);
   const ues = useMemo(() => devices.map((device) => device.value), [devices]);
 
-  // SET INITIAL STATE
-
   useEffect(() => {
     if (!requestedData && !isLiveDataToggled) {
       onMessage({
@@ -56,8 +54,6 @@ export default function DisplayTelemetry({
       setGeneralTelemetryStatus([]);
     }
   }, [requestedData, isLiveDataToggled, onMessage]);
-
-  // FETCH QUERIED DATA
 
   useEffect(() => {
     const fetchTelemetryData = async () => {
@@ -126,8 +122,6 @@ export default function DisplayTelemetry({
 
     fetchTelemetryData();
   }, [requestedData, onMessage]);
-
-  // FETCH LIVE DATA
 
   useEffect(() => {
     const fetchLiveData = async () => {
@@ -212,8 +206,6 @@ export default function DisplayTelemetry({
     generalGnbState,
   ]);
 
-  // FETCH RECENT DATA
-
   useEffect(() => {
     const fetchRecentData = async () => {
       try {
@@ -250,8 +242,6 @@ export default function DisplayTelemetry({
 
     fetchRecentData();
   }, [ues, onMessage, requestedData, isLiveDataToggled, resetFlag]);
-
-  // FETCH LIVE GNB STATUS
 
   useEffect(() => {
     const fetchLiveData = async () => {

@@ -32,3 +32,94 @@ jobs:
     - name: Run backend tests
       working-directory: backend
       run: npm test
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Download Swagger UI
+      run: wget https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip
+
+    - name: Unzip Swagger UI
+      run: unzip v5.17.14.zip -d swagger-ui
+
+    - name: Move Swagger UI to docs
+      run: |
+        mkdir -p docs
+        mv swagger-ui/swagger-ui-5.17.14/dist/* docs/
+        rm -rf swagger-ui v5.17.14.zip
+
+    - name: Create index.html
+      run: |
+        cat <<EOT > docs/index.html
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Swagger UI</title>
+            <link rel="stylesheet" type="text/css" href="swagger-ui.css" >
+            <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+            <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+            <style>
+                html
+                {
+                    box-sizing: border-box;
+                    overflow: -moz-scrollbars-vertical;
+                    overflow-y: scroll;
+                }
+                *,
+                *:before,
+                *:after
+                {
+                    box-sizing: inherit;
+                }
+
+                body {
+                  margin:0;
+                  background: #fafafa;
+                }
+            </style>
+        </head>
+        <body>
+        <div id="swagger-ui"></div>
+        <script src="swagger-ui-bundle.js"> </script>
+        <script src="swagger-ui-standalone-preset.js"> </script>
+        <script>
+        window.onload = function() {
+          const ui = SwaggerUIBundle({
+            url: "openapi.yaml",
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+              SwaggerUIBundle.presets.apis,
+              SwaggerUIStandalonePreset
+            ],
+            plugins: [
+              SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout"
+          })
+          window.ui = ui
+        }
+        </script>
+        </body>
+        </html>
+        EOT
+
+    - name: Copy OpenAPI YAML file
+      run: cp openapi.yaml docs/
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PAT_PAGES }}
+        publish_dir: ./docs
+
+    
